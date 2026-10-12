@@ -82,7 +82,6 @@
   </nav>
 
   <main class="flex-1 p-6 overflow-y-auto">
-    
     <!-- JANELA 1: MESAS AO VIVO -->
     <div id="view-mesas" class="space-y-4">
       <div id="tables-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
@@ -163,7 +162,6 @@
         </div>
       </div>
     </div>
-
   </main>
 
   <!-- MODAL: GESTÃO / DETALHES DA MESA -->
@@ -190,16 +188,13 @@
           <div id="modal-items-list" class="space-y-2 max-h-48 overflow-y-auto pr-1"></div>
         </div>
 
-        <!-- ADICIONAR ITEM MANUALMENTE -->
-        <div class="bg-zinc-950 p-3 rounded-xl border border-zinc-800 space-y-3">
-          <h4 class="text-xs font-bold text-orange-400 uppercase">➕ Lançar Pedido Manual (Garçom)</h4>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-            <input type="text" id="manual-item-name" placeholder="Nome do item..." class="bg-zinc-900 border border-zinc-700 rounded-lg p-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-orange-500">
-            <input type="number" step="0.01" id="manual-item-price" placeholder="Preço (R$)" class="bg-zinc-900 border border-zinc-700 rounded-lg p-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-orange-500">
-            <input type="number" id="manual-item-qty" value="1" min="1" placeholder="Qtd" class="bg-zinc-900 border border-zinc-700 rounded-lg p-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-orange-500">
-          </div>
-          <input type="text" id="manual-item-notes" placeholder="Observações (opcional)..." class="w-full bg-zinc-900 border border-zinc-700 rounded-lg p-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-orange-500">
-          <button onclick="adicionarItemManual()" class="w-full bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-2 rounded-lg text-xs transition">Adicionar à Mesa</button>
+        <!-- BOTÃO PARA ABRIR O CARDÁPIO E ADICIONAR ITEM -->
+        <div class="bg-zinc-950 p-4 rounded-xl border border-zinc-800 text-center space-y-2">
+          <h4 class="text-xs font-bold text-orange-400 uppercase">➕ Adicionar Item do Cardápio</h4>
+          <p class="text-[11px] text-zinc-400">Selecione pratos diretamente do catálogo oficial para lançar na mesa.</p>
+          <button onclick="openAdminMenuPicker()" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 text-black font-extrabold py-3 rounded-xl text-xs uppercase tracking-wider transition shadow-lg shadow-orange-500/20 cursor-pointer">
+            <i class="fa-solid fa-book-open mr-1.5"></i> Abrir Catálogo / Cardápio
+          </button>
         </div>
       </div>
 
@@ -217,6 +212,53 @@
             <i class="fa-solid fa-cash-register mr-1"></i> Fechar Comanda
           </button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: SELETOR DE CARDÁPIO DO PAINEL -->
+  <div id="modal-admin-menu" class="hidden fixed inset-0 z-[60] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-zinc-900 border border-zinc-800 w-full max-w-xl rounded-2xl shadow-2xl flex flex-col overflow-hidden max-h-[90vh]">
+      <div class="bg-zinc-950 p-4 border-b border-zinc-800 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <i class="fa-solid fa-book-open text-orange-500"></i>
+          <h3 class="font-bold text-white text-sm uppercase tracking-wider">Selecionar do Cardápio</h3>
+        </div>
+        <button onclick="closeModal('modal-admin-menu')" class="text-zinc-400 hover:text-white p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <!-- Categorias -->
+      <div class="p-3 bg-zinc-950/60 border-b border-zinc-800 overflow-x-auto flex space-x-2" id="admin-categories-container"></div>
+
+      <!-- Lista de Itens do Cardápio -->
+      <div class="p-4 overflow-y-auto flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3" id="admin-dishes-grid"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: CUSTOMIZAR QUANTIDADE / OBS DO ADMIN -->
+  <div id="modal-admin-customize" class="hidden fixed inset-0 z-[70] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-zinc-900 border border-zinc-800 w-full max-w-md rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+      <div class="p-4 border-b border-zinc-800 bg-zinc-950 flex justify-between items-center">
+        <h4 id="admin-custom-title" class="font-bold text-sm text-white">Adicionar Item</h4>
+        <button onclick="closeModal('modal-admin-customize')" class="text-zinc-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="p-4 space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-zinc-400 uppercase mb-1">Observações (opcional)</label>
+          <textarea id="admin-custom-notes" rows="2" placeholder="Ex: Sem cebola, ponto bem passado..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-xs text-white placeholder-zinc-600 focus:outline-none focus:border-orange-500"></textarea>
+        </div>
+        <div class="flex items-center justify-between bg-zinc-950 p-3 rounded-xl border border-zinc-800">
+          <span class="text-xs font-bold text-zinc-300">Quantidade:</span>
+          <div class="flex items-center space-x-3">
+            <button onclick="updateAdminQty(-1)" class="w-8 h-8 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white font-bold flex items-center justify-center">-</button>
+            <span id="admin-custom-qty" class="text-sm font-black text-orange-500 min-w-[20px] text-center">1</span>
+            <button onclick="updateAdminQty(1)" class="w-8 h-8 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white font-bold flex items-center justify-center">+</button>
+          </div>
+        </div>
+      </div>
+      <div class="p-4 border-t border-zinc-800 bg-zinc-950 flex justify-between items-center">
+        <span id="admin-custom-total" class="text-base font-black text-orange-400">R$ 0,00</span>
+        <button onclick="confirmAdminAddToCart()" class="bg-orange-500 hover:bg-orange-400 text-black font-bold px-6 py-2.5 rounded-xl text-xs transition shadow-lg">Confirmar e Lançar</button>
       </div>
     </div>
   </div>
@@ -246,7 +288,7 @@
   </div>
 
   <!-- TOAST ALERTS -->
-  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all bg-zinc-900 border border-zinc-700 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-3">
+  <div id="toast" class="fixed bottom-5 right-5 z-[80] transform translate-y-20 opacity-0 transition-all bg-zinc-900 border border-zinc-700 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-3">
     <i id="toast-icon" class="fa-solid fa-info-circle text-orange-400 text-lg"></i>
     <span id="toast-message" class="text-xs font-medium">Ação realizada!</span>
   </div>
@@ -256,6 +298,37 @@
     let tablesState = [];
     let currentEditingTableId = null;
     let audioCtx = null;
+
+    // CARDÁPIO CACHEADO IDÊntico AO DO CLIENTE
+    const MENU_DATA = [
+        { id: 'h1', name: 'Smash Bacon Supreme', category: 'hamburgueres', price: 34.90, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80', description: 'Dois smashes artesanais 90g, cheddar, bacon crocante e maionese da casa.' },
+        { id: 'h2', name: 'Double Cheddar Melt', category: 'hamburgueres', price: 38.90, image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80', description: 'Blend especial 180g, muito creme cheddar melt e cebola caramelizada.' },
+        { id: 'h3', name: 'Crispy Chicken Burger', category: 'hamburgueres', price: 32.90, image: 'https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&w=600&q=80', description: 'Sobrecoxa empanada crocante, alface americana, molho tártaro artesanal.' },
+        { id: 'h4', name: 'Burger Vegetariano de Grão', category: 'hamburgueres', price: 29.90, image: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80', description: 'Hambúrguer de grão-de-bico com quinoa, queijo prato, tomate e rúcula.' },
+        
+        { id: 'p1', name: 'Batata Rústica Trufada', category: 'petiscos', price: 28.90, image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80', description: 'Batatas com azeite de trufas, flor de sal e parmesão ralado.' },
+        { id: 'p2', name: 'Onion Rings Crocantes', category: 'petiscos', price: 24.90, image: 'https://images.unsplash.com/photo-1639024471283-03518883512d?auto=format&fit=crop&w=600&q=80', description: 'Anéis de cebola empanados super crocantes acompanhados de molho barbecue.' },
+        { id: 'p3', name: 'Dadinhos de Tapioca', category: 'petiscos', price: 31.90, image: 'https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&w=600&q=80', description: 'Dadinhos de tapioca com queijo coalho servidos com geleia de pimenta.' },
+
+        { id: 'b1', name: 'Refrigerante Lata', category: 'bebidas', price: 7.00, image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80', description: 'Lata 350ml gelada (Coca-Cola, Guaraná, Sprite).' },
+        { id: 'b2', name: 'Suco Natural de Laranja', category: 'bebidas', price: 9.50, image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=600&q=80', description: 'Feito na hora com frutas frescas 400ml.' },
+        { id: 'b3', name: 'Cerveja Artesanal IPA 500ml', category: 'bebidas', price: 19.90, image: 'https://images.unsplash.com/photo-1608270105387-98565538e12d?auto=format&fit=crop&w=600&q=80', description: 'Cerveja artesanal encorpada com notas cítricas.' },
+        { id: 'b4', name: 'Água Mineral com Gás', category: 'bebidas', price: 5.00, image: 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?auto=format&fit=crop&w=600&q=80', description: 'Garrafa 500ml.' },
+
+        { id: 's1', name: 'Petit Gâteau com Sorvete', category: 'sobremesas', price: 22.00, image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80', description: 'Bolinho de chocolate quente com recheio cremoso e sorvete de baunilha.' },
+        { id: 's2', name: 'Brownie de Chocolate Belga', category: 'sobremesas', price: 18.50, image: 'https://images.unsplash.com/photo-1514517521153-1be72277b32f?auto=format&fit=crop&w=600&q=80', description: 'Brownie denso com nozes e calda de chocolate belga.' }
+    ];
+
+    const CATEGORIES = [
+        { id: 'hamburgueres', name: 'Hambúrgueres', icon: 'fa-burger' },
+        { id: 'petiscos', name: 'Petiscos', icon: 'fa-utensils' },
+        { id: 'bebidas', name: 'Bebidas', icon: 'fa-glass-water' },
+        { id: 'sobremesas', name: 'Sobremesas', icon: 'fa-ice-cream' }
+    ];
+
+    let adminActiveCategory = null;
+    let selectedAdminDish = null;
+    let adminCustomizeQty = 1;
 
     window.onload = function() {
         if (localStorage.getItem('admin_logado') === 'true') {
@@ -569,17 +642,12 @@
         const waiterSection = document.getElementById('modal-waiter-section');
         waiterSection.classList.toggle('hidden', !table.waiterCalledAt);
 
-        document.getElementById('manual-item-name').value = '';
-        document.getElementById('manual-item-price').value = '';
-        document.getElementById('manual-item-qty').value = '1';
-        document.getElementById('manual-item-notes').value = '';
-
         const list = document.getElementById('modal-items-list');
         let total = 0;
         list.innerHTML = '';
 
         if (table.items.length === 0) {
-            list.innerHTML = `<div class="text-xs text-zinc-500 text-center py-4">Nenhum item nesta mesa. Pode adicionar abaixo.</div>`;
+            list.innerHTML = `<div class="text-xs text-zinc-500 text-center py-4">Nenhum item nesta mesa. Pode adicionar pelo catálogo.</div>`;
         } else {
             table.items.forEach(item => {
                 const t = item.price * item.qty;
@@ -602,17 +670,70 @@
         document.getElementById('modal-comanda').classList.remove('hidden');
     }
 
-    async function adicionarItemManual() {
-        if (!currentEditingTableId) return;
-        const name = document.getElementById('manual-item-name').value.trim();
-        const price = parseFloat(document.getElementById('manual-item-price').value);
-        const qty = parseInt(document.getElementById('manual-item-qty').value) || 1;
-        const notes = document.getElementById('manual-item-notes').value.trim();
+    // ABRIR SELETOR DE CARDÁPIO DO PAINEL
+    function openAdminMenuPicker() {
+        renderAdminCategories();
+        renderAdminDishes();
+        document.getElementById('modal-admin-menu').classList.remove('hidden');
+    }
 
-        if (!name || isNaN(price) || price <= 0) {
-            showToast("Preencha o nome e um preço válido.", "rose");
-            return;
-        }
+    function renderAdminCategories() {
+        const container = document.getElementById('admin-categories-container');
+        container.innerHTML = '';
+        CATEGORIES.forEach(cat => {
+            const isActive = adminActiveCategory === cat.id;
+            const btn = document.createElement('button');
+            btn.className = `px-3 py-1.5 rounded-xl text-xs font-bold border transition shrink-0 flex items-center space-x-1.5 ${isActive ? 'bg-orange-500 text-black border-orange-500' : 'bg-zinc-900 text-zinc-300 border-zinc-800'}`;
+            btn.onclick = () => { adminActiveCategory = adminActiveCategory === cat.id ? null : cat.id; renderAdminCategories(); renderAdminDishes(); };
+            btn.innerHTML = `<i class="fa-solid ${cat.icon}"></i> <span>${cat.name}</span>`;
+            container.appendChild(btn);
+        });
+    }
+
+    function renderAdminDishes() {
+        const grid = document.getElementById('admin-dishes-grid');
+        grid.innerHTML = '';
+        const filtered = adminActiveCategory ? MENU_DATA.filter(d => d.category === adminActiveCategory) : MENU_DATA;
+
+        filtered.forEach(dish => {
+            const card = document.createElement('div');
+            card.className = "bg-zinc-900 border border-zinc-800 p-3 rounded-xl flex items-center space-x-3 cursor-pointer hover:border-orange-500 transition";
+            card.onclick = () => openAdminCustomizeModal(dish.id);
+            card.innerHTML = `
+                <img src="${dish.image}" class="w-14 h-14 rounded-lg object-cover">
+                <div class="flex-1">
+                    <h5 class="text-xs font-bold text-white line-clamp-1">${dish.name}</h5>
+                    <div class="text-xs font-black text-orange-400 mt-1">R$ ${dish.price.toFixed(2).replace('.', ',')}</div>
+                </div>
+                <div class="w-8 h-8 rounded-lg bg-orange-500/10 text-orange-500 flex items-center justify-center">
+                    <i class="fa-solid fa-plus text-xs"></i>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function openAdminCustomizeModal(dishId) {
+        selectedAdminDish = MENU_DATA.find(d => d.id === dishId);
+        adminCustomizeQty = 1;
+        document.getElementById('admin-custom-title').innerText = `Adicionar: ${selectedAdminDish.name}`;
+        document.getElementById('admin-custom-qty').innerText = adminCustomizeQty;
+        document.getElementById('admin-custom-notes').value = '';
+        document.getElementById('admin-custom-total').innerText = `R$ ${selectedAdminDish.price.toFixed(2).replace('.', ',')}`;
+        document.getElementById('modal-admin-menu').classList.add('hidden');
+        document.getElementById('modal-admin-customize').classList.remove('hidden');
+    }
+
+    function updateAdminQty(delta) {
+        adminCustomizeQty = Math.max(1, adminCustomizeQty + delta);
+        document.getElementById('admin-custom-qty').innerText = adminCustomizeQty;
+        const total = selectedAdminDish.price * adminCustomizeQty;
+        document.getElementById('admin-custom-total').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+    }
+
+    async function confirmAdminAddToCart() {
+        if (!currentEditingTableId || !selectedAdminDish) return;
+        const notes = document.getElementById('admin-custom-notes').value.trim();
 
         try {
             await fetch(`${API_URL}/api/admin/mesa/adicionar-itens`, {
@@ -620,10 +741,17 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     mesa_id: currentEditingTableId,
-                    cart: [{ dishId: 'manual', name, unitPrice: price, quantity: qty, notes }]
+                    cart: [{ 
+                        dishId: selectedAdminDish.id, 
+                        name: selectedAdminDish.name, 
+                        unitPrice: selectedAdminDish.price, 
+                        quantity: adminCustomizeQty, 
+                        notes 
+                    }]
                 })
             });
-            showToast("Item adicionado com sucesso!");
+            showToast("Item lançado com sucesso!");
+            closeModal('modal-admin-customize');
             await carregarMesas();
             openTableModal(currentEditingTableId);
         } catch (e) {
