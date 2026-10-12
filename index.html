@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cardápio Digital NFC | Preto & Laranja</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        orange: {
+                            500: '#f97316',
+                            600: '#ea580c',
+                            700: '#c2410c'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- FontAwesome Icons & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #f4f4f5;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.88);
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .active-category-btn {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            color: #000000 !important;
+            font-weight: 800 !important;
+            box-shadow: 0 4px 14px rgba(249, 115, 22, 0.4);
+            border-color: transparent !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen relative pb-10 bg-black text-zinc-100">
+
+    <!-- TELA 1: LANDING -->
+    <section id="screen-landing" class="max-w-md mx-auto min-h-[90vh] flex flex-col justify-between p-6 animate-fade-in">
+        <div class="flex flex-col items-center text-center pt-6">
+            <span class="text-orange-500 font-bold text-xs uppercase tracking-widest mb-3 flex items-center space-x-1.5">
+                <i class="fa-solid fa-sparkles"></i>
+                <span>Seja bem vindo</span>
+            </span>
+
+            <div class="w-28 h-28 rounded-full bg-gradient-to-tr from-orange-500 via-orange-600 to-amber-500 p-1 shadow-2xl shadow-orange-500/20 mb-4">
+                <div class="w-full h-full bg-zinc-950 rounded-full flex flex-col items-center justify-center border-2 border-black">
+                    <i class="fa-solid fa-burger text-orange-500 text-4xl mb-1"></i>
+                    <span class="text-[9px] font-black tracking-widest text-orange-400 uppercase">Gourmet</span>
+                </div>
+            </div>
+
+            <h1 class="text-2xl font-black text-white tracking-tight">GOURMET BURGER HOUSE</h1>
+            <p class="text-xs text-zinc-400 mt-1 font-medium">Hambúrgueres Artesanais & Cervejas Especiais</p>
+        </div>
+
+        <div class="w-full my-auto py-8 space-y-4">
+            <button onclick="navigateTo('screen-menu')" class="w-full py-4 px-6 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 active:scale-98 text-black rounded-2xl font-black text-base uppercase tracking-wider shadow-xl shadow-orange-500/20 transition flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-book-open text-xl"></i>
+                    <span>Cardápio</span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-sm"></i>
+            </button>
+
+            <button onclick="callWaiter()" class="w-full py-4 px-6 bg-zinc-900 hover:bg-zinc-800 active:scale-98 text-white rounded-2xl font-bold text-base tracking-wide border border-zinc-800 shadow-lg transition flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-lg bg-orange-500/10 text-orange-500 flex items-center justify-center">
+                        <i class="fa-solid fa-bell text-base"></i>
+                    </div>
+                    <span>Chamar Garçom</span>
+                </div>
+                <i class="fa-solid fa-hand-pointer text-xs text-zinc-500"></i>
+            </button>
+        </div>
+
+        <div class="text-center text-zinc-400 text-xs py-4 border-t border-zinc-900">
+            <p class="font-black text-sm text-orange-500 tracking-widest uppercase flex items-center justify-center space-x-2">
+                <i class="fa-solid fa-location-dot"></i>
+                <span id="mesa-tag-footer">MESA --</span>
+            </p>
+        </div>
+    </section>
+
+    <!-- TELA 2: CARDÁPIO -->
+    <section id="screen-menu" class="max-w-md mx-auto hidden animate-fade-in">
+        <header class="sticky top-0 z-40 bg-zinc-950/90 backdrop-blur-md border-b border-zinc-800 px-4 py-3 shadow-xl">
+            <div class="flex items-center justify-between">
+                <button onclick="callWaiter()" class="flex items-center space-x-1.5 text-xs font-bold text-orange-500 bg-orange-500/10 hover:bg-orange-500/20 border border-orange-500/30 px-3 py-2 rounded-xl active:scale-95 transition">
+                    <i class="fa-solid fa-bell"></i>
+                    <span>Garçom</span>
+                </button>
+
+                <div class="text-center">
+                    <h2 class="font-black text-sm text-white uppercase tracking-widest">Cardápio</h2>
+                </div>
+
+                <button onclick="openCartModal()" class="relative bg-zinc-900 text-orange-500 p-2.5 rounded-xl border border-zinc-800 hover:bg-zinc-800 transition active:scale-95">
+                    <i class="fa-solid fa-basket-shopping text-base"></i>
+                    <span id="cart-badge" class="absolute -top-1.5 -right-1.5 bg-orange-600 text-black text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-black hidden">0</span>
+                </button>
+            </div>
+        </header>
+
+        <nav class="mt-4 px-4">
+            <div id="categories-container" class="flex space-x-2 overflow-x-auto no-scrollbar py-1 scroll-smooth"></div>
+        </nav>
+
+        <main class="px-4 mt-5">
+            <div class="flex items-center justify-between mb-3">
+                <h3 id="current-category-title" class="text-xs font-bold text-zinc-300 uppercase tracking-wide flex items-center">
+                    <i class="fa-solid fa-fire text-orange-500 mr-2"></i> Todos os Pratos
+                </h3>
+            </div>
+            <div id="dishes-grid" class="grid grid-cols-2 gap-3.5 pb-20"></div>
+        </main>
+    </section>
+
+    <!-- MODAL DETALHE DO PRATO -->
+    <div id="modal-dish-detail" class="fixed inset-0 z-50 modal-backdrop hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-zinc-900 border-t sm:border border-zinc-800 rounded-t-3xl sm:rounded-2xl w-full max-w-md max-h-[92vh] flex flex-col overflow-hidden animate-slide-up shadow-2xl">
+            <button onclick="closeModal('modal-dish-detail')" class="absolute top-3 right-3 z-10 w-9 h-9 bg-black/80 text-white rounded-full flex items-center justify-center border border-zinc-700/60 active:scale-90 transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="relative bg-black w-full h-56 flex items-center justify-center overflow-hidden">
+                <video id="modal-video" class="w-full h-full object-cover" autoplay loop muted playsinline poster="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80">
+                    <source id="modal-video-source" src="https://assets.mixkit.co/videos/preview/mixkit-top-view-of-a-delicious-burger-42881-large.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="p-5 flex-1 overflow-y-auto">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h3 id="modal-dish-title" class="text-lg font-bold text-white leading-tight">Nome do Prato</h3>
+                        <span id="modal-dish-category" class="text-[11px] font-semibold text-orange-500 uppercase">Categoria</span>
+                    </div>
+                    <div id="modal-dish-price" class="text-base font-black text-orange-500 bg-orange-500/10 px-3 py-1 rounded-xl border border-orange-500/20">R$ 0,00</div>
+                </div>
+                <p id="modal-dish-description" class="text-xs text-zinc-300 mt-3 leading-relaxed"></p>
+                <div class="mt-6">
+                    <button onclick="openCustomizeFromDetail()" class="w-full py-3 px-2 bg-gradient-to-r from-orange-500 to-orange-600 text-black active:scale-95 rounded-xl font-black text-xs shadow-lg shadow-orange-500/20 transition flex items-center justify-center">
+                        <i class="fa-solid fa-plus mr-1.5"></i> Adicionar ao Pedido
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CUSTOMIZAR -->
+    <div id="modal-customize" class="fixed inset-0 z-50 modal-backdrop hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-zinc-900 border-t sm:border border-zinc-800 rounded-t-3xl sm:rounded-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden animate-slide-up shadow-2xl">
+            <div class="p-4 border-b border-zinc-800 flex items-center justify-between bg-zinc-950">
+                <div>
+                    <h4 id="customize-dish-title" class="font-bold text-sm text-white leading-tight">Personalizar Pedido</h4>
+                </div>
+                <button onclick="closeModal('modal-customize')" class="text-zinc-400 hover:text-white w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-4 overflow-y-auto flex-1 space-y-4">
+                <div>
+                    <h5 class="text-xs font-bold text-zinc-300 uppercase tracking-wider mb-1.5">Observações Adicionais</h5>
+                    <textarea id="custom-notes" rows="2" placeholder="Ex: Ponto da carne bem passado, sem salada..." class="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-2.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-orange-500 transition"></textarea>
+                </div>
+                <div class="flex items-center justify-between bg-zinc-800 p-3 rounded-xl border border-zinc-700">
+                    <span class="text-xs font-bold text-zinc-200">Quantidade:</span>
+                    <div class="flex items-center space-x-3">
+                        <button onclick="updateCustomizeQty(-1)" class="w-8 h-8 rounded-lg bg-zinc-700 hover:bg-zinc-600 text-white font-bold flex items-center justify-center active:scale-90 transition">-</button>
+                        <span id="customize-qty" class="text-sm font-black text-orange-500 min-w-[20px] text-center">1</span>
+                        <button onclick="updateCustomizeQty(1)" class="w-8 h-8 rounded-lg bg-zinc-700 hover:bg-zinc-600 text-white font-bold flex items-center justify-center active:scale-90 transition">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 border-t border-zinc-800 bg-zinc-950 flex items-center space-x-3">
+                <button onclick="confirmAddToCart()" class="w-full py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-black font-black text-xs rounded-xl shadow-lg shadow-orange-500/20 active:scale-95 transition flex items-center justify-center space-x-2">
+                    <span>Adicionar</span>
+                    <span id="customize-total-price" class="bg-black/30 px-2 py-0.5 rounded text-[10px] font-extrabold text-orange-300">R$ 0,00</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CARRINHO -->
+    <div id="modal-cart" class="fixed inset-0 z-50 modal-backdrop hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="bg-zinc-900 border-t sm:border border-zinc-800 rounded-t-3xl sm:rounded-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden animate-slide-up shadow-2xl">
+            <div class="p-4 border-b border-zinc-800 flex items-center justify-between bg-zinc-950">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center text-orange-500">
+                        <i class="fa-solid fa-basket-shopping text-sm"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm text-white">Seu Pedido</h4>
+                    </div>
+                </div>
+                <button onclick="closeModal('modal-cart')" class="text-zinc-400 hover:text-white w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div id="cart-items-container" class="p-4 overflow-y-auto flex-1 space-y-3"></div>
+
+            <div class="p-4 border-t border-zinc-800 bg-zinc-950 space-y-3">
+                <div class="space-y-1 text-xs">
+                    <div class="flex justify-between text-sm font-black text-white pt-2">
+                        <span>Total:</span>
+                        <span id="cart-total" class="text-orange-500 text-base">R$ 0,00</span>
+                    </div>
+                </div>
+                <button id="btn-send-order" onclick="submitOrder()" class="w-full py-3.5 bg-gradient-to-r from-orange-500 to-orange-600 active:scale-95 text-black font-black text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-orange-500/20 transition flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    <span>Enviar para Cozinha</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast-notification" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-11/12 max-w-md bg-zinc-900 border border-orange-500/50 backdrop-blur-md rounded-2xl p-3.5 shadow-2xl flex items-center space-x-3 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-full">
+        <div id="toast-icon-bg" class="w-9 h-9 rounded-xl bg-orange-500/20 text-orange-500 flex items-center justify-center shrink-0">
+            <i id="toast-icon" class="fa-solid fa-bell text-base"></i>
+        </div>
+        <div class="flex-1">
+            <h5 id="toast-title" class="text-xs font-bold text-white uppercase">Notificação</h5>
+            <p id="toast-message" class="text-[11px] text-zinc-300">Mensagem do sistema.</p>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://restaurante1-backend.onrender.com';
+
+        // Captura direta e segura do parâmetro da URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const NUMERO_DA_MESA = urlParams.get('mesa') || '1';
+
+        let MESA_TOKEN = null;
+
+        // Atualiza o texto na tela imediatamente
+        function updateMesaDisplay() {
+            const footerTag = document.getElementById('mesa-tag-footer');
+            if (footerTag) {
+                footerTag.textContent = `MESA ${NUMERO_DA_MESA}`;
+            }
+        }
+
+        async function initMesaSession() {
+            try {
+                const response = await fetch(`${API_URL}/api/mesa/sessao`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mesa_numero: NUMERO_DA_MESA })
+                });
+                const data = await response.json();
+                if (response.ok && data.token_sessao) {
+                    MESA_TOKEN = data.token_sessao;
+                } else {
+                    showToast('Aviso', 'Sessão da mesa inválida ou expirada.', 'fa-triangle-exclamation');
+                }
+            } catch (error) {
+                console.error('Erro ao conectar ao servidor de sessão:', error);
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            updateMesaDisplay();
+            initMesaSession();
+        });
+
+        // Executa atualização visual imediata
+        updateMesaDisplay();
+
+        // CARDÁPIO CACHEADO
+        const MENU_DATA = [
+            { id: 'h1', name: 'Smash Bacon Supreme', category: 'hamburgueres', price: 34.90, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80', description: 'Dois smashes artesanais 90g, cheddar, bacon e maionese.' },
+            { id: 'p1', name: 'Batata Rústica Trufada', category: 'petiscos', price: 28.90, image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80', description: 'Batatas com azeite de trufas e parmesão.' },
+            { id: 'b1', name: 'Refrigerante Lata', category: 'bebidas', price: 7.00, image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80', description: 'Refrigerante gelado.' }
+        ];
+
+        const CATEGORIES = [
+            { id: 'hamburgueres', name: 'Hambúrgueres', icon: 'fa-burger' },
+            { id: 'petiscos', name: 'Petiscos', icon: 'fa-utensils' },
+            { id: 'bebidas', name: 'Bebidas', icon: 'fa-glass-water' }
+        ];
+
+        let activeCategory = null;
+        let cart = [];
+        let currentDish = null;
+        let customizeQty = 1;
+
+        window.onload = function() {
+            renderCategories();
+            renderDishes();
+        };
+
+        function navigateTo(screenId) {
+            document.getElementById('screen-landing').classList.add('hidden');
+            document.getElementById('screen-menu').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function callWaiter() {
+            try {
+                const response = await fetch(`${API_URL}/api/garcom`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mesa_numero: NUMERO_DA_MESA, token_sessao: MESA_TOKEN })
+                });
+                
+                if (response.ok) {
+                    showToast('Garçom Chamado!', 'Um atendente foi notificado e já está indo até você.', 'fa-bell');
+                } else {
+                    showToast('Acesso Negado', 'Sessão inválida ou mesa fechada.', 'fa-xmark');
+                }
+            } catch (error) {
+                console.error(error);
+                showToast('Erro', 'Verifique a conexão.', 'fa-wifi');
+            }
+        }
+
+        async function submitOrder() {
+            if (cart.length === 0) return;
+
+            const btn = document.getElementById('btn-send-order');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(`${API_URL}/api/pedidos`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mesa_numero: NUMERO_DA_MESA, cart: cart, token_sessao: MESA_TOKEN })
+                });
+
+                if (response.ok) {
+                    cart = [];
+                    updateCartBadge();
+                    closeModal('modal-cart');
+                    showToast('Sucesso', 'Pedido enviado direto para a cozinha!', 'fa-circle-check');
+                } else {
+                    showToast('Erro', 'Falha ao enviar o pedido (Sessão expirada).', 'fa-xmark');
+                }
+            } catch (error) {
+                console.error(error);
+                showToast('Erro', 'Verifique a conexão.', 'fa-wifi');
+            } finally {
+                btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Enviar para Cozinha';
+                btn.disabled = false;
+            }
+        }
+
+        function renderCategories() {
+            const container = document.getElementById('categories-container');
+            container.innerHTML = '';
+            CATEGORIES.forEach(cat => {
+                const isActive = activeCategory === cat.id;
+                const btn = document.createElement('button');
+                btn.className = `px-3.5 py-2 rounded-xl text-xs font-bold border transition-all shrink-0 flex items-center space-x-1.5 ${isActive ? 'active-category-btn' : 'bg-zinc-900 text-zinc-300 border-zinc-800'}`;
+                btn.onclick = () => { activeCategory = activeCategory === cat.id ? null : cat.id; renderCategories(); renderDishes(); };
+                btn.innerHTML = `<i class="fa-solid ${cat.icon} text-sm"></i> <span>${cat.name}</span>`;
+                container.appendChild(btn);
+            });
+        }
+
+        function renderDishes() {
+            const grid = document.getElementById('dishes-grid');
+            grid.innerHTML = '';
+            const filteredDishes = activeCategory ? MENU_DATA.filter(d => d.category === activeCategory) : MENU_DATA;
+
+            filteredDishes.forEach(dish => {
+                const card = document.createElement('div');
+                card.className = "bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden shadow-lg active:scale-95 transition-all cursor-pointer flex flex-col";
+                card.onclick = () => openDishDetailModal(dish.id);
+                card.innerHTML = `
+                    <div class="w-full aspect-square relative bg-black overflow-hidden">
+                        <img src="${dish.image}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-3 bg-zinc-900 flex-1 flex flex-col justify-between">
+                        <div class="text-orange-500 font-black text-sm mb-0.5">R$ ${dish.price.toFixed(2).replace('.', ',')}</div>
+                        <h4 class="text-xs font-bold text-white line-clamp-2">${dish.name}</h4>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function openDishDetailModal(dishId) {
+            currentDish = MENU_DATA.find(d => d.id === dishId);
+            document.getElementById('modal-dish-title').textContent = currentDish.name;
+            document.getElementById('modal-dish-price').textContent = `R$ ${currentDish.price.toFixed(2).replace('.', ',')}`;
+            document.getElementById('modal-dish-description').textContent = currentDish.description;
+            openModal('modal-dish-detail');
+        }
+
+        function openCustomizeFromDetail() {
+            closeModal('modal-dish-detail');
+            setTimeout(() => { 
+                customizeQty = 1;
+                document.getElementById('customize-qty').textContent = customizeQty;
+                document.getElementById('customize-total-price').textContent = `R$ ${currentDish.price.toFixed(2).replace('.', ',')}`;
+                document.getElementById('custom-notes').value = '';
+                openModal('modal-customize'); 
+            }, 150);
+        }
+
+        function updateCustomizeQty(delta) {
+            customizeQty = Math.max(1, customizeQty + delta);
+            document.getElementById('customize-qty').textContent = customizeQty;
+            document.getElementById('customize-total-price').textContent = `R$ ${(currentDish.price * customizeQty).toFixed(2).replace('.', ',')}`;
+        }
+
+        function confirmAddToCart() {
+            cart.push({
+                cartId: Date.now(),
+                dishId: currentDish.id,
+                name: currentDish.name,
+                image: currentDish.image,
+                quantity: customizeQty,
+                unitPrice: currentDish.price,
+                notes: document.getElementById('custom-notes').value.trim()
+            });
+            updateCartBadge();
+            closeModal('modal-customize');
+            showToast('Item Adicionado', `${currentDish.name} no carrinho.`, 'fa-circle-check');
+        }
+
+        function openCartModal() {
+            const container = document.getElementById('cart-items-container');
+            container.innerHTML = '';
+            
+            if (cart.length === 0) {
+                container.innerHTML = `<div class="text-center py-8 text-zinc-500 text-xs">Seu carrinho está vazio.</div>`;
+                document.getElementById('cart-total').textContent = 'R$ 0,00';
+                document.getElementById('btn-send-order').disabled = true;
+            } else {
+                let total = 0;
+                document.getElementById('btn-send-order').disabled = false;
+                cart.forEach(item => {
+                    const itemTotal = item.unitPrice * item.quantity;
+                    total += itemTotal;
+                    container.innerHTML += `
+                        <div class="bg-zinc-800/80 p-3 rounded-xl border border-zinc-700 flex space-x-3">
+                            <img src="${item.image}" class="w-12 h-12 rounded-lg object-cover">
+                            <div class="flex-1">
+                                <div class="flex justify-between"><h5 class="text-xs font-bold text-white">${item.name}</h5>
+                                <button onclick="removeCartItem(${item.cartId})" class="text-rose-400 text-xs"><i class="fa-solid fa-trash"></i></button></div>
+                                <div class="text-xs text-orange-500 font-bold">R$ ${itemTotal.toFixed(2).replace('.', ',')} (Qtd: ${item.quantity})</div>
+                                ${item.notes ? `<div class="text-[10px] text-zinc-400 italic">Obs: ${item.notes}</div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+                document.getElementById('cart-total').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            }
+            openModal('modal-cart');
+        }
+
+        function removeCartItem(id) {
+            cart = cart.filter(i => i.cartId !== id);
+            openCartModal();
+            updateCartBadge();
+        }
+
+        function updateCartBadge() {
+            const badge = document.getElementById('cart-badge');
+            const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+            if (total > 0) { badge.textContent = total; badge.classList.remove('hidden'); }
+            else { badge.classList.add('hidden'); }
+        }
+
+        let toastTimeout;
+        function showToast(title, message, icon = 'fa-bell') {
+            const toast = document.getElementById('toast-notification');
+            document.getElementById('toast-title').textContent = title;
+            document.getElementById('toast-message').textContent = message;
+            document.getElementById('toast-icon').className = `fa-solid ${icon} text-base`;
+            toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-full');
+            clearTimeout(toastTimeout);
+            // Alterado de 3000ms para 1500ms para sumir mais rápido
+            toastTimeout = setTimeout(() => { toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-full'); }, 1500);
+        }
+
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+    </script>
+</body>
+</html>
