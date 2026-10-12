@@ -15,7 +15,7 @@
     }
   </script>
 </head>
-<body class="h-full font-sans text-zinc-100 bg-zinc-950 flex flex-col selection:bg-orange-500 selection:text-white overflow-hidden">
+<body class="h-full font-sans text-zinc-100 bg-zinc-950 flex flex-col selection:bg-orange-500 selection:text-white">
 
   <!-- TELA DE LOGIN -->
   <div id="login-screen" class="fixed inset-0 z-50 bg-zinc-950 flex items-center justify-center p-4">
@@ -36,125 +36,275 @@
           <input type="password" id="login-pass" placeholder="admin123" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-orange-500 transition">
         </div>
         <div id="login-error" class="hidden text-rose-400 text-xs font-medium text-center"></div>
-        <button onclick="fazerLogin()" class="w-full bg-orange-500 hover:bg-orange-400 text-black font-bold py-3 rounded-xl text-sm transition shadow-lg">Entrar no Painel</button>
+        <button onclick="fazerLogin()" class="w-full bg-orange-500 hover:bg-orange-400 text-black font-bold py-3 rounded-xl text-sm transition shadow-lg cursor-pointer">Entrar no Painel</button>
       </div>
     </div>
   </div>
 
-  <!-- APLICAÇÃO PRINCIPAL (OCULTA ATÉ O LOGIN) -->
-  <div id="app-screen" class="hidden h-full flex flex-col overflow-hidden">
+  <!-- NAVBAR COM ABAS DE NAVEGAÇÃO -->
+  <nav class="bg-zinc-900 border-b border-zinc-800 px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+    <div class="flex items-center space-x-4">
+      <div class="w-9 h-9 bg-orange-500/20 text-orange-400 rounded-xl flex items-center justify-center font-bold border border-orange-500/30">R1</div>
+      <h2 class="font-bold text-zinc-100 hidden sm:block">Painel de Gestão</h2>
+    </div>
 
-    <!-- NAVBAR COM ABAS DE NAVEGAÇÃO -->
-    <nav class="bg-zinc-900 border-b border-zinc-800 px-4 py-3 flex flex-wrap items-center justify-between gap-4 shrink-0">
-      <div class="flex items-center space-x-4">
-        <div class="w-9 h-9 bg-orange-500/20 text-orange-400 rounded-xl flex items-center justify-center font-bold border border-orange-500/30">R1</div>
-        <h2 class="font-bold text-zinc-100 hidden sm:block">Painel de Gestão</h2>
-      </div>
+    <!-- ABAS / JANELAS -->
+    <div class="flex items-center space-x-2 bg-zinc-950 p-1 rounded-xl border border-zinc-800">
+      <button onclick="switchTab('mesas')" id="tab-btn-mesas" class="px-4 py-2 rounded-lg text-xs font-bold transition bg-orange-500 text-black flex items-center space-x-2">
+        <i class="fa-solid fa-chair"></i> <span>Mesas</span>
+      </button>
+      <button onclick="switchTab('historico')" id="tab-btn-historico" class="px-4 py-2 rounded-lg text-xs font-bold transition text-zinc-400 hover:text-white flex items-center space-x-2">
+        <i class="fa-solid fa-clock-rotate-left"></i> <span>Histórico</span>
+      </button>
+      <button onclick="switchTab('estatisticas')" id="tab-btn-estatisticas" class="px-4 py-2 rounded-lg text-xs font-bold transition text-zinc-400 hover:text-white flex items-center space-x-2">
+        <i class="fa-solid fa-chart-pie"></i> <span>Estatísticas</span>
+      </button>
+    </div>
 
-      <!-- ABAS / JANELAS -->
-      <div class="flex items-center space-x-2 bg-zinc-950 p-1 rounded-xl border border-zinc-800">
-        <button onclick="switchTab('mesas')" id="tab-btn-mesas" class="px-4 py-2 rounded-lg text-xs font-bold transition bg-orange-500 text-black flex items-center space-x-2">
-          <i class="fa-solid fa-chair"></i> <span>Mesas</span>
+    <div class="flex items-center space-x-3">
+      <div class="relative">
+        <button id="waiter-queue-btn" onclick="toggleWaiterQueue()" class="bg-zinc-950 border border-zinc-800 px-3 py-2 rounded-xl text-xs font-medium flex items-center space-x-2">
+          <i class="fa-solid fa-bell text-amber-400"></i>
+          <span class="hidden md:inline">Fila Garçom</span>
+          <span id="waiter-queue-count" class="hidden bg-amber-500 text-black text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
         </button>
-        <button onclick="switchTab('historico')" id="tab-btn-historico" class="px-4 py-2 rounded-lg text-xs font-bold transition text-zinc-400 hover:text-white flex items-center space-x-2">
-          <i class="fa-solid fa-clock-rotate-left"></i> <span>Histórico</span>
-        </button>
-        <button onclick="switchTab('estatisticas')" id="tab-btn-estatisticas" class="px-4 py-2 rounded-lg text-xs font-bold transition text-zinc-400 hover:text-white flex items-center space-x-2">
-          <i class="fa-solid fa-chart-pie"></i> <span>Estatísticas</span>
-        </button>
-      </div>
-
-      <div class="flex items-center space-x-3">
-        <div class="relative">
-          <button id="waiter-queue-btn" onclick="toggleWaiterQueue()" class="bg-zinc-950 border border-zinc-800 px-3 py-2 rounded-xl text-xs font-medium flex items-center space-x-2">
-            <i class="fa-solid fa-bell text-amber-400"></i>
-            <span class="hidden md:inline">Fila Garçom</span>
-            <span id="waiter-queue-count" class="hidden bg-amber-500 text-black text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
-          </button>
-          <div id="waiter-queue-drawer" class="hidden absolute right-0 mt-2 w-72 bg-zinc-900 border border-zinc-800 rounded-xl shadow-2xl z-50 p-2">
-              <div id="waiter-queue-list" class="space-y-2"></div>
-          </div>
+        <div id="waiter-queue-drawer" class="hidden absolute right-0 mt-2 w-72 bg-zinc-900 border border-zinc-800 rounded-xl shadow-2xl z-50 p-2">
+            <div id="waiter-queue-list" class="space-y-2"></div>
         </div>
-        <span id="server-status-badge" class="inline-flex items-center px-2 py-1 rounded text-[10px] font-medium bg-zinc-800 text-rose-400 border border-zinc-700">
-          <span class="w-1.5 h-1.5 rounded-full bg-rose-500 me-1 animate-pulse"></span> Offline
-        </span>
-        <button onclick="fazerLogout()" title="Sair do Painel" class="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white p-2 rounded-xl text-xs transition">
-          <i class="fa-solid fa-right-from-bracket"></i>
-        </button>
       </div>
-    </nav>
+      <span id="server-status-badge" class="inline-flex items-center px-2 py-1 rounded text-[10px] font-medium bg-zinc-800 text-rose-400 border border-zinc-700">
+        <span class="w-1.5 h-1.5 rounded-full bg-rose-500 me-1 animate-pulse"></span> Offline
+      </span>
+      <button onclick="fazerLogout()" title="Terminar Sessão" class="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white px-2.5 py-1.5 rounded-xl text-xs font-bold transition">
+        <i class="fa-solid fa-right-from-bracket"></i>
+      </button>
+    </div>
+  </nav>
 
-    <main class="flex-1 p-6 overflow-y-auto">
+  <main class="flex-1 p-6 overflow-y-auto">
+    
+    <!-- JANELA 1: MESAS AO VIVO -->
+    <div id="view-mesas" class="space-y-4">
+      <div id="tables-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
+    </div>
+
+    <!-- JANELA 2: HISTÓRICO DE PEDIDOS -->
+    <div id="view-historico" class="hidden space-y-4">
+      <div class="flex flex-wrap justify-between items-center gap-4 bg-zinc-900 p-4 rounded-2xl border border-zinc-800">
+        <h3 class="font-bold text-white text-sm">Histórico de Comandas Fechadas</h3>
+        <div class="flex items-center space-x-2">
+          <button onclick="carregarHistorico('dia')" id="btn-hist-dia" class="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-xs rounded-xl font-medium transition">Hoje</button>
+          <button onclick="carregarHistorico('semana')" id="btn-hist-semana" class="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-xs rounded-xl font-medium transition">Últimos 7 Dias</button>
+          <button onclick="carregarHistorico('mes')" id="btn-hist-mes" class="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-xs rounded-xl font-medium transition">Último Mês</button>
+          <button onclick="carregarHistorico('todos')" id="btn-hist-todos" class="px-3 py-1.5 bg-orange-500 text-black text-xs rounded-xl font-bold transition">Todos</button>
+        </div>
+      </div>
+
+      <div class="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden shadow-xl">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-zinc-950 text-zinc-400 text-xs uppercase border-b border-zinc-800">
+              <th class="p-3.5">Mesa</th>
+              <th class="p-3.5">Comanda</th>
+              <th class="p-3.5">Data / Fechamento</th>
+              <th class="p-3.5">Valor Total</th>
+              <th class="p-3.5 text-right">Ação</th>
+            </tr>
+          </thead>
+          <tbody id="historico-table-body" class="divide-y divide-zinc-800 text-xs">
+            <tr><td colspan="5" class="p-6 text-center text-zinc-500">A carregar histórico...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- JANELA 3: ESTATÍSTICAS E MÉTRICAS -->
+    <div id="view-estatisticas" class="hidden space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl">
+          <span class="text-xs text-zinc-400 uppercase font-bold">Faturamento (Hoje)</span>
+          <div id="stat-fat-dia" class="text-2xl font-black text-orange-400 mt-2">R$ 0,00</div>
+        </div>
+        <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl">
+          <span class="text-xs text-zinc-400 uppercase font-bold">Faturamento (7 Dias)</span>
+          <div id="stat-fat-semana" class="text-2xl font-black text-emerald-400 mt-2">R$ 0,00</div>
+        </div>
+        <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl">
+          <span class="text-xs text-zinc-400 uppercase font-bold">Faturamento (30 Dias)</span>
+          <div id="stat-fat-mes" class="text-2xl font-black text-blue-400 mt-2">R$ 0,00</div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl flex items-center justify-between">
+          <div>
+            <span class="text-xs text-zinc-400 uppercase font-bold">Horário de Pico</span>
+            <div id="stat-hora-pico" class="text-xl font-bold text-white mt-1">--:--</div>
+          </div>
+          <div class="w-12 h-12 bg-orange-500/10 text-orange-500 rounded-xl flex items-center justify-center text-xl"><i class="fa-solid fa-bolt"></i></div>
+        </div>
+        <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl flex items-center justify-between">
+          <div>
+            <span class="text-xs text-zinc-400 uppercase font-bold">Dia de Maior Movimento</span>
+            <div id="stat-dia-pico" class="text-xl font-bold text-white mt-1">---</div>
+          </div>
+          <div class="w-12 h-12 bg-emerald-500/10 text-emerald-500 rounded-xl flex items-center justify-center text-xl"><i class="fa-solid fa-calendar-days"></i></div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl">
+          <h4 class="text-xs font-bold text-zinc-400 uppercase mb-3">🔥 Itens Mais Vendidos</h4>
+          <div id="stat-top-itens" class="space-y-2"></div>
+        </div>
+        <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl">
+          <h4 class="text-xs font-bold text-zinc-400 uppercase mb-3">❄️ Itens Menos Vendidos</h4>
+          <div id="stat-low-itens" class="space-y-2"></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- MODAL: GESTÃO / DETALHES DA MESA -->
+  <div id="modal-comanda" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-zinc-900 border border-zinc-800 w-full max-w-2xl rounded-2xl shadow-2xl flex flex-col overflow-hidden max-h-[90vh]">
+      <div class="bg-zinc-950 p-4 border-b border-zinc-800 flex justify-between items-center">
+        <h3 class="font-bold text-white text-lg">Mesa <span id="modal-table-num" class="text-orange-500"></span></h3>
+        <button onclick="closeModal('modal-comanda')" class="text-zinc-400 hover:text-white p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
       
-      <!-- JANELA 1: MESAS AO VIVO -->
-      <div id="view-mesas" class="space-y-4">
-        <div id="tables-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
-      </div>
-
-      <!-- JANELA 2: HISTÓRICO DE PEDIDOS -->
-      <div id="view-historico" class="hidden space-y-4">
-        <div class="flex flex-wrap justify-between items-center gap-4 bg-zinc-900 p-4 rounded-2xl border border-zinc-800">
-          <h3 class="font-bold text-white text-sm">Histórico de Comandas Fechadas</h3>
-          <div class="flex items-center space-x-2">
-            <button onclick="carregarHistorico('dia')" id="btn-hist-dia" class="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-xs rounded-xl font-medium transition">Hoje</button>
-            <button onclick="carregarHistorico('semana')" id="btn-hist-semana" class="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-xs rounded-xl font-medium transition">Últimos 7 Dias</button>
-            <button onclick="carregarHistorico('mes')" id="btn-hist-mes" class="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-xs rounded-xl font-medium transition">Último Mês</button>
-            <button onclick="carregarHistorico('todos')" id="btn-hist-todos" class="px-3 py-1.5 bg-orange-500 text-black text-xs rounded-xl font-bold transition">Todos</button>
+      <div class="p-4 overflow-y-auto space-y-4 flex-1">
+        <!-- ALERTA DE GARÇOM SE HOUVER -->
+        <div id="modal-waiter-section" class="hidden bg-zinc-950 p-3 rounded-xl border border-amber-500/50 flex justify-between items-center">
+          <div class="flex items-center space-x-2 text-amber-400 font-bold text-xs">
+            <i class="fa-solid fa-bell animate-bounce text-base"></i>
+            <span>Cliente chamou o garçom!</span>
           </div>
+          <button onclick="atenderGarcomModal()" class="bg-amber-500 hover:bg-amber-400 text-black font-bold px-3 py-1.5 rounded-lg text-xs transition">Atender</button>
         </div>
 
-        <div class="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden shadow-xl">
-          <table class="w-full text-left border-collapse">
-            <thead>
-              <tr class="bg-zinc-950 text-zinc-400 text-xs uppercase border-b border-zinc-800">
-                <th class="p-3.5">Mesa</th>
-                <th class="p-3.5">Comanda</th>
-                <th class="p-3.5">Data / Fechamento</th>
-                <th class="p-3.5">Valor Total</th>
-                <th class="p-3.5 text-right">Ação</th>
-              </tr>
-            </thead>
-            <tbody id="historico-table-body" class="divide-y divide-zinc-800 text-xs">
-              <tr><td colspan="5" class="p-6 text-center text-zinc-500">A carregar histórico...</td></tr>
-            </tbody>
-          </table>
+        <!-- LISTA DE ITENS ATUAIS -->
+        <div>
+          <h4 class="text-xs font-bold text-zinc-400 uppercase mb-2">Itens na Comanda:</h4>
+          <div id="modal-items-list" class="space-y-2 max-h-48 overflow-y-auto pr-1"></div>
+        </div>
+
+        <!-- ADICIONAR ITEM MANUALMENTE -->
+        <div class="bg-zinc-950 p-3 rounded-xl border border-zinc-800 space-y-3">
+          <h4 class="text-xs font-bold text-orange-400 uppercase">➕ Lançar Pedido Manual (Garçom)</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <input type="text" id="manual-item-name" placeholder="Nome do item..." class="bg-zinc-900 border border-zinc-700 rounded-lg p-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-orange-500">
+            <input type="number" step="0.01" id="manual-item-price" placeholder="Preço (R$)" class="bg-zinc-900 border border-zinc-700 rounded-lg p-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-orange-500">
+            <input type="number" id="manual-item-qty" value="1" min="1" placeholder="Qtd" class="bg-zinc-900 border border-zinc-700 rounded-lg p-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-orange-500">
+          </div>
+          <input type="text" id="manual-item-notes" placeholder="Observações (opcional)..." class="w-full bg-zinc-900 border border-zinc-700 rounded-lg p-2 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-orange-500">
+          <button onclick="adicionarItemManual()" class="w-full bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-2 rounded-lg text-xs transition">Adicionar à Mesa</button>
         </div>
       </div>
 
-      <!-- JANELA 3: ESTATÍSTICAS E MÉTRICAS -->
-      <div id="view-estatisticas" class="hidden space-y-6">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl">
-            <span class="text-xs text-zinc-400 uppercase font-bold">Faturamento (Hoje)</span>
-            <div id="stat-fat-dia" class="text-2xl font-black text-orange-400 mt-2">R$ 0,00</div>
-          </div>
-          <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl">
-            <span class="text-xs text-zinc-400 uppercase font-bold">Faturamento (7 Dias)</span>
-            <div id="stat-fat-semana" class="text-2xl font-black text-emerald-400 mt-2">R$ 0,00</div>
-          </div>
-          <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl">
-            <span class="text-xs text-zinc-400 uppercase font-bold">Faturamento (30 Dias)</span>
-            <div id="stat-fat-mes" class="text-2xl font-black text-blue-400 mt-2">R$ 0,00</div>
-          </div>
+      <!-- RODAPÉ DE AÇÕES -->
+      <div class="bg-zinc-950 p-4 border-t border-zinc-800 space-y-3">
+        <div class="flex justify-between items-center text-sm font-bold">
+          <span class="text-zinc-400 text-xs">Total Atual:</span>
+          <span id="modal-total-value" class="text-xl font-black text-orange-400">R$ 0,00</span>
         </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl flex items-center justify-between">
-            <div>
-              <span class="text-xs text-zinc-400 uppercase font-bold">Horário de Pico</span>
-              <div id="stat-hora-pico" class="text-xl font-bold text-white mt-1">--:--</div>
-            </div>
-            <div class="w-12 h-12 bg-orange-500/10 text-orange-500 rounded-xl flex items-center justify-center text-xl"><i class="fa-solid fa-bolt"></i></div>
-          </div>
-          <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl flex items-center justify-between">
-            <div>
-              <span class="text-xs text-zinc-400 uppercase font-bold">Dia de Maior Movimento</span>
-              <div id="stat-dia-pico" class="text-xl font-bold text-white mt-1">---</div>
-            </div>
-            <div class="w-12 h-12 bg-emerald-500/10 text-emerald-500 rounded-xl flex items-center justify-center text-xl"><i class="fa-solid fa-calendar-days"></i></div>
-          </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <button onclick="cancelarMesaCompleta()" class="bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/30 font-bold py-2.5 rounded-xl text-xs transition">
+            <i class="fa-solid fa-ban mr-1"></i> Cancelar / Limpar Mesa
+          </button>
+          <button onclick="realizarCheckout()" class="bg-orange-500 hover:bg-orange-400 text-black font-bold py-2.5 rounded-xl text-xs transition shadow-lg">
+            <i class="fa-solid fa-cash-register mr-1"></i> Fechar Comanda
+          </button>
         </div>
+      </div>
+    </div>
+  </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl">
-            <h4 class="text-xs font-bold text
+  <!-- MODAL: DETALHES DE HISTÓRICO -->
+  <div id="modal-historico" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-zinc-900 border border-zinc-800 w-full max-w-lg rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+      <div class="bg-zinc-950 p-4 border-b border-zinc-800 flex justify-between items-center">
+        <h3 class="font-bold text-white text-sm">Detalhes da Comanda <span id="hist-modal-code" class="text-orange-500"></span></h3>
+        <button onclick="closeModal('modal-historico')" class="text-zinc-400 hover:text-white p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <div class="p-4 flex-1 overflow-y-auto space-y-3">
+        <div class="text-xs text-zinc-400 flex justify-between">
+          <span>Mesa: <strong id="hist-modal-mesa" class="text-white"></strong></span>
+          <span>Data: <strong id="hist-modal-data" class="text-white"></strong></span>
+        </div>
+        <div class="border-t border-zinc-800 pt-3">
+          <h4 class="text-xs font-bold text-zinc-400 uppercase mb-2">Itens Consumidos:</h4>
+          <div id="hist-modal-items" class="space-y-2"></div>
+        </div>
+        <div class="border-t border-zinc-800 pt-3 flex justify-between items-center text-sm">
+          <span class="font-bold text-zinc-300">Total Pago:</span>
+          <span id="hist-modal-total" class="font-black text-orange-400 text-lg"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST ALERTS -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all bg-zinc-900 border border-zinc-700 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-3">
+    <i id="toast-icon" class="fa-solid fa-info-circle text-orange-400 text-lg"></i>
+    <span id="toast-message" class="text-xs font-medium">Ação realizada!</span>
+  </div>
+
+  <script>
+    const API_URL = 'https://restaurante1-backend.onrender.com';
+    let tablesState = [];
+    let currentEditingTableId = null;
+    let audioCtx = null;
+
+    window.onload = function() {
+        if (localStorage.getItem('admin_logado') === 'true') {
+            document.getElementById('login-screen').classList.add('hidden');
+            carregarMesas();
+            iniciarSocket();
+        } else {
+            document.getElementById('login-screen').classList.remove('hidden');
+        }
+    };
+
+    function fazerLogin() {
+        const user = document.getElementById('login-user').value.trim();
+        const pass = document.getElementById('login-pass').value.trim();
+        const err = document.getElementById('login-error');
+
+        if (user === 'admin' && pass === 'admin123') {
+            localStorage.setItem('admin_logado', 'true');
+            err.classList.add('hidden');
+            document.getElementById('login-screen').classList.add('hidden');
+            carregarMesas();
+            iniciarSocket();
+        } else {
+            err.innerText = 'Utilizador ou senha incorretos!';
+            err.classList.remove('hidden');
+        }
+    }
+
+    function fazerLogout() {
+        localStorage.removeItem('admin_logado');
+        document.getElementById('login-user').value = '';
+        document.getElementById('login-pass').value = '';
+        document.getElementById('login-error').classList.add('hidden');
+        document.getElementById('login-screen').classList.remove('hidden');
+    }
+
+    function switchTab(tab) {
+        document.getElementById('view-mesas').classList.add('hidden');
+        document.getElementById('view-historico').classList.add('hidden');
+        document.getElementById('view-estatisticas').classList.add('hidden');
+
+        document.getElementById('tab-btn-mesas').className = "px-4 py-2 rounded-lg text-xs font-bold transition text-zinc-400 hover:text-white flex items-center space-x-2";
+        document.getElementById('tab-btn-historico').className = "px-4 py-2 rounded-lg text-xs font-bold transition text-zinc-400 hover:text-white flex items-center space-x-2";
+        document.getElementById('tab-btn-estatisticas').className = "px-4 py-2 rounded-lg text-xs font-bold transition text-zinc-400 hover:text-white flex items-center space-x-2";
+
+        if (tab === 'mesas') {
+            document.getElementById('view-mesas').classList.remove('hidden');
+            document.getElementById('tab-btn-mesas').className = "px-4 py-2 rounded-lg text-xs font-bold transition bg-orange-500 text-black flex items-center space-x-2";
+            carregarMesas();
+        } else if (tab === 'historico') {
+            document.getElementById('view-historico').classList.remove('hidden');
+            document.getElementById('tab-btn-historico
