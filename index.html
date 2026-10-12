@@ -172,9 +172,7 @@
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
             <div class="relative bg-black w-full h-56 flex items-center justify-center overflow-hidden">
-                <video id="modal-video" class="w-full h-full object-cover" autoplay loop muted playsinline poster="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80">
-                    <source id="modal-video-source" src="https://assets.mixkit.co/videos/preview/mixkit-top-view-of-a-delicious-burger-42881-large.mp4" type="video/mp4">
-                </video>
+                <img id="modal-dish-img" src="" class="w-full h-full object-cover">
             </div>
             <div class="p-5 flex-1 overflow-y-auto">
                 <div class="flex items-start justify-between">
@@ -275,14 +273,10 @@
 
     <script>
         const API_URL = 'https://restaurante1-backend.onrender.com';
-
-        // Captura direta e segura do parâmetro da URL
         const urlParams = new URLSearchParams(window.location.search);
         const NUMERO_DA_MESA = urlParams.get('mesa') || '1';
-
         let MESA_TOKEN = null;
 
-        // Atualiza o texto na tela imediatamente
         function updateMesaDisplay() {
             const footerTag = document.getElementById('mesa-tag-footer');
             if (footerTag) {
@@ -312,21 +306,33 @@
             updateMesaDisplay();
             initMesaSession();
         });
-
-        // Executa atualização visual imediata
         updateMesaDisplay();
 
-        // CARDÁPIO CACHEADO
+        // CARDÁPIO CACHEADO EXPANDIDO
         const MENU_DATA = [
-            { id: 'h1', name: 'Smash Bacon Supreme', category: 'hamburgueres', price: 34.90, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80', description: 'Dois smashes artesanais 90g, cheddar, bacon e maionese.' },
-            { id: 'p1', name: 'Batata Rústica Trufada', category: 'petiscos', price: 28.90, image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80', description: 'Batatas com azeite de trufas e parmesão.' },
-            { id: 'b1', name: 'Refrigerante Lata', category: 'bebidas', price: 7.00, image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80', description: 'Refrigerante gelado.' }
+            { id: 'h1', name: 'Smash Bacon Supreme', category: 'hamburgueres', price: 34.90, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80', description: 'Dois smashes artesanais 90g, cheddar, bacon crocante e maionese da casa.' },
+            { id: 'h2', name: 'Double Cheddar Melt', category: 'hamburgueres', price: 38.90, image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80', description: 'Blend especial 180g, muito creme cheddar melt e cebola caramelizada.' },
+            { id: 'h3', name: 'Crispy Chicken Burger', category: 'hamburgueres', price: 32.90, image: 'https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&w=600&q=80', description: 'Sobrecoxa empanada crocante, alface americana, molho tártaro artesanal.' },
+            { id: 'h4', name: 'Burger Vegetariano de Grão', category: 'hamburgueres', price: 29.90, image: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80', description: 'Hambúrguer de grão-de-bico com quinoa, queijo prato, tomate e rúcula.' },
+            
+            { id: 'p1', name: 'Batata Rústica Trufada', category: 'petiscos', price: 28.90, image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80', description: 'Batatas com azeite de trufas, flor de sal e parmesão ralado.' },
+            { id: 'p2', name: 'Onion Rings Crocantes', category: 'petiscos', price: 24.90, image: 'https://images.unsplash.com/photo-1639024471283-03518883512d?auto=format&fit=crop&w=600&q=80', description: 'Anéis de cebola empanados super crocantes acompanhados de molho barbecue.' },
+            { id: 'p3', name: 'Dadinhos de Tapioca', category: 'petiscos', price: 31.90, image: 'https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&w=600&q=80', description: 'Dadinhos de tapioca com queijo coalho servidos com geleia de pimenta.' },
+
+            { id: 'b1', name: 'Refrigerante Lata', category: 'bebidas', price: 7.00, image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80', description: 'Lata 350ml gelada (Coca-Cola, Guaraná, Sprite).' },
+            { id: 'b2', name: 'Suco Natural de Laranja', category: 'bebidas', price: 9.50, image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=600&q=80', description: 'Feito na hora com frutas frescas 400ml.' },
+            { id: 'b3', name: 'Cerveja Artesanal IPA 500ml', category: 'bebidas', price: 19.90, image: 'https://images.unsplash.com/photo-1608270105387-98565538e12d?auto=format&fit=crop&w=600&q=80', description: 'Cerveja artesanal encorpada com notas cítricas.' },
+            { id: 'b4', name: 'Água Mineral com Gás', category: 'bebidas', price: 5.00, image: 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?auto=format&fit=crop&w=600&q=80', description: 'Garrafa 500ml.' },
+
+            { id: 's1', name: 'Petit Gâteau com Sorvete', category: 'sobremesas', price: 22.00, image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80', description: 'Bolinho de chocolate quente com recheio cremoso e sorvete de baunilha.' },
+            { id: 's2', name: 'Brownie de Chocolate Belga', category: 'sobremesas', price: 18.50, image: 'https://images.unsplash.com/photo-1514517521153-1be72277b32f?auto=format&fit=crop&w=600&q=80', description: 'Brownie denso com nozes e calda de chocolate belga.' }
         ];
 
         const CATEGORIES = [
             { id: 'hamburgueres', name: 'Hambúrgueres', icon: 'fa-burger' },
             { id: 'petiscos', name: 'Petiscos', icon: 'fa-utensils' },
-            { id: 'bebidas', name: 'Bebidas', icon: 'fa-glass-water' }
+            { id: 'bebidas', name: 'Bebidas', icon: 'fa-glass-water' },
+            { id: 'sobremesas', name: 'Sobremesas', icon: 'fa-ice-cream' }
         ];
 
         let activeCategory = null;
@@ -435,6 +441,7 @@
             document.getElementById('modal-dish-title').textContent = currentDish.name;
             document.getElementById('modal-dish-price').textContent = `R$ ${currentDish.price.toFixed(2).replace('.', ',')}`;
             document.getElementById('modal-dish-description').textContent = currentDish.description;
+            document.getElementById('modal-dish-img').src = currentDish.image;
             openModal('modal-dish-detail');
         }
 
@@ -522,7 +529,6 @@
             document.getElementById('toast-icon').className = `fa-solid ${icon} text-base`;
             toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-full');
             clearTimeout(toastTimeout);
-            // Alterado de 3000ms para 1500ms para sumir mais rápido
             toastTimeout = setTimeout(() => { toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-full'); }, 1500);
         }
 
