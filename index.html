@@ -84,6 +84,17 @@
 </head>
 <body class="min-h-screen relative pb-10 bg-black text-zinc-100">
 
+    <!-- TELA DE BLOQUEIO SE NÃO HOUVER TOKEN VÁLIDO NA URL -->
+    <div id="screen-blocked" class="hidden fixed inset-0 z-[100] bg-black flex items-center justify-center p-6 text-center">
+        <div class="bg-zinc-900 border border-zinc-800 p-8 rounded-3xl max-w-sm space-y-4 shadow-2xl">
+            <div class="w-16 h-16 bg-rose-500/20 text-rose-500 rounded-2xl flex items-center justify-center text-2xl mx-auto border border-rose-500/30">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white">Acesso Restrito</h3>
+            <p class="text-xs text-zinc-400 leading-relaxed">Para aceder ao cardápio e realizar pedidos, por favor aproxime o seu telemóvel da **Tag NFC** ou leia o **QR Code** localizado na sua mesa.</p>
+        </div>
+    </div>
+
     <!-- TELA 1: LANDING -->
     <section id="screen-landing" class="max-w-md mx-auto min-h-[90vh] flex flex-col justify-between p-6 animate-fade-in">
         <div class="flex flex-col items-center text-center pt-6">
@@ -275,7 +286,7 @@
         const API_URL = 'https://restaurante1-backend.onrender.com';
         const urlParams = new URLSearchParams(window.location.search);
         const NUMERO_DA_MESA = urlParams.get('mesa') || '1';
-        let MESA_TOKEN = null;
+        const MESA_TOKEN = urlParams.get('token') || '';
 
         function updateMesaDisplay() {
             const footerTag = document.getElementById('mesa-tag-footer');
@@ -284,27 +295,16 @@
             }
         }
 
-        async function initMesaSession() {
-            try {
-                const response = await fetch(`${API_URL}/api/mesa/sessao`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ mesa_numero: NUMERO_DA_MESA })
-                });
-                const data = await response.json();
-                if (response.ok && data.token_sessao) {
-                    MESA_TOKEN = data.token_sessao;
-                } else {
-                    showToast('Aviso', 'Sessão da mesa inválida ou expirada.', 'fa-triangle-exclamation');
-                }
-            } catch (error) {
-                console.error('Erro ao conectar ao servidor de sessão:', error);
-            }
-        }
-
         window.addEventListener('DOMContentLoaded', () => {
+            // Valida se o token de segurança veio na URL (se escaneou o NFC)
+            if (!MESA_TOKEN) {
+                document.getElementById('screen-blocked').classList.remove('hidden');
+                return;
+            }
+
             updateMesaDisplay();
-            initMesaSession();
+            renderCategories();
+            renderDishes();
         });
         updateMesaDisplay();
 
@@ -340,11 +340,6 @@
         let currentDish = null;
         let customizeQty = 1;
 
-        window.onload = function() {
-            renderCategories();
-            renderDishes();
-        };
-
         function navigateTo(screenId) {
             document.getElementById('screen-landing').classList.add('hidden');
             document.getElementById('screen-menu').classList.remove('hidden');
@@ -362,7 +357,7 @@
                 if (response.ok) {
                     showToast('Garçom Chamado!', 'Um atendente foi notificado e já está indo até você.', 'fa-bell');
                 } else {
-                    showToast('Acesso Negado', 'Sessão inválida ou mesa fechada.', 'fa-xmark');
+                    showToast('Acesso Negado', 'Sessão inválida ou comanda encerrada.', 'fa-xmark');
                 }
             } catch (error) {
                 console.error(error);
@@ -390,7 +385,7 @@
                     closeModal('modal-cart');
                     showToast('Sucesso', 'Pedido enviado direto para a cozinha!', 'fa-circle-check');
                 } else {
-                    showToast('Erro', 'Falha ao enviar o pedido (Sessão expirada).', 'fa-xmark');
+                    showToast('Erro', 'Sessão expirada ou comanda encerrada.', 'fa-xmark');
                 }
             } catch (error) {
                 console.error(error);
