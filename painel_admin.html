@@ -573,4 +573,471 @@
             if(btn) btn.className = f === filtro ? "px-4 py-1.5 bg-orange-500 text-black text-xs rounded-lg font-black shadow-sm transition" : "px-4 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-xs rounded-lg font-bold text-zinc-300 transition";
         });
 
-        const tbody = document.getElementById('historico-table
+        const tbody = document.getElementById('historico-table-body');
+        tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-zinc-500 font-medium"><i class="fa-solid fa-spinner fa-spin mr-2"></i> A carregar...</td></tr>`;
+
+        try {
+            const url = filtro === 'todos' ? `${API_URL}/api/historico` : `${API_URL}/api/historico?filtro=${filtro}`;
+            const res = await fetch(url);
+            const data = await res.json();
+
+            tbody.innerHTML = '';
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-zinc-500 font-medium">Nenhum registo encontrado.</td></tr>`;
+                return;
+            }
+
+            window.historicoCache = data;
+
+            data.forEach((comanda, index) => {
+                const dataF = new Date(comanda.data_fechamento).toLocaleString('pt-BR');
+                const totalF = parseFloat(comanda.valor_total_final || 0).toFixed(2).replace('.', ',');
+                tbody.innerHTML += `
+                    <tr class="hover:bg-zinc-800/50 transition border-b border-zinc-800/50 last:border-0">
+                        <td class="p-4 font-black text-white">Mesa ${comanda.mesa_numero}</td>
+                        <td class="p-4 text-orange-400 font-mono text-xs font-bold">${comanda.codigo}</td>
+                        <td class="p-4 text-zinc-400 text-xs"><i class="fa-regular fa-clock mr-1"></i> ${dataF}</td>
+                        <td class="p-4 font-black text-emerald-400">R$ ${totalF}</td>
+                        <td class="p-4 text-right">
+                            <button onclick="abrirDetalhesHistorico(${index})" class="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl text-xs font-bold transition shadow-sm border border-zinc-700">Ver Detalhes</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        } catch (e) {
+            tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-rose-500 font-bold"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Erro ao carregar histórico.</td></tr>`;
+        }
+    }
+
+    function abrirDetalhesHistorico(index) {
+        const comanda = window.historicoCache[index];
+        document.getElementById('hist-modal-code').innerText = comanda.codigo;
+        document.getElementById('hist-modal-mesa').innerText = comanda.mesa_numero;
+        document.getElementById('hist-modal-data').innerText = new Date(comanda.data_fechamento).toLocaleString('pt-BR');
+        document.getElementById('hist-modal-total').innerText = `R$ ${parseFloat(comanda.valor_total_final || 0).toFixed(2).replace('.', ',')}`;
+
+        const itemsContainer = document.getElementById('hist-modal-items');
+        itemsContainer.innerHTML = '';
+        if (comanda.items) {
+            comanda.items.forEach(item => {
+                const sub = item.preco_unitario * item.quantidade;
+                itemsContainer.innerHTML += `
+                    <div class="bg-zinc-950 p-3 rounded-xl border border-zinc-800 flex justify-between items-center text-sm">
+                        <div>
+                            <span class="font-bold text-white">${item.quantidade}x ${item.nome_item}</span>
+                            ${item.observacoes ? `<div class="text-[11px] text-zinc-400 mt-0.5"><i class="fa-solid fa-comment-dots mr-1"></i> ${item.observacoes}</div>` : ''}
+                        </div>
+                        <span class="text-zinc-300 font-bold">R$ ${sub.toFixed(2).replace('.', ',')}</span>
+                    </div>
+                `;
+            });
+        }
+        document.getElementById('modal-historico').classList.remove('hidden');
+    }
+
+    async function carregarEstatisticas() {
+        try {
+            const res = await fetch(`${API_URL}/api/estatisticas`);
+            const data = await res.json();
+
+            document.getElementById('stat-fat-dia').innerText = `R$ ${parseFloat(data.faturamento.dia || 0).toFixed(2).replace('.', ',')}`;
+            document.getElementById('stat-fat-semana').innerText = `R$ ${parseFloat(data.faturamento.semana || 0).toFixed(2).replace('.', ',')}`;
+            document.getElementById('stat-fat-mes').innerText = `R$ ${parseFloat(data.faturamento.mes || 0).toFixed(2).replace('.', ',')}`;
+            document.getElementById('stat-hora-pico').innerText = data.horaPico;
+            document.getElementById('stat-dia-pico').innerText = data.diaPico;
+
+            const topList = document.getElementById('stat-top-itens');
+            const lowList = document.getElementById('stat-low-itens');
+            topList.innerHTML = '';
+            lowList.innerHTML = '';
+
+            if (data.itens.length > 0) {
+                data.itens.slice(0, 5).forEach(i => {
+                    topList.innerHTML += `<div class="flex justify-between items-center text-sm bg-zinc-950 p-3 rounded-xl border border-zinc-800"><span class="font-bold text-white">${i.nome_item}</span><span class="bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded text-xs font-black">${i.total_qtd}x</span></div>`;
+                });
+                data.itens.slice(-5).reverse().forEach(i => {
+                    lowList.innerHTML += `<div class="flex justify-between items-center text-sm bg-zinc-950 p-3 rounded-xl border border-zinc-800"><span class="font-bold text-white">${i.nome_item}</span><span class="bg-rose-500/20 text-rose-400 px-2 py-1 rounded text-xs font-black">${i.total_qtd}x</span></div>`;
+                });
+            } else {
+                topList.innerHTML = `<span class="text-xs text-zinc-500 italic">Sem dados suficientes.</span>`;
+                lowList.innerHTML = `<span class="text-xs text-zinc-500 italic">Sem dados suficientes.</span>`;
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function renderWaiterQueue() {
+        const queueList = document.getElementById('waiter-queue-list');
+        const badge = document.getElementById('waiter-queue-count');
+        const callingTables = tablesState.filter(t => t.waiterCalledAt);
+
+        queueList.innerHTML = '';
+        badge.innerText = callingTables.length;
+        badge.classList.toggle('hidden', callingTables.length === 0);
+
+        if (callingTables.length === 0) {
+            queueList.innerHTML = '<div class="text-xs text-zinc-500 text-center p-4 font-medium"><i class="fa-solid fa-mug-hot text-2xl mb-2 block opacity-20"></i>Nenhuma chamada pendente.</div>';
+            return;
+        }
+
+        callingTables.forEach(table => {
+            queueList.innerHTML += `
+                <div class="bg-amber-950/30 border border-amber-500/20 p-3 rounded-xl flex justify-between items-center">
+                    <span class="text-sm font-black text-amber-400 flex items-center"><i class="fa-solid fa-bell mr-2 animate-bounce"></i> Mesa ${table.number}</span>
+                    <button onclick="atenderGarcom(${table.id})" class="bg-amber-500 hover:bg-amber-400 text-black text-xs font-black px-3 py-1.5 rounded-lg shadow-sm transition uppercase">Atender</button>
+                </div>
+            `;
+        });
+    }
+
+    function toggleWaiterQueue() { document.getElementById('waiter-queue-drawer').classList.toggle('hidden'); }
+
+    async function atenderGarcom(tableId) {
+        try {
+            await fetch(`${API_URL}/api/garcom/atender`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mesa_id: tableId })
+            });
+            showToast("Atendimento registado!", "orange");
+            carregarMesas();
+        } catch (e) { console.error(e); }
+    }
+
+    async function atenderGarcomModal() {
+        if (!currentEditingTableId) return;
+        await atenderGarcom(currentEditingTableId);
+        const table = tablesState.find(t => t.id === currentEditingTableId);
+        if (table) table.waiterCalledAt = false;
+        openTableModal(currentEditingTableId);
+        renderTablesGrid();
+        renderWaiterQueue();
+    }
+
+    function openTableModal(tableId) {
+        const table = tablesState.find(t => t.id === tableId);
+        if (!table) return;
+        currentEditingTableId = tableId;
+        document.getElementById('modal-table-num').innerText = table.number;
+        
+        const waiterSection = document.getElementById('modal-waiter-section');
+        waiterSection.classList.toggle('hidden', !table.waiterCalledAt);
+
+        const list = document.getElementById('modal-items-list');
+        let total = 0;
+        list.innerHTML = '';
+
+        if (table.items.length === 0) {
+            list.innerHTML = `<div class="text-xs text-zinc-500 text-center py-6 italic">A comanda desta mesa está vazia.</div>`;
+        } else {
+            table.items.forEach(item => {
+                const t = item.price * item.qty;
+                total += t;
+                // Adicionei uma borda laranja se o item nunca foi impresso (opcional visual)
+                const isImpresso = itensImpressosGlobais.has(item.id);
+                const borderClass = isImpresso ? "border-zinc-800" : "border-orange-500/30 bg-orange-500/5";
+
+                list.innerHTML += `
+                    <div class="p-3 rounded-xl flex justify-between items-center border ${borderClass} mb-2">
+                        <div>
+                            <div class="text-sm font-bold text-white">${item.qty}x ${item.name}</div>
+                            ${item.notes ? `<div class="text-[11px] text-zinc-400 mt-1"><i class="fa-solid fa-comment-dots text-zinc-600 mr-1"></i> ${item.notes}</div>` : ''}
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span class="text-zinc-300 text-sm font-bold">R$ ${t.toFixed(2).replace('.', ',')}</span>
+                            <button onclick="apagarItemIndividual(${item.id})" class="text-rose-500 hover:text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 w-8 h-8 rounded-lg flex items-center justify-center transition"><i class="fa-solid fa-trash-can text-sm"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        document.getElementById('modal-total-value').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        document.getElementById('modal-comanda').classList.remove('hidden');
+    }
+
+    // ========== NOVA FUNCIONALIDADE: IMPRESSÃO ==========
+
+    function abrirModalImpressao() {
+      const table = tablesState.find(t => t.id === currentEditingTableId);
+      if (!table || table.items.length === 0) {
+          showToast("A mesa está vazia. Não há nada para imprimir.", "rose");
+          return;
+      }
+      
+      document.getElementById('impressao-num-mesa').innerText = table.number;
+      const listaDiv = document.getElementById('lista-checkboxes-imprimir');
+      listaDiv.innerHTML = ''; 
+      
+      table.items.forEach((item) => {
+          // A INTELIGÊNCIA: Se o ID do item NÃO estiver na nossa memória global, a checkbox já vem marcada (checked).
+          const isJaImpresso = itensImpressosGlobais.has(item.id);
+          const checkedStr = isJaImpresso ? '' : 'checked';
+          
+          listaDiv.innerHTML += `
+              <div class="flex items-center space-x-3 p-2 hover:bg-zinc-900 rounded-lg transition border-b border-zinc-800/50 last:border-0">
+                  <input type="checkbox" id="check-print-${item.id}" value="${item.id}" ${checkedStr} class="w-5 h-5 accent-orange-500 cursor-pointer">
+                  <label for="check-print-${item.id}" class="flex-1 cursor-pointer">
+                      <div class="text-sm font-bold text-white flex justify-between">
+                         <span>${item.qty}x ${item.name}</span>
+                         ${isJaImpresso ? '<span class="text-[10px] bg-zinc-800 text-zinc-400 px-1.5 py-0.5 rounded font-medium uppercase">Já Impresso</span>' : '<span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded font-bold uppercase">Novo</span>'}
+                      </div>
+                      ${item.notes ? `<div class="text-[11px] text-zinc-400 mt-0.5">Obs: ${item.notes}</div>` : ''}
+                  </label>
+              </div>
+          `;
+      });
+      
+      document.getElementById('modal-impressao').classList.remove('hidden');
+    }
+
+    function fecharModalImpressao() {
+        document.getElementById('modal-impressao').classList.add('hidden');
+    }
+
+    function gerarEImprimirCupom() {
+        const table = tablesState.find(t => t.id === currentEditingTableId);
+        const areaCupom = document.getElementById('area-cupom-impresso');
+        
+        let dataAtual = new Date().toLocaleString('pt-BR');
+        let htmlCupom = `
+            <div style="text-align: center; border-bottom: 2px dashed #000; padding-bottom: 10px; margin-bottom: 10px;">
+                <h2 style="margin:0; font-size:18px;">PEDIDO COZINHA</h2>
+                <h1 style="margin:5px 0; font-size:24px;">MESA ${table.number}</h1>
+                <p style="margin:0; font-size:12px;">${dataAtual}</p>
+            </div>
+        `;
+        
+        let itensSelecionados = 0;
+        
+        // Passa por todos os itens da mesa
+        table.items.forEach((item) => {
+            const checkbox = document.getElementById(`check-print-${item.id}`);
+            
+            // Se o funcionário deixou a caixa marcada
+            if (checkbox && checkbox.checked) {
+                htmlCupom += `
+                    <div style="margin-bottom: 10px;">
+                      <div style="font-weight: bold; font-size: 16px;">${item.qty}x ${item.name}</div>
+                      ${item.notes ? `<div style="font-size: 14px; text-transform: uppercase;">-> OBS: ${item.notes}</div>` : ''}
+                    </div>
+                `;
+                itensSelecionados++;
+                
+                // Grava na memória que este item específico já foi mandado para a impressora!
+                itensImpressosGlobais.add(item.id);
+            }
+        });
+        
+        htmlCupom += `
+            <div style="text-align: center; border-top: 2px dashed #000; margin-top: 15px; padding-top: 10px; font-size: 12px;">
+                <p>*** FIM DA COMANDA ***</p>
+                <p>.</p>
+            </div>
+        `;
+        
+        if (itensSelecionados === 0) {
+            showToast("Selecione pelo menos um item para imprimir!", "rose");
+            return;
+        }
+        
+        // Injeta o HTML na área invisível e chama a impressão do navegador
+        areaCupom.innerHTML = htmlCupom;
+        fecharModalImpressao();
+        
+        // Timeout rápido para garantir que o modal fechou antes da tela de imprimir abrir
+        setTimeout(() => { window.print(); }, 100);
+    }
+    // ======================================================
+
+    function openAdminMenuPicker() {
+        renderAdminCategories();
+        renderAdminDishes();
+        document.getElementById('modal-admin-menu').classList.remove('hidden');
+    }
+
+    function renderAdminCategories() {
+        const container = document.getElementById('admin-categories-container');
+        container.innerHTML = '';
+        CATEGORIES.forEach(cat => {
+            const isActive = adminActiveCategory === cat.id;
+            const btn = document.createElement('button');
+            btn.className = `px-4 py-2 rounded-xl text-xs font-bold border transition shrink-0 flex items-center space-x-2 ${isActive ? 'bg-orange-500 text-black border-orange-500 shadow-lg shadow-orange-500/20' : 'bg-zinc-900 text-zinc-400 border-zinc-800 hover:border-zinc-700 hover:text-white'}`;
+            btn.onclick = () => { adminActiveCategory = adminActiveCategory === cat.id ? null : cat.id; renderAdminCategories(); renderAdminDishes(); };
+            btn.innerHTML = `<i class="fa-solid ${cat.icon}"></i> <span>${cat.name}</span>`;
+            container.appendChild(btn);
+        });
+    }
+
+    function renderAdminDishes() {
+        const grid = document.getElementById('admin-dishes-grid');
+        grid.innerHTML = '';
+        const filtered = adminActiveCategory ? MENU_DATA.filter(d => d.category === adminActiveCategory) : MENU_DATA;
+
+        filtered.forEach(dish => {
+            const card = document.createElement('div');
+            card.className = "bg-zinc-950 border border-zinc-800 p-3 rounded-xl flex items-center space-x-3 cursor-pointer hover:border-orange-500 transition group";
+            card.onclick = () => openAdminCustomizeModal(dish.id);
+            card.innerHTML = `
+                <img src="${dish.image}" class="w-16 h-16 rounded-lg object-cover border border-zinc-800 group-hover:border-orange-500/50 transition">
+                <div class="flex-1">
+                    <h5 class="text-sm font-bold text-white line-clamp-1">${dish.name}</h5>
+                    <div class="text-xs font-black text-zinc-400 mt-1">R$ ${dish.price.toFixed(2).replace('.', ',')}</div>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-zinc-900 group-hover:bg-orange-500 group-hover:text-black text-zinc-500 flex items-center justify-center transition">
+                    <i class="fa-solid fa-plus"></i>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function openAdminCustomizeModal(dishId) {
+        selectedAdminDish = MENU_DATA.find(d => d.id === dishId);
+        adminCustomizeQty = 1;
+        document.getElementById('admin-custom-title').innerText = selectedAdminDish.name;
+        document.getElementById('admin-custom-qty').innerText = adminCustomizeQty;
+        document.getElementById('admin-custom-notes').value = '';
+        document.getElementById('admin-custom-total').innerText = `R$ ${selectedAdminDish.price.toFixed(2).replace('.', ',')}`;
+        document.getElementById('modal-admin-menu').classList.add('hidden');
+        document.getElementById('modal-admin-customize').classList.remove('hidden');
+    }
+
+    function updateAdminQty(delta) {
+        adminCustomizeQty = Math.max(1, adminCustomizeQty + delta);
+        document.getElementById('admin-custom-qty').innerText = adminCustomizeQty;
+        const total = selectedAdminDish.price * adminCustomizeQty;
+        document.getElementById('admin-custom-total').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+    }
+
+    async function confirmAdminAddToCart() {
+        if (!currentEditingTableId || !selectedAdminDish) return;
+        const notes = document.getElementById('admin-custom-notes').value.trim();
+
+        try {
+            await fetch(`${API_URL}/api/admin/mesa/adicionar-itens`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    mesa_id: currentEditingTableId,
+                    cart: [{ 
+                        dishId: selectedAdminDish.id, 
+                        name: selectedAdminDish.name, 
+                        unitPrice: selectedAdminDish.price, 
+                        quantity: adminCustomizeQty, 
+                        notes 
+                    }]
+                })
+            });
+            showToast(`${adminCustomizeQty}x ${selectedAdminDish.name} adicionado!`);
+            closeModal('modal-admin-customize');
+            await carregarMesas();
+            openTableModal(currentEditingTableId);
+        } catch (e) {
+            showToast("Erro ao adicionar item", "rose");
+        }
+    }
+
+    async function apagarItemIndividual(itemId) {
+        if (!confirm("Remover este item da comanda?")) return;
+        try {
+            await fetch(`${API_URL}/api/admin/comanda-item/${itemId}`, { method: 'DELETE' });
+            
+            // Quando removemos um item, também o apagamos da memória da impressora para não haver falhas futuras
+            itensImpressosGlobais.delete(itemId);
+            
+            showToast("Item removido da mesa!");
+            await carregarMesas();
+            openTableModal(currentEditingTableId);
+        } catch (e) {
+            showToast("Erro ao remover item", "rose");
+        }
+    }
+
+    async function cancelarMesaCompleta() {
+        const table = tablesState.find(t => t.id === currentEditingTableId);
+        if (!table) return;
+
+        if (!confirm(`ATENÇÃO! Tem certeza que deseja CANCELAR a Mesa ${table.number}? O histórico não será salvo.`)) return;
+
+        try {
+            await fetch(`${API_URL}/api/admin/mesa/cancelar`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mesa_id: table.id, comanda_id: table.comandaId })
+            });
+            
+            // Limpa a memória de impressão desta mesa ao cancelar
+            if(table.items) { table.items.forEach(i => itensImpressosGlobais.delete(i.id)); }
+
+            closeModal('modal-comanda');
+            showToast(`Mesa ${table.number} cancelada e limpa!`);
+            carregarMesas();
+        } catch (e) {
+            showToast("Erro ao cancelar mesa", "rose");
+        }
+    }
+
+    async function realizarCheckout() {
+        const table = tablesState.find(t => t.id === currentEditingTableId);
+        if (!table || table.items.length === 0) {
+            showToast("Mesa vazia. Nada a cobrar.", "rose");
+            return;
+        }
+        const subtotal = table.items.reduce((s, i) => s + (i.price * i.qty), 0);
+
+        try {
+            await fetch(`${API_URL}/api/checkout`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    comanda_id: table.comandaId,
+                    mesa_id: table.id,
+                    forma_pagamento: 'BALCAO',
+                    subtotal: subtotal,
+                    taxa: 0,
+                    desconto: 0,
+                    final: subtotal
+                })
+            });
+            
+            // Limpa a memória de impressão desta mesa pois a comanda foi fechada
+            table.items.forEach(i => itensImpressosGlobais.delete(i.id));
+
+            closeModal('modal-comanda');
+            showToast(`Mesa ${table.number} fechada e paga!`);
+            carregarMesas();
+        } catch (e) {
+            showToast("Erro ao fechar comanda", "rose");
+        }
+    }
+
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+    function playWaiterChimeSound() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.frequency.setValueAtTime(880, now);
+        gain.gain.setValueAtTime(0.3, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+        osc.start(now); osc.stop(now + 0.5);
+    }
+
+    function showToast(msg, color="orange") {
+        const toast = document.getElementById('toast');
+        const icon = document.getElementById('toast-icon');
+        document.getElementById('toast-message').innerText = msg;
+        
+        if(color === "amber") icon.className = "fa-solid fa-bell text-amber-400 text-2xl";
+        else if(color === "rose") icon.className = "fa-solid fa-circle-xmark text-rose-400 text-2xl";
+        else icon.className = "fa-solid fa-circle-check text-emerald-400 text-2xl";
+
+        toast.classList.remove('translate-y-20', 'opacity-0');
+        setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3500);
+    }
+  </script>
+</body>
+</html>
