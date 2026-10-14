@@ -14,6 +14,39 @@
       theme: { extend: { colors: { orange: { 400: '#fb923c', 500: '#f97316' } } } }
     }
   </script>
+
+  <!-- ESTILOS PARA A IMPRESSORA TÉRMICA -->
+  <style>
+    /* Oculta a área de impressão na tela do computador */
+    #area-cupom-impresso { display: none; }
+
+    /* Quando a tela nativa de impressão abrir, aplicam-se estas regras */
+    @media print {
+      /* Esconde o painel inteiro */
+      body * { visibility: hidden; }
+      
+      /* Mostra apenas a área do cupom e o seu conteúdo */
+      #area-cupom-impresso, #area-cupom-impresso * { visibility: visible; }
+      
+      /* Formata como um cupom de 80mm */
+      #area-cupom-impresso {
+        display: block !important;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 80mm; /* Tamanho padrão térmica. Mude para 58mm se for a pequena */
+        margin: 0;
+        padding: 0;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 14px;
+        color: #000;
+        background: #fff;
+      }
+
+      /* Garante que o fundo seja branco no papel */
+      body { background-color: white !important; }
+    }
+  </style>
 </head>
 <body class="h-full font-sans text-zinc-100 bg-zinc-950 flex flex-col selection:bg-orange-500 selection:text-white">
 
@@ -44,13 +77,13 @@
   <!-- NAVBAR COM ABAS DE NAVEGAÇÃO -->
   <nav class="bg-zinc-900 border-b border-zinc-800 px-4 py-3 flex flex-wrap items-center justify-between gap-4">
     <div class="flex items-center space-x-4">
-      <div class="w-9 h-9 bg-orange-500/20 text-orange-400 rounded-xl flex items-center justify-center font-bold border border-orange-500/30">R1</div>
-      <h2 class="font-bold text-zinc-100 hidden sm:block">Painel de Gestão</h2>
+      <div class="w-10 h-10 bg-orange-500/20 text-orange-400 rounded-xl flex items-center justify-center font-black border border-orange-500/30">R1</div>
+      <h2 class="font-bold text-zinc-100 hidden sm:block tracking-wide uppercase text-sm">Painel de Gestão</h2>
     </div>
 
     <!-- ABAS / JANELAS -->
-    <div class="flex items-center space-x-2 bg-zinc-950 p-1 rounded-xl border border-zinc-800">
-      <button onclick="switchTab('mesas')" id="tab-btn-mesas" class="px-4 py-2 rounded-lg text-xs font-bold transition bg-orange-500 text-black flex items-center space-x-2">
+    <div class="flex items-center space-x-2 bg-zinc-950 p-1 rounded-xl border border-zinc-800 shadow-inner">
+      <button onclick="switchTab('mesas')" id="tab-btn-mesas" class="px-4 py-2 rounded-lg text-xs font-bold transition bg-orange-500 text-black flex items-center space-x-2 shadow-sm shadow-orange-500/20">
         <i class="fa-solid fa-chair"></i> <span>Mesas</span>
       </button>
       <button onclick="switchTab('historico')" id="tab-btn-historico" class="px-4 py-2 rounded-lg text-xs font-bold transition text-zinc-400 hover:text-white flex items-center space-x-2">
@@ -61,21 +94,21 @@
       </button>
     </div>
 
-    <div class="flex items-center space-x-3">
+    <div class="flex items-center space-x-4">
       <div class="relative">
-        <button id="waiter-queue-btn" onclick="toggleWaiterQueue()" class="bg-zinc-950 border border-zinc-800 px-3 py-2 rounded-xl text-xs font-medium flex items-center space-x-2">
+        <button id="waiter-queue-btn" onclick="toggleWaiterQueue()" class="bg-zinc-950 hover:bg-zinc-800 transition border border-zinc-800 px-3 py-2 rounded-xl text-xs font-bold flex items-center space-x-2">
           <i class="fa-solid fa-bell text-amber-400"></i>
-          <span class="hidden md:inline">Fila Garçom</span>
-          <span id="waiter-queue-count" class="hidden bg-amber-500 text-black text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
+          <span class="hidden md:inline text-zinc-300">Fila Garçom</span>
+          <span id="waiter-queue-count" class="hidden bg-amber-500 text-black text-[10px] font-black px-2 py-0.5 rounded-full shadow-lg shadow-amber-500/20">0</span>
         </button>
         <div id="waiter-queue-drawer" class="hidden absolute right-0 mt-2 w-72 bg-zinc-900 border border-zinc-800 rounded-xl shadow-2xl z-50 p-2">
             <div id="waiter-queue-list" class="space-y-2"></div>
         </div>
       </div>
-      <span id="server-status-badge" class="inline-flex items-center px-2 py-1 rounded text-[10px] font-medium bg-zinc-800 text-rose-400 border border-zinc-700">
-        <span class="w-1.5 h-1.5 rounded-full bg-rose-500 me-1 animate-pulse"></span> Offline
+      <span id="server-status-badge" class="inline-flex items-center px-2 py-1.5 rounded-lg text-[10px] font-bold bg-zinc-950 text-rose-400 border border-zinc-800 shadow-inner">
+        <span class="w-2 h-2 rounded-full bg-rose-500 me-2 animate-pulse"></span> Offline
       </span>
-      <button onclick="fazerLogout()" title="Terminar Sessão" class="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white px-2.5 py-1.5 rounded-xl text-xs font-bold transition">
+      <button onclick="fazerLogout()" title="Terminar Sessão" class="bg-zinc-800 hover:bg-rose-500/20 text-zinc-400 hover:text-rose-400 border border-transparent hover:border-rose-500/30 px-3 py-2 rounded-xl text-xs transition">
         <i class="fa-solid fa-right-from-bracket"></i>
       </button>
     </div>
@@ -89,29 +122,29 @@
 
     <!-- JANELA 2: HISTÓRICO DE PEDIDOS -->
     <div id="view-historico" class="hidden space-y-4">
-      <div class="flex flex-wrap justify-between items-center gap-4 bg-zinc-900 p-4 rounded-2xl border border-zinc-800">
-        <h3 class="font-bold text-white text-sm">Histórico de Comandas Fechadas</h3>
-        <div class="flex items-center space-x-2">
-          <button onclick="carregarHistorico('dia')" id="btn-hist-dia" class="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-xs rounded-xl font-medium transition">Hoje</button>
-          <button onclick="carregarHistorico('semana')" id="btn-hist-semana" class="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-xs rounded-xl font-medium transition">Últimos 7 Dias</button>
-          <button onclick="carregarHistorico('mes')" id="btn-hist-mes" class="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-xs rounded-xl font-medium transition">Último Mês</button>
-          <button onclick="carregarHistorico('todos')" id="btn-hist-todos" class="px-3 py-1.5 bg-orange-500 text-black text-xs rounded-xl font-bold transition">Todos</button>
+      <div class="flex flex-wrap justify-between items-center gap-4 bg-zinc-900 p-4 rounded-2xl border border-zinc-800 shadow-lg">
+        <h3 class="font-bold text-white text-sm uppercase tracking-wide">Histórico de Comandas Fechadas</h3>
+        <div class="flex items-center space-x-2 bg-zinc-950 p-1 rounded-xl border border-zinc-800">
+          <button onclick="carregarHistorico('dia')" id="btn-hist-dia" class="px-4 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-xs rounded-lg font-bold text-zinc-300 transition">Hoje</button>
+          <button onclick="carregarHistorico('semana')" id="btn-hist-semana" class="px-4 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-xs rounded-lg font-bold text-zinc-300 transition">7 Dias</button>
+          <button onclick="carregarHistorico('mes')" id="btn-hist-mes" class="px-4 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-xs rounded-lg font-bold text-zinc-300 transition">30 Dias</button>
+          <button onclick="carregarHistorico('todos')" id="btn-hist-todos" class="px-4 py-1.5 bg-orange-500 text-black text-xs rounded-lg font-black shadow-sm transition">Todos</button>
         </div>
       </div>
 
-      <div class="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden shadow-xl">
+      <div class="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden shadow-2xl">
         <table class="w-full text-left border-collapse">
           <thead>
-            <tr class="bg-zinc-950 text-zinc-400 text-xs uppercase border-b border-zinc-800">
-              <th class="p-3.5">Mesa</th>
-              <th class="p-3.5">Comanda</th>
-              <th class="p-3.5">Data / Fechamento</th>
-              <th class="p-3.5">Valor Total</th>
-              <th class="p-3.5 text-right">Ação</th>
+            <tr class="bg-zinc-950 text-zinc-400 text-xs uppercase tracking-wider border-b border-zinc-800">
+              <th class="p-4 font-bold">Mesa</th>
+              <th class="p-4 font-bold">Comanda</th>
+              <th class="p-4 font-bold">Data / Fechamento</th>
+              <th class="p-4 font-bold">Valor Total</th>
+              <th class="p-4 font-bold text-right">Ação</th>
             </tr>
           </thead>
-          <tbody id="historico-table-body" class="divide-y divide-zinc-800 text-xs">
-            <tr><td colspan="5" class="p-6 text-center text-zinc-500">A carregar histórico...</td></tr>
+          <tbody id="historico-table-body" class="divide-y divide-zinc-800/50 text-sm">
+            <tr><td colspan="5" class="p-8 text-center text-zinc-500 font-medium">A carregar histórico...</td></tr>
           </tbody>
         </table>
       </div>
@@ -120,45 +153,48 @@
     <!-- JANELA 3: ESTATÍSTICAS E MÉTRICAS -->
     <div id="view-estatisticas" class="hidden space-y-6">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl">
-          <span class="text-xs text-zinc-400 uppercase font-bold">Faturamento (Hoje)</span>
-          <div id="stat-fat-dia" class="text-2xl font-black text-orange-400 mt-2">R$ 0,00</div>
+        <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg relative overflow-hidden group hover:border-orange-500/50 transition-colors">
+          <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i class="fa-solid fa-money-bill-wave text-5xl text-orange-500"></i></div>
+          <span class="text-xs text-zinc-400 uppercase font-bold tracking-wider">Faturamento (Hoje)</span>
+          <div id="stat-fat-dia" class="text-3xl font-black text-white mt-2">R$ 0,00</div>
         </div>
-        <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl">
-          <span class="text-xs text-zinc-400 uppercase font-bold">Faturamento (7 Dias)</span>
-          <div id="stat-fat-semana" class="text-2xl font-black text-emerald-400 mt-2">R$ 0,00</div>
+        <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg relative overflow-hidden group hover:border-emerald-500/50 transition-colors">
+          <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i class="fa-solid fa-chart-line text-5xl text-emerald-500"></i></div>
+          <span class="text-xs text-zinc-400 uppercase font-bold tracking-wider">Faturamento (7 Dias)</span>
+          <div id="stat-fat-semana" class="text-3xl font-black text-emerald-400 mt-2">R$ 0,00</div>
         </div>
-        <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl">
-          <span class="text-xs text-zinc-400 uppercase font-bold">Faturamento (30 Dias)</span>
-          <div id="stat-fat-mes" class="text-2xl font-black text-blue-400 mt-2">R$ 0,00</div>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl flex items-center justify-between">
-          <div>
-            <span class="text-xs text-zinc-400 uppercase font-bold">Horário de Pico</span>
-            <div id="stat-hora-pico" class="text-xl font-bold text-white mt-1">--:--</div>
-          </div>
-          <div class="w-12 h-12 bg-orange-500/10 text-orange-500 rounded-xl flex items-center justify-center text-xl"><i class="fa-solid fa-bolt"></i></div>
-        </div>
-        <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl flex items-center justify-between">
-          <div>
-            <span class="text-xs text-zinc-400 uppercase font-bold">Dia de Maior Movimento</span>
-            <div id="stat-dia-pico" class="text-xl font-bold text-white mt-1">---</div>
-          </div>
-          <div class="w-12 h-12 bg-emerald-500/10 text-emerald-500 rounded-xl flex items-center justify-center text-xl"><i class="fa-solid fa-calendar-days"></i></div>
+        <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg relative overflow-hidden group hover:border-blue-500/50 transition-colors">
+          <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i class="fa-solid fa-calendar-check text-5xl text-blue-500"></i></div>
+          <span class="text-xs text-zinc-400 uppercase font-bold tracking-wider">Faturamento (30 Dias)</span>
+          <div id="stat-fat-mes" class="text-3xl font-black text-blue-400 mt-2">R$ 0,00</div>
         </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl">
-          <h4 class="text-xs font-bold text-zinc-400 uppercase mb-3">🔥 Itens Mais Vendidos</h4>
-          <div id="stat-top-itens" class="space-y-2"></div>
+        <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg flex items-center justify-between hover:border-zinc-700 transition">
+          <div>
+            <span class="text-xs text-zinc-400 uppercase font-bold tracking-wider">Horário de Pico</span>
+            <div id="stat-hora-pico" class="text-2xl font-black text-white mt-1">--:--</div>
+          </div>
+          <div class="w-14 h-14 bg-amber-500/10 text-amber-500 rounded-2xl flex items-center justify-center text-2xl shadow-inner border border-amber-500/20"><i class="fa-solid fa-bolt"></i></div>
         </div>
-        <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl">
-          <h4 class="text-xs font-bold text-zinc-400 uppercase mb-3">❄️ Itens Menos Vendidos</h4>
-          <div id="stat-low-itens" class="space-y-2"></div>
+        <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg flex items-center justify-between hover:border-zinc-700 transition">
+          <div>
+            <span class="text-xs text-zinc-400 uppercase font-bold tracking-wider">Dia de Maior Movimento</span>
+            <div id="stat-dia-pico" class="text-2xl font-black text-white mt-1">---</div>
+          </div>
+          <div class="w-14 h-14 bg-emerald-500/10 text-emerald-500 rounded-2xl flex items-center justify-center text-2xl shadow-inner border border-emerald-500/20"><i class="fa-solid fa-calendar-days"></i></div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg">
+          <h4 class="text-xs font-black text-emerald-400 uppercase tracking-widest mb-4 flex items-center"><i class="fa-solid fa-arrow-trend-up mr-2"></i> Itens Mais Vendidos</h4>
+          <div id="stat-top-itens" class="space-y-2.5"></div>
+        </div>
+        <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg">
+          <h4 class="text-xs font-black text-rose-400 uppercase tracking-widest mb-4 flex items-center"><i class="fa-solid fa-arrow-trend-down mr-2"></i> Itens Menos Vendidos</h4>
+          <div id="stat-low-itens" class="space-y-2.5"></div>
         </div>
       </div>
     </div>
@@ -167,54 +203,88 @@
   <!-- MODAL: GESTÃO / DETALHES DA MESA -->
   <div id="modal-comanda" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-zinc-900 border border-zinc-800 w-full max-w-2xl rounded-2xl shadow-2xl flex flex-col overflow-hidden max-h-[90vh]">
-      <div class="bg-zinc-950 p-4 border-b border-zinc-800 flex justify-between items-center">
-        <h3 class="font-bold text-white text-lg">Mesa <span id="modal-table-num" class="text-orange-500"></span></h3>
-        <button onclick="closeModal('modal-comanda')" class="text-zinc-400 hover:text-white p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <div class="bg-zinc-950 p-5 border-b border-zinc-800 flex justify-between items-center">
+        <h3 class="font-black text-white text-lg tracking-wide uppercase">Mesa <span id="modal-table-num" class="text-orange-500"></span></h3>
+        <button onclick="closeModal('modal-comanda')" class="text-zinc-500 hover:text-white transition bg-zinc-900 hover:bg-zinc-800 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
       
-      <div class="p-4 overflow-y-auto space-y-4 flex-1">
+      <div class="p-5 overflow-y-auto space-y-5 flex-1 bg-zinc-900/50">
         <!-- ALERTA DE GARÇOM SE HOUVER -->
-        <div id="modal-waiter-section" class="hidden bg-zinc-950 p-3 rounded-xl border border-amber-500/50 flex justify-between items-center">
-          <div class="flex items-center space-x-2 text-amber-400 font-bold text-xs">
-            <i class="fa-solid fa-bell animate-bounce text-base"></i>
+        <div id="modal-waiter-section" class="hidden bg-amber-950/30 p-4 rounded-xl border border-amber-500/50 flex justify-between items-center shadow-lg shadow-amber-900/20">
+          <div class="flex items-center space-x-3 text-amber-400 font-bold text-sm tracking-wide">
+            <i class="fa-solid fa-bell animate-bounce text-xl"></i>
             <span>Cliente chamou o garçom!</span>
           </div>
-          <button onclick="atenderGarcomModal()" class="bg-amber-500 hover:bg-amber-400 text-black font-bold px-3 py-1.5 rounded-lg text-xs transition">Atender</button>
+          <button onclick="atenderGarcomModal()" class="bg-amber-500 hover:bg-amber-400 text-black font-black px-4 py-2 rounded-lg text-xs uppercase tracking-wider transition shadow-md">Atender</button>
         </div>
 
         <!-- LISTA DE ITENS ATUAIS -->
-        <div>
-          <h4 class="text-xs font-bold text-zinc-400 uppercase mb-2">Itens na Comanda:</h4>
-          <div id="modal-items-list" class="space-y-2 max-h-48 overflow-y-auto pr-1"></div>
+        <div class="bg-zinc-950 p-4 rounded-2xl border border-zinc-800 shadow-inner">
+          <h4 class="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-3">Itens na Comanda</h4>
+          <div id="modal-items-list" class="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar"></div>
         </div>
 
         <!-- BOTÃO PARA ABRIR O CARDÁPIO E ADICIONAR ITEM -->
-        <div class="bg-zinc-950 p-4 rounded-xl border border-zinc-800 text-center space-y-2">
-          <h4 class="text-xs font-bold text-orange-400 uppercase">➕ Adicionar Item do Cardápio</h4>
-          <p class="text-[11px] text-zinc-400">Selecione pratos diretamente do catálogo oficial para lançar na mesa.</p>
-          <button onclick="openAdminMenuPicker()" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 text-black font-extrabold py-3 rounded-xl text-xs uppercase tracking-wider transition shadow-lg shadow-orange-500/20 cursor-pointer">
-            <i class="fa-solid fa-book-open mr-1.5"></i> Abrir Catálogo / Cardápio
-          </button>
-        </div>
+        <button onclick="openAdminMenuPicker()" class="w-full bg-zinc-900 hover:bg-zinc-800 border border-dashed border-zinc-700 hover:border-orange-500 text-zinc-300 hover:text-orange-400 font-bold py-4 rounded-2xl text-sm transition group">
+          <i class="fa-solid fa-plus text-orange-500 mr-2 group-hover:scale-125 transition-transform"></i> Adicionar Novo Item à Mesa
+        </button>
       </div>
 
       <!-- RODAPÉ DE AÇÕES -->
-      <div class="bg-zinc-950 p-4 border-t border-zinc-800 space-y-3">
-        <div class="flex justify-between items-center text-sm font-bold">
-          <span class="text-zinc-400 text-xs">Total Atual:</span>
-          <span id="modal-total-value" class="text-xl font-black text-orange-400">R$ 0,00</span>
+      <div class="bg-zinc-950 p-5 border-t border-zinc-800 space-y-4">
+        <div class="flex justify-between items-end bg-zinc-900 p-4 rounded-xl border border-zinc-800">
+          <span class="text-zinc-400 text-xs font-bold uppercase tracking-wider">Total Acumulado</span>
+          <span id="modal-total-value" class="text-3xl font-black text-orange-400">R$ 0,00</span>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          <button onclick="cancelarMesaCompleta()" class="bg-rose-500/20 hover:bg-rose-500/30 text-rose-400 border border-rose-500/30 font-bold py-2.5 rounded-xl text-xs transition">
-            <i class="fa-solid fa-ban mr-1"></i> Cancelar / Limpar Mesa
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <button onclick="cancelarMesaCompleta()" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition">
+             Cancelar
           </button>
-          <button onclick="realizarCheckout()" class="bg-orange-500 hover:bg-orange-400 text-black font-bold py-2.5 rounded-xl text-xs transition shadow-lg">
-            <i class="fa-solid fa-cash-register mr-1"></i> Fechar Comanda
+          
+          <!-- NOVO BOTÃO DE IMPRIMIR PARA A COZINHA -->
+          <button onclick="abrirModalImpressao()" class="bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition border border-zinc-700 shadow-lg flex justify-center items-center">
+            <i class="fa-solid fa-print mr-2"></i> Cozinha
+          </button>
+          
+          <button onclick="realizarCheckout()" class="bg-orange-500 hover:bg-orange-400 text-black font-black py-3 rounded-xl text-xs uppercase tracking-wider transition shadow-lg shadow-orange-500/20 flex justify-center items-center">
+            <i class="fa-solid fa-cash-register mr-2"></i> Fechar Comanda
           </button>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- NOVO MODAL: SELECIONAR ITENS PARA IMPRESSÃO -->
+  <div id="modal-impressao" class="hidden fixed inset-0 z-[60] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-zinc-900 border border-zinc-800 w-full max-w-md rounded-2xl shadow-2xl flex flex-col overflow-hidden max-h-[90vh]">
+      <div class="bg-zinc-950 p-4 border-b border-zinc-800 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <i class="fa-solid fa-print text-orange-500"></i>
+          <h3 class="font-bold text-white text-sm uppercase tracking-wider">Imprimir Pedido - Mesa <span id="impressao-num-mesa" class="text-orange-500"></span></h3>
+        </div>
+        <button onclick="fecharModalImpressao()" class="text-zinc-400 hover:text-white p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <div class="p-4 bg-zinc-900">
+        <p class="text-xs text-zinc-400 mb-3">Selecione os itens para enviar para a cozinha. <br>Itens novos já vêm marcados automaticamente.</p>
+        
+        <div id="lista-checkboxes-imprimir" class="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar bg-zinc-950 p-3 rounded-xl border border-zinc-800">
+            <!-- Checkboxes gerados via JS -->
+        </div>
+      </div>
+
+      <div class="bg-zinc-950 p-4 border-t border-zinc-800 flex space-x-3">
+        <button onclick="fecharModalImpressao()" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-2.5 rounded-xl text-xs transition">Cancelar</button>
+        <button onclick="gerarEImprimirCupom()" class="flex-1 bg-orange-500 hover:bg-orange-400 text-black font-black py-2.5 rounded-xl text-xs uppercase tracking-wider transition shadow-lg flex justify-center items-center">
+            <i class="fa-solid fa-print mr-2"></i> Confirmar Impressão
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AREA OCULTA PARA GERAR O HTML DO CUPOM DA IMPRESSORA -->
+  <div id="area-cupom-impresso"></div>
+
 
   <!-- MODAL: SELETOR DE CARDÁPIO DO PAINEL -->
   <div id="modal-admin-menu" class="hidden fixed inset-0 z-[60] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
@@ -228,10 +298,10 @@
       </div>
 
       <!-- Categorias -->
-      <div class="p-3 bg-zinc-950/60 border-b border-zinc-800 overflow-x-auto flex space-x-2" id="admin-categories-container"></div>
+      <div class="p-3 bg-zinc-950/60 border-b border-zinc-800 overflow-x-auto flex space-x-2 custom-scrollbar" id="admin-categories-container"></div>
 
       <!-- Lista de Itens do Cardápio -->
-      <div class="p-4 overflow-y-auto flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3" id="admin-dishes-grid"></div>
+      <div class="p-4 overflow-y-auto flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 custom-scrollbar" id="admin-dishes-grid"></div>
     </div>
   </div>
 
@@ -242,23 +312,23 @@
         <h4 id="admin-custom-title" class="font-bold text-sm text-white">Adicionar Item</h4>
         <button onclick="closeModal('modal-admin-customize')" class="text-zinc-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
       </div>
-      <div class="p-4 space-y-4">
+      <div class="p-5 space-y-5 bg-zinc-900">
         <div>
-          <label class="block text-xs font-bold text-zinc-400 uppercase mb-1">Observações (opcional)</label>
-          <textarea id="admin-custom-notes" rows="2" placeholder="Ex: Sem cebola, ponto bem passado..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-xs text-white placeholder-zinc-600 focus:outline-none focus:border-orange-500"></textarea>
+          <label class="block text-xs font-bold text-zinc-400 uppercase mb-2">Observações para Cozinha (opcional)</label>
+          <textarea id="admin-custom-notes" rows="3" placeholder="Ex: Sem cebola, ponto bem passado..." class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-orange-500 transition"></textarea>
         </div>
-        <div class="flex items-center justify-between bg-zinc-950 p-3 rounded-xl border border-zinc-800">
-          <span class="text-xs font-bold text-zinc-300">Quantidade:</span>
-          <div class="flex items-center space-x-3">
-            <button onclick="updateAdminQty(-1)" class="w-8 h-8 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white font-bold flex items-center justify-center">-</button>
-            <span id="admin-custom-qty" class="text-sm font-black text-orange-500 min-w-[20px] text-center">1</span>
-            <button onclick="updateAdminQty(1)" class="w-8 h-8 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white font-bold flex items-center justify-center">+</button>
+        <div class="flex items-center justify-between bg-zinc-950 p-4 rounded-xl border border-zinc-800">
+          <span class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Quantidade</span>
+          <div class="flex items-center space-x-4">
+            <button onclick="updateAdminQty(-1)" class="w-10 h-10 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white font-bold flex items-center justify-center text-lg transition">-</button>
+            <span id="admin-custom-qty" class="text-xl font-black text-white min-w-[24px] text-center">1</span>
+            <button onclick="updateAdminQty(1)" class="w-10 h-10 rounded-lg bg-orange-500 hover:bg-orange-400 text-black font-bold flex items-center justify-center text-lg transition">+</button>
           </div>
         </div>
       </div>
-      <div class="p-4 border-t border-zinc-800 bg-zinc-950 flex justify-between items-center">
-        <span id="admin-custom-total" class="text-base font-black text-orange-400">R$ 0,00</span>
-        <button onclick="confirmAdminAddToCart()" class="bg-orange-500 hover:bg-orange-400 text-black font-bold px-6 py-2.5 rounded-xl text-xs transition shadow-lg">Confirmar e Lançar</button>
+      <div class="p-5 border-t border-zinc-800 bg-zinc-950 flex justify-between items-center">
+        <span id="admin-custom-total" class="text-2xl font-black text-orange-400">R$ 0,00</span>
+        <button onclick="confirmAdminAddToCart()" class="bg-orange-500 hover:bg-orange-400 text-black font-black px-6 py-3 rounded-xl text-xs uppercase tracking-wider transition shadow-lg shadow-orange-500/20">Lançar na Mesa</button>
       </div>
     </div>
   </div>
@@ -266,32 +336,40 @@
   <!-- MODAL: DETALHES DE HISTÓRICO -->
   <div id="modal-historico" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-zinc-900 border border-zinc-800 w-full max-w-lg rounded-2xl shadow-2xl flex flex-col overflow-hidden">
-      <div class="bg-zinc-950 p-4 border-b border-zinc-800 flex justify-between items-center">
-        <h3 class="font-bold text-white text-sm">Detalhes da Comanda <span id="hist-modal-code" class="text-orange-500"></span></h3>
-        <button onclick="closeModal('modal-historico')" class="text-zinc-400 hover:text-white p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
+      <div class="bg-zinc-950 p-5 border-b border-zinc-800 flex justify-between items-center">
+        <h3 class="font-bold text-white text-sm uppercase tracking-wider">Comanda <span id="hist-modal-code" class="text-orange-500"></span></h3>
+        <button onclick="closeModal('modal-historico')" class="text-zinc-500 hover:text-white bg-zinc-900 hover:bg-zinc-800 w-8 h-8 rounded-lg flex items-center justify-center transition"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
-      <div class="p-4 flex-1 overflow-y-auto space-y-3">
-        <div class="text-xs text-zinc-400 flex justify-between">
-          <span>Mesa: <strong id="hist-modal-mesa" class="text-white"></strong></span>
-          <span>Data: <strong id="hist-modal-data" class="text-white"></strong></span>
+      <div class="p-5 flex-1 overflow-y-auto space-y-4 bg-zinc-900">
+        <div class="bg-zinc-950 border border-zinc-800 p-3 rounded-xl flex justify-between text-xs text-zinc-400">
+          <span><i class="fa-solid fa-chair text-zinc-500 mr-1"></i> Mesa <strong id="hist-modal-mesa" class="text-white text-sm"></strong></span>
+          <span><i class="fa-solid fa-calendar text-zinc-500 mr-1"></i> <strong id="hist-modal-data" class="text-white"></strong></span>
         </div>
-        <div class="border-t border-zinc-800 pt-3">
-          <h4 class="text-xs font-bold text-zinc-400 uppercase mb-2">Itens Consumidos:</h4>
+        <div>
+          <h4 class="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-3">Itens Consumidos</h4>
           <div id="hist-modal-items" class="space-y-2"></div>
         </div>
-        <div class="border-t border-zinc-800 pt-3 flex justify-between items-center text-sm">
-          <span class="font-bold text-zinc-300">Total Pago:</span>
-          <span id="hist-modal-total" class="font-black text-orange-400 text-lg"></span>
-        </div>
+      </div>
+      <div class="bg-zinc-950 border-t border-zinc-800 p-5 flex justify-between items-center text-sm">
+        <span class="font-bold text-zinc-400 uppercase tracking-wider text-xs">Total Pago</span>
+        <span id="hist-modal-total" class="font-black text-emerald-400 text-2xl"></span>
       </div>
     </div>
   </div>
 
   <!-- TOAST ALERTS -->
-  <div id="toast" class="fixed bottom-5 right-5 z-[80] transform translate-y-20 opacity-0 transition-all bg-zinc-900 border border-zinc-700 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-3">
-    <i id="toast-icon" class="fa-solid fa-info-circle text-orange-400 text-lg"></i>
-    <span id="toast-message" class="text-xs font-medium">Ação realizada!</span>
+  <div id="toast" class="fixed bottom-5 right-5 z-[80] transform translate-y-20 opacity-0 transition-all duration-300 bg-zinc-900 border border-zinc-700 text-white px-5 py-4 rounded-xl shadow-2xl flex items-center space-x-3">
+    <i id="toast-icon" class="fa-solid fa-info-circle text-orange-400 text-xl"></i>
+    <span id="toast-message" class="text-sm font-bold">Ação realizada!</span>
   </div>
+
+  <style>
+    /* Estilos extras para barra de rolagem customizada no painel para ficar chique */
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #3f3f46; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #f97316; }
+  </style>
 
   <script>
     const API_URL = 'https://restaurante1-backend.onrender.com';
@@ -299,24 +377,27 @@
     let currentEditingTableId = null;
     let audioCtx = null;
 
-    // CARDÁPIO CACHEADO IDÊntico AO DO CLIENTE
-    const MENU_DATA = [
-        { id: 'h1', name: 'Smash Bacon Supreme', category: 'hamburgueres', price: 34.90, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80', description: 'Dois smashes artesanais 90g, cheddar, bacon crocante e maionese da casa.' },
-        { id: 'h2', name: 'Double Cheddar Melt', category: 'hamburgueres', price: 38.90, image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80', description: 'Blend especial 180g, muito creme cheddar melt e cebola caramelizada.' },
-        { id: 'h3', name: 'Crispy Chicken Burger', category: 'hamburgueres', price: 32.90, image: 'https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&w=600&q=80', description: 'Sobrecoxa empanada crocante, alface americana, molho tártaro artesanal.' },
-        { id: 'h4', name: 'Burger Vegetariano de Grão', category: 'hamburgueres', price: 29.90, image: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80', description: 'Hambúrguer de grão-de-bico com quinoa, queijo prato, tomate e rúcula.' },
-        
-        { id: 'p1', name: 'Batata Rústica Trufada', category: 'petiscos', price: 28.90, image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80', description: 'Batatas com azeite de trufas, flor de sal e parmesão ralado.' },
-        { id: 'p2', name: 'Onion Rings Crocantes', category: 'petiscos', price: 24.90, image: 'https://images.unsplash.com/photo-1639024471283-03518883512d?auto=format&fit=crop&w=600&q=80', description: 'Anéis de cebola empanados super crocantes acompanhados de molho barbecue.' },
-        { id: 'p3', name: 'Dadinhos de Tapioca', category: 'petiscos', price: 31.90, image: 'https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&w=600&q=80', description: 'Dadinhos de tapioca com queijo coalho servidos com geleia de pimenta.' },
+    // NOVO: Memória de itens que já foram impressos para a cozinha
+    let itensImpressosGlobais = new Set();
 
-        { id: 'b1', name: 'Refrigerante Lata', category: 'bebidas', price: 7.00, image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80', description: 'Lata 350ml gelada (Coca-Cola, Guaraná, Sprite).' },
-        { id: 'b2', name: 'Suco Natural de Laranja', category: 'bebidas', price: 9.50, image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=600&q=80', description: 'Feito na hora com frutas frescas 400ml.' },
-        { id: 'b3', name: 'Cerveja Artesanal IPA 500ml', category: 'bebidas', price: 19.90, image: 'https://images.unsplash.com/photo-1608270105387-98565538e12d?auto=format&fit=crop&w=600&q=80', description: 'Cerveja artesanal encorpada com notas cítricas.' },
+    // CARDÁPIO CACHEADO
+    const MENU_DATA = [
+        { id: 'h1', name: 'Smash Bacon Supreme', category: 'hamburgueres', price: 34.90, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80', description: 'Dois smashes artesanais 90g, cheddar, bacon crocante.' },
+        { id: 'h2', name: 'Double Cheddar Melt', category: 'hamburgueres', price: 38.90, image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80', description: 'Blend especial 180g, muito creme cheddar melt.' },
+        { id: 'h3', name: 'Crispy Chicken Burger', category: 'hamburgueres', price: 32.90, image: 'https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&w=600&q=80', description: 'Sobrecoxa empanada crocante, alface americana.' },
+        { id: 'h4', name: 'Burger Vegetariano de Grão', category: 'hamburgueres', price: 29.90, image: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80', description: 'Hambúrguer de grão-de-bico com quinoa.' },
+        
+        { id: 'p1', name: 'Batata Rústica Trufada', category: 'petiscos', price: 28.90, image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80', description: 'Batatas com azeite de trufas e parmesão.' },
+        { id: 'p2', name: 'Onion Rings Crocantes', category: 'petiscos', price: 24.90, image: 'https://images.unsplash.com/photo-1639024471283-03518883512d?auto=format&fit=crop&w=600&q=80', description: 'Anéis de cebola empanados.' },
+        { id: 'p3', name: 'Dadinhos de Tapioca', category: 'petiscos', price: 31.90, image: 'https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&w=600&q=80', description: 'Com queijo coalho e geleia de pimenta.' },
+
+        { id: 'b1', name: 'Refrigerante Lata', category: 'bebidas', price: 7.00, image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80', description: 'Lata 350ml gelada.' },
+        { id: 'b2', name: 'Suco Natural de Laranja', category: 'bebidas', price: 9.50, image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=600&q=80', description: 'Feito na hora com frutas frescas.' },
+        { id: 'b3', name: 'Cerveja Artesanal IPA', category: 'bebidas', price: 19.90, image: 'https://images.unsplash.com/photo-1608270105387-98565538e12d?auto=format&fit=crop&w=600&q=80', description: 'Cerveja artesanal encorpada 500ml.' },
         { id: 'b4', name: 'Água Mineral com Gás', category: 'bebidas', price: 5.00, image: 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?auto=format&fit=crop&w=600&q=80', description: 'Garrafa 500ml.' },
 
-        { id: 's1', name: 'Petit Gâteau com Sorvete', category: 'sobremesas', price: 22.00, image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80', description: 'Bolinho de chocolate quente com recheio cremoso e sorvete de baunilha.' },
-        { id: 's2', name: 'Brownie de Chocolate Belga', category: 'sobremesas', price: 18.50, image: 'https://images.unsplash.com/photo-1514517521153-1be72277b32f?auto=format&fit=crop&w=600&q=80', description: 'Brownie denso com nozes e calda de chocolate belga.' }
+        { id: 's1', name: 'Petit Gâteau com Sorvete', category: 'sobremesas', price: 22.00, image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80', description: 'Bolinho quente com sorvete de baunilha.' },
+        { id: 's2', name: 'Brownie de Chocolate Belga', category: 'sobremesas', price: 18.50, image: 'https://images.unsplash.com/photo-1514517521153-1be72277b32f?auto=format&fit=crop&w=600&q=80', description: 'Brownie denso com calda de chocolate.' }
     ];
 
     const CATEGORIES = [
@@ -376,15 +457,15 @@
 
         if (tab === 'mesas') {
             document.getElementById('view-mesas').classList.remove('hidden');
-            document.getElementById('tab-btn-mesas').className = "px-4 py-2 rounded-lg text-xs font-bold transition bg-orange-500 text-black flex items-center space-x-2";
+            document.getElementById('tab-btn-mesas').className = "px-4 py-2 rounded-lg text-xs font-bold transition bg-orange-500 text-black flex items-center space-x-2 shadow-sm shadow-orange-500/20";
             carregarMesas();
         } else if (tab === 'historico') {
             document.getElementById('view-historico').classList.remove('hidden');
-            document.getElementById('tab-btn-historico').className = "px-4 py-2 rounded-lg text-xs font-bold transition bg-orange-500 text-black flex items-center space-x-2";
+            document.getElementById('tab-btn-historico').className = "px-4 py-2 rounded-lg text-xs font-bold transition bg-orange-500 text-black flex items-center space-x-2 shadow-sm shadow-orange-500/20";
             carregarHistorico('todos');
         } else if (tab === 'estatisticas') {
             document.getElementById('view-estatisticas').classList.remove('hidden');
-            document.getElementById('tab-btn-estatisticas').className = "px-4 py-2 rounded-lg text-xs font-bold transition bg-orange-500 text-black flex items-center space-x-2";
+            document.getElementById('tab-btn-estatisticas').className = "px-4 py-2 rounded-lg text-xs font-bold transition bg-orange-500 text-black flex items-center space-x-2 shadow-sm shadow-orange-500/20";
             carregarEstatisticas();
         }
     }
@@ -410,11 +491,11 @@
     function atualizarStatusServidor(online) {
         const badge = document.getElementById('server-status-badge');
         if (online) {
-            badge.className = "inline-flex items-center px-2 py-1 rounded text-[10px] font-medium bg-zinc-800 text-emerald-400 border border-zinc-700";
-            badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 me-1 animate-pulse"></span> Servidor Conectado';
+            badge.className = "inline-flex items-center px-3 py-1.5 rounded-lg text-[10px] font-bold bg-zinc-950 text-emerald-400 border border-zinc-800 shadow-inner";
+            badge.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 me-2 animate-pulse"></span> Servidor Conectado';
         } else {
-            badge.className = "inline-flex items-center px-2 py-1 rounded text-[10px] font-medium bg-zinc-800 text-rose-400 border border-zinc-700";
-            badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-rose-500 me-1"></span> Offline';
+            badge.className = "inline-flex items-center px-3 py-1.5 rounded-lg text-[10px] font-bold bg-zinc-950 text-rose-400 border border-zinc-800 shadow-inner";
+            badge.innerHTML = '<span class="w-2 h-2 rounded-full bg-rose-500 me-2"></span> Offline';
         }
     }
 
@@ -458,27 +539,28 @@
         const isCalling = table.waiterCalledAt;
         const total = isBusy ? table.items.reduce((s, i) => s + (i.price * i.qty), 0) : 0;
 
-        let bgClass = "bg-zinc-900 border-zinc-800";
-        if (isBusy) bgClass = "bg-emerald-950 border-emerald-500 shadow-lg shadow-emerald-500/10";
-        if (isCalling) bgClass = "bg-amber-950 border-amber-400 animate-pulse";
+        let bgClass = "bg-zinc-900 border-zinc-800 hover:border-zinc-700";
+        if (isBusy) bgClass = "bg-emerald-950/20 border-emerald-500/50 hover:border-emerald-400 shadow-lg shadow-emerald-900/20";
+        if (isCalling) bgClass = "bg-amber-950/40 border-amber-400 animate-pulse shadow-lg shadow-amber-900/40";
 
         const card = document.createElement('div');
-        card.className = `p-4 rounded-xl border flex flex-col justify-between cursor-pointer hover:opacity-95 transition-all ${bgClass}`;
+        card.className = `p-5 rounded-2xl border flex flex-col justify-between cursor-pointer transition-all duration-300 transform hover:-translate-y-1 ${bgClass}`;
         card.onclick = () => openTableModal(table.id);
 
         card.innerHTML = `
           <div>
-            <div class="flex justify-between items-center mb-2">
-              <span class="text-[10px] text-zinc-500 font-bold uppercase">MESA</span>
-              ${isCalling ? '<span class="bg-amber-500 text-black px-2 py-0.5 rounded text-[10px] font-bold">GARÇOM</span>' : ''}
-              ${isBusy && !isCalling ? '<span class="bg-emerald-500 text-black px-2 py-0.5 rounded text-[10px] font-bold">ATIVA</span>' : ''}
-              ${!isBusy && !isCalling ? '<span class="text-zinc-600 text-[10px]">LIVRE</span>' : ''}
+            <div class="flex justify-between items-center mb-3">
+              <span class="text-[10px] text-zinc-500 font-bold uppercase tracking-widest flex items-center"><i class="fa-solid fa-chair mr-1"></i> MESA</span>
+              ${isCalling ? '<span class="bg-amber-500 text-black px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider shadow-sm">GARÇOM</span>' : ''}
+              ${isBusy && !isCalling ? '<span class="bg-emerald-500 text-black px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider shadow-sm">ATIVA</span>' : ''}
+              ${!isBusy && !isCalling ? '<span class="text-zinc-600 text-[10px] font-bold uppercase">LIVRE</span>' : ''}
             </div>
-            <div class="text-3xl font-black text-white">${table.number}</div>
-            <div class="text-xs text-zinc-400 mt-2">${isBusy ? `${table.items.reduce((s,i)=>s+i.qty,0)} itens` : 'Mesa Livre'}</div>
+            <div class="text-4xl font-black text-white">${table.number}</div>
+            <div class="text-xs text-zinc-400 mt-2">${isBusy ? `${table.items.reduce((s,i)=>s+i.qty,0)} itens pedidos` : 'Disponível'}</div>
           </div>
-          <div class="mt-4 pt-2 border-t border-zinc-800 text-right">
-            ${isBusy ? `<span class="text-emerald-400 font-bold">R$ ${total.toFixed(2).replace('.', ',')}</span>` : `<span class="text-zinc-600">--</span>`}
+          <div class="mt-4 pt-3 border-t ${isBusy ? 'border-emerald-500/20' : 'border-zinc-800'} flex justify-between items-center">
+            <span class="text-[10px] text-zinc-500 uppercase font-bold">Total</span>
+            ${isBusy ? `<span class="text-emerald-400 font-black text-lg tracking-tight">R$ ${total.toFixed(2).replace('.', ',')}</span>` : `<span class="text-zinc-600 font-bold">--</span>`}
           </div>
         `;
         grid.appendChild(card);
@@ -488,364 +570,7 @@
     async function carregarHistorico(filtro) {
         ['dia', 'semana', 'mes', 'todos'].forEach(f => {
             const btn = document.getElementById(`btn-hist-${f}`);
-            if(btn) btn.className = f === filtro ? "px-3 py-1.5 bg-orange-500 text-black text-xs rounded-xl font-bold transition" : "px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-xs rounded-xl font-medium transition";
+            if(btn) btn.className = f === filtro ? "px-4 py-1.5 bg-orange-500 text-black text-xs rounded-lg font-black shadow-sm transition" : "px-4 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-xs rounded-lg font-bold text-zinc-300 transition";
         });
 
-        const tbody = document.getElementById('historico-table-body');
-        tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-zinc-500">A carregar...</td></tr>`;
-
-        try {
-            const url = filtro === 'todos' ? `${API_URL}/api/historico` : `${API_URL}/api/historico?filtro=${filtro}`;
-            const res = await fetch(url);
-            const data = await res.json();
-
-            tbody.innerHTML = '';
-            if (data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-zinc-500">Nenhum registo encontrado.</td></tr>`;
-                return;
-            }
-
-            window.historicoCache = data;
-
-            data.forEach((comanda, index) => {
-                const dataF = new Date(comanda.data_fechamento).toLocaleString('pt-BR');
-                const totalF = parseFloat(comanda.valor_total_final || 0).toFixed(2).replace('.', ',');
-                tbody.innerHTML += `
-                    <tr class="hover:bg-zinc-800/50 transition">
-                        <td class="p-3.5 font-bold">Mesa ${comanda.mesa_numero}</td>
-                        <td class="p-3.5 text-orange-400 font-mono">${comanda.codigo}</td>
-                        <td class="p-3.5 text-zinc-300">${dataF}</td>
-                        <td class="p-3.5 font-bold text-emerald-400">R$ ${totalF}</td>
-                        <td class="p-3.5 text-right">
-                            <button onclick="abrirDetalhesHistorico(${index})" class="px-3 py-1 bg-zinc-800 hover:bg-zinc-700 text-white rounded-lg text-xs font-bold transition">Ver Detalhes</button>
-                        </td>
-                    </tr>
-                `;
-            });
-        } catch (e) {
-            tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-rose-500">Erro ao carregar histórico.</td></tr>`;
-        }
-    }
-
-    function abrirDetalhesHistorico(index) {
-        const comanda = window.historicoCache[index];
-        document.getElementById('hist-modal-code').innerText = comanda.codigo;
-        document.getElementById('hist-modal-mesa').innerText = `Mesa ${comanda.mesa_numero}`;
-        document.getElementById('hist-modal-data').innerText = new Date(comanda.data_fechamento).toLocaleString('pt-BR');
-        document.getElementById('hist-modal-total').innerText = `R$ ${parseFloat(comanda.valor_total_final || 0).toFixed(2).replace('.', ',')}`;
-
-        const itemsContainer = document.getElementById('hist-modal-items');
-        itemsContainer.innerHTML = '';
-        if (comanda.items) {
-            comanda.items.forEach(item => {
-                const sub = item.preco_unitario * item.quantidade;
-                itemsContainer.innerHTML += `
-                    <div class="bg-zinc-950 p-2.5 rounded-xl border border-zinc-800 flex justify-between items-center text-xs">
-                        <div>
-                            <span class="font-bold text-white">${item.quantidade}x ${item.nome_item}</span>
-                            ${item.observacoes ? `<div class="text-[10px] text-zinc-400">Obs: ${item.observacoes}</div>` : ''}
-                        </div>
-                        <span class="text-orange-400 font-bold">R$ ${sub.toFixed(2).replace('.', ',')}</span>
-                    </div>
-                `;
-            });
-        }
-        document.getElementById('modal-historico').classList.remove('hidden');
-    }
-
-    async function carregarEstatisticas() {
-        try {
-            const res = await fetch(`${API_URL}/api/estatisticas`);
-            const data = await res.json();
-
-            document.getElementById('stat-fat-dia').innerText = `R$ ${parseFloat(data.faturamento.dia || 0).toFixed(2).replace('.', ',')}`;
-            document.getElementById('stat-fat-semana').innerText = `R$ ${parseFloat(data.faturamento.semana || 0).toFixed(2).replace('.', ',')}`;
-            document.getElementById('stat-fat-mes').innerText = `R$ ${parseFloat(data.faturamento.mes || 0).toFixed(2).replace('.', ',')}`;
-            document.getElementById('stat-hora-pico').innerText = data.horaPico;
-            document.getElementById('stat-dia-pico').innerText = data.diaPico;
-
-            const topList = document.getElementById('stat-top-itens');
-            const lowList = document.getElementById('stat-low-itens');
-            topList.innerHTML = '';
-            lowList.innerHTML = '';
-
-            if (data.itens.length > 0) {
-                data.itens.slice(0, 5).forEach(i => {
-                    topList.innerHTML += `<div class="flex justify-between text-xs bg-zinc-950 p-2.5 rounded-xl border border-zinc-800"><span class="font-bold text-white">${i.nome_item}</span><span class="text-emerald-400 font-bold">${i.total_qtd} un.</span></div>`;
-                });
-                data.itens.slice(-5).reverse().forEach(i => {
-                    lowList.innerHTML += `<div class="flex justify-between text-xs bg-zinc-950 p-2.5 rounded-xl border border-zinc-800"><span class="font-bold text-white">${i.nome_item}</span><span class="text-rose-400 font-bold">${i.total_qtd} un.</span></div>`;
-                });
-            } else {
-                topList.innerHTML = `<span class="text-xs text-zinc-500">Sem dados suficientes.</span>`;
-                lowList.innerHTML = `<span class="text-xs text-zinc-500">Sem dados suficientes.</span>`;
-            }
-        } catch (e) {
-            console.error(e);
-        }
-    }
-
-    function renderWaiterQueue() {
-        const queueList = document.getElementById('waiter-queue-list');
-        const badge = document.getElementById('waiter-queue-count');
-        const callingTables = tablesState.filter(t => t.waiterCalledAt);
-
-        queueList.innerHTML = '';
-        badge.innerText = callingTables.length;
-        badge.classList.toggle('hidden', callingTables.length === 0);
-
-        if (callingTables.length === 0) {
-            queueList.innerHTML = '<div class="text-xs text-zinc-500 text-center p-2">Nenhuma chamada.</div>';
-            return;
-        }
-
-        callingTables.forEach(table => {
-            queueList.innerHTML += `
-                <div class="bg-zinc-800 p-2 rounded flex justify-between items-center">
-                    <span class="text-xs font-bold text-white">Mesa ${table.number}</span>
-                    <button onclick="atenderGarcom(${table.id})" class="bg-orange-500 text-black text-[10px] font-bold px-2 py-1 rounded">Atender</button>
-                </div>
-            `;
-        });
-    }
-
-    function toggleWaiterQueue() { document.getElementById('waiter-queue-drawer').classList.toggle('hidden'); }
-
-    async function atenderGarcom(tableId) {
-        try {
-            await fetch(`${API_URL}/api/garcom/atender`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mesa_id: tableId })
-            });
-            showToast("Atendimento registado!");
-            carregarMesas();
-        } catch (e) { console.error(e); }
-    }
-
-    async function atenderGarcomModal() {
-        if (!currentEditingTableId) return;
-        await atenderGarcom(currentEditingTableId);
-        const table = tablesState.find(t => t.id === currentEditingTableId);
-        if (table) table.waiterCalledAt = false;
-        openTableModal(currentEditingTableId);
-        renderTablesGrid();
-        renderWaiterQueue();
-    }
-
-    function openTableModal(tableId) {
-        const table = tablesState.find(t => t.id === tableId);
-        if (!table) return;
-        currentEditingTableId = tableId;
-        document.getElementById('modal-table-num').innerText = table.number;
-        
-        const waiterSection = document.getElementById('modal-waiter-section');
-        waiterSection.classList.toggle('hidden', !table.waiterCalledAt);
-
-        const list = document.getElementById('modal-items-list');
-        let total = 0;
-        list.innerHTML = '';
-
-        if (table.items.length === 0) {
-            list.innerHTML = `<div class="text-xs text-zinc-500 text-center py-4">Nenhum item nesta mesa. Pode adicionar pelo catálogo.</div>`;
-        } else {
-            table.items.forEach(item => {
-                const t = item.price * item.qty;
-                total += t;
-                list.innerHTML += `
-                    <div class="bg-zinc-950 p-2.5 rounded-xl flex justify-between items-center border border-zinc-800">
-                        <div>
-                            <div class="text-xs font-bold text-white">${item.qty}x ${item.name}</div>
-                            ${item.notes ? `<div class="text-[10px] text-zinc-400 mt-0.5">Obs: ${item.notes}</div>` : ''}
-                        </div>
-                        <div class="flex items-center space-x-3">
-                            <span class="text-orange-400 text-xs font-bold">R$ ${t.toFixed(2).replace('.', ',')}</span>
-                            <button onclick="apagarItemIndividual(${item.id})" class="text-rose-400 hover:text-rose-300 p-1"><i class="fa-solid fa-trash text-xs"></i></button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-        document.getElementById('modal-total-value').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
-        document.getElementById('modal-comanda').classList.remove('hidden');
-    }
-
-    // ABRIR SELETOR DE CARDÁPIO DO PAINEL
-    function openAdminMenuPicker() {
-        renderAdminCategories();
-        renderAdminDishes();
-        document.getElementById('modal-admin-menu').classList.remove('hidden');
-    }
-
-    function renderAdminCategories() {
-        const container = document.getElementById('admin-categories-container');
-        container.innerHTML = '';
-        CATEGORIES.forEach(cat => {
-            const isActive = adminActiveCategory === cat.id;
-            const btn = document.createElement('button');
-            btn.className = `px-3 py-1.5 rounded-xl text-xs font-bold border transition shrink-0 flex items-center space-x-1.5 ${isActive ? 'bg-orange-500 text-black border-orange-500' : 'bg-zinc-900 text-zinc-300 border-zinc-800'}`;
-            btn.onclick = () => { adminActiveCategory = adminActiveCategory === cat.id ? null : cat.id; renderAdminCategories(); renderAdminDishes(); };
-            btn.innerHTML = `<i class="fa-solid ${cat.icon}"></i> <span>${cat.name}</span>`;
-            container.appendChild(btn);
-        });
-    }
-
-    function renderAdminDishes() {
-        const grid = document.getElementById('admin-dishes-grid');
-        grid.innerHTML = '';
-        const filtered = adminActiveCategory ? MENU_DATA.filter(d => d.category === adminActiveCategory) : MENU_DATA;
-
-        filtered.forEach(dish => {
-            const card = document.createElement('div');
-            card.className = "bg-zinc-900 border border-zinc-800 p-3 rounded-xl flex items-center space-x-3 cursor-pointer hover:border-orange-500 transition";
-            card.onclick = () => openAdminCustomizeModal(dish.id);
-            card.innerHTML = `
-                <img src="${dish.image}" class="w-14 h-14 rounded-lg object-cover">
-                <div class="flex-1">
-                    <h5 class="text-xs font-bold text-white line-clamp-1">${dish.name}</h5>
-                    <div class="text-xs font-black text-orange-400 mt-1">R$ ${dish.price.toFixed(2).replace('.', ',')}</div>
-                </div>
-                <div class="w-8 h-8 rounded-lg bg-orange-500/10 text-orange-500 flex items-center justify-center">
-                    <i class="fa-solid fa-plus text-xs"></i>
-                </div>
-            `;
-            grid.appendChild(card);
-        });
-    }
-
-    function openAdminCustomizeModal(dishId) {
-        selectedAdminDish = MENU_DATA.find(d => d.id === dishId);
-        adminCustomizeQty = 1;
-        document.getElementById('admin-custom-title').innerText = `Adicionar: ${selectedAdminDish.name}`;
-        document.getElementById('admin-custom-qty').innerText = adminCustomizeQty;
-        document.getElementById('admin-custom-notes').value = '';
-        document.getElementById('admin-custom-total').innerText = `R$ ${selectedAdminDish.price.toFixed(2).replace('.', ',')}`;
-        document.getElementById('modal-admin-menu').classList.add('hidden');
-        document.getElementById('modal-admin-customize').classList.remove('hidden');
-    }
-
-    function updateAdminQty(delta) {
-        adminCustomizeQty = Math.max(1, adminCustomizeQty + delta);
-        document.getElementById('admin-custom-qty').innerText = adminCustomizeQty;
-        const total = selectedAdminDish.price * adminCustomizeQty;
-        document.getElementById('admin-custom-total').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
-    }
-
-    async function confirmAdminAddToCart() {
-        if (!currentEditingTableId || !selectedAdminDish) return;
-        const notes = document.getElementById('admin-custom-notes').value.trim();
-
-        try {
-            await fetch(`${API_URL}/api/admin/mesa/adicionar-itens`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    mesa_id: currentEditingTableId,
-                    cart: [{ 
-                        dishId: selectedAdminDish.id, 
-                        name: selectedAdminDish.name, 
-                        unitPrice: selectedAdminDish.price, 
-                        quantity: adminCustomizeQty, 
-                        notes 
-                    }]
-                })
-            });
-            showToast("Item lançado com sucesso!");
-            closeModal('modal-admin-customize');
-            await carregarMesas();
-            openTableModal(currentEditingTableId);
-        } catch (e) {
-            showToast("Erro ao adicionar item", "rose");
-        }
-    }
-
-    async function apagarItemIndividual(itemId) {
-        try {
-            await fetch(`${API_URL}/api/admin/comanda-item/${itemId}`, { method: 'DELETE' });
-            showToast("Item removido!");
-            await carregarMesas();
-            openTableModal(currentEditingTableId);
-        } catch (e) {
-            showToast("Erro ao remover item", "rose");
-        }
-    }
-
-    async function cancelarMesaCompleta() {
-        const table = tablesState.find(t => t.id === currentEditingTableId);
-        if (!table) return;
-
-        if (!confirm(`Tem certeza que deseja cancelar e limpar a Mesa ${table.number} sem gerar histórico?`)) return;
-
-        try {
-            await fetch(`${API_URL}/api/admin/mesa/cancelar`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mesa_id: table.id, comanda_id: table.comandaId })
-            });
-            closeModal('modal-comanda');
-            showToast(`Mesa ${table.number} cancelada e limpa!`);
-            carregarMesas();
-        } catch (e) {
-            showToast("Erro ao cancelar mesa", "rose");
-        }
-    }
-
-    async function realizarCheckout() {
-        const table = tablesState.find(t => t.id === currentEditingTableId);
-        if (!table || table.items.length === 0) {
-            showToast("Mesa vazia ou sem comanda ativa", "rose");
-            return;
-        }
-        const subtotal = table.items.reduce((s, i) => s + (i.price * i.qty), 0);
-
-        try {
-            await fetch(`${API_URL}/api/checkout`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    comanda_id: table.comandaId,
-                    mesa_id: table.id,
-                    forma_pagamento: 'CARTAO',
-                    subtotal: subtotal,
-                    taxa: 0,
-                    desconto: 0,
-                    final: subtotal
-                })
-            });
-            closeModal('modal-comanda');
-            showToast(`Mesa ${table.number} fechada com sucesso!`);
-            carregarMesas();
-        } catch (e) {
-            showToast("Erro ao fechar comanda", "rose");
-        }
-    }
-
-    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-
-    function playWaiterChimeSound() {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const now = audioCtx.currentTime;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.frequency.setValueAtTime(880, now);
-        gain.gain.setValueAtTime(0.3, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
-        osc.start(now); osc.stop(now + 0.5);
-    }
-
-    function showToast(msg, color="orange") {
-        const toast = document.getElementById('toast');
-        const icon = document.getElementById('toast-icon');
-        document.getElementById('toast-message').innerText = msg;
-        
-        if(color === "amber") icon.className = "fa-solid fa-bell text-amber-400 text-lg";
-        else if(color === "rose") icon.className = "fa-solid fa-circle-xmark text-rose-400 text-lg";
-        else icon.className = "fa-solid fa-circle-check text-orange-400 text-lg";
-
-        toast.classList.remove('translate-y-20', 'opacity-0');
-        setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3500);
-    }
-  </script>
-</body>
-</html>
+        const tbody = document.getElementById('historico-table
