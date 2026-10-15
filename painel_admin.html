@@ -17,24 +17,17 @@
 
   <!-- ESTILOS PARA A IMPRESSORA TÉRMICA -->
   <style>
-    /* Oculta a área de impressão na tela do computador */
     #area-cupom-impresso { display: none; }
 
-    /* Quando a tela nativa de impressão abrir, aplicam-se estas regras */
     @media print {
-      /* Esconde o painel inteiro */
       body * { visibility: hidden; }
-      
-      /* Mostra apenas a área do cupom e o seu conteúdo */
       #area-cupom-impresso, #area-cupom-impresso * { visibility: visible; }
-      
-      /* Formata como um cupom de 80mm */
       #area-cupom-impresso {
         display: block !important;
         position: absolute;
         left: 0;
         top: 0;
-        width: 80mm; /* Tamanho padrão térmica. Mude para 58mm se for a pequena */
+        width: 80mm;
         margin: 0;
         padding: 0;
         font-family: 'Courier New', Courier, monospace;
@@ -42,8 +35,6 @@
         color: #000;
         background: #fff;
       }
-
-      /* Garante que o fundo seja branco no papel */
       body { background-color: white !important; }
     }
   </style>
@@ -153,7 +144,7 @@
     <!-- JANELA 3: ESTATÍSTICAS E MÉTRICAS -->
     <div id="view-estatisticas" class="hidden space-y-6">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- FATURAMENTO HOJE + MÉDIA -->
+        <!-- FATURAMENTO HOJE + MÉDIA DIÁRIA GERAL -->
         <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg relative overflow-hidden group hover:border-orange-500/50 transition-colors flex flex-col justify-between">
           <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i class="fa-solid fa-money-bill-wave text-5xl text-orange-500"></i></div>
           <div>
@@ -161,12 +152,11 @@
             <div id="stat-fat-dia" class="text-3xl font-black text-white mt-2">R$ 0,00</div>
           </div>
           <div class="mt-4 pt-3 border-t border-zinc-800/80">
-            <span class="text-[11px] text-zinc-400 block font-medium">Média Diária Geral:</span>
-            <span id="stat-media-dia" class="text-sm font-bold text-orange-400">R$ 0,00</span>
+            <span id="stat-media-dia" class="text-xs font-bold text-orange-400">Média diária: R$ 0,00</span>
           </div>
         </div>
 
-        <!-- FATURAMENTO 7 DIAS + MÉDIA -->
+        <!-- FATURAMENTO 7 DIAS + MÉDIA SEMANAL GERAL -->
         <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg relative overflow-hidden group hover:border-emerald-500/50 transition-colors flex flex-col justify-between">
           <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i class="fa-solid fa-chart-line text-5xl text-emerald-500"></i></div>
           <div>
@@ -174,12 +164,11 @@
             <div id="stat-fat-semana" class="text-3xl font-black text-emerald-400 mt-2">R$ 0,00</div>
           </div>
           <div class="mt-4 pt-3 border-t border-zinc-800/80">
-            <span class="text-[11px] text-zinc-400 block font-medium">Média por Dia (7d):</span>
-            <span id="stat-media-semana" class="text-sm font-bold text-emerald-400">R$ 0,00 / dia</span>
+            <span id="stat-media-semana" class="text-xs font-bold text-emerald-400">Média semanal: R$ 0,00</span>
           </div>
         </div>
 
-        <!-- FATURAMENTO 30 DIAS + MÉDIA -->
+        <!-- FATURAMENTO 30 DIAS + MÉDIA MENSAL GERAL -->
         <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg relative overflow-hidden group hover:border-blue-500/50 transition-colors flex flex-col justify-between">
           <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i class="fa-solid fa-calendar-check text-5xl text-blue-500"></i></div>
           <div>
@@ -187,8 +176,7 @@
             <div id="stat-fat-mes" class="text-3xl font-black text-blue-400 mt-2">R$ 0,00</div>
           </div>
           <div class="mt-4 pt-3 border-t border-zinc-800/80">
-            <span class="text-[11px] text-zinc-400 block font-medium">Média por Dia (30d):</span>
-            <span id="stat-media-mes" class="text-sm font-bold text-blue-400">R$ 0,00 / dia</span>
+            <span id="stat-media-mes" class="text-xs font-bold text-blue-400">Média mensal: R$ 0,00</span>
           </div>
         </div>
       </div>
@@ -264,12 +252,11 @@
              Cancelar
           </button>
           
-          <!-- NOVO BOTÃO DE IMPRIMIR PARA A COZINHA -->
           <button onclick="abrirModalImpressao()" class="bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition border border-zinc-700 shadow-lg flex justify-center items-center">
             <i class="fa-solid fa-print mr-2"></i> Imprimir
           </button>
           
-          <button onclick="realizarCheckout()" class="bg-orange-500 hover:bg-orange-400 text-black font-black py-3 rounded-xl text-xs uppercase tracking-wider transition shadow-lg shadow-orange-500/20 flex justify-center items-center">
+          <button onclick="abrirSplitPayment()" class="bg-orange-500 hover:bg-orange-400 text-black font-black py-3 rounded-xl text-xs uppercase tracking-wider transition shadow-lg shadow-orange-500/20 flex justify-center items-center">
             <i class="fa-solid fa-cash-register mr-2"></i> Fechar Comanda
           </button>
         </div>
@@ -277,7 +264,57 @@
     </div>
   </div>
 
-  <!-- NOVO MODAL: SELECIONAR ITENS PARA IMPRESSÃO -->
+  <!-- MODAL: SPLIT PAYMENT (DIVISÃO INTELIGENTE) -->
+  <div id="modal-split-payment" class="hidden fixed inset-0 z-[70] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-zinc-900 border border-zinc-800 w-full max-w-xl rounded-2xl shadow-2xl flex flex-col overflow-hidden max-h-[90vh]">
+      <div class="bg-zinc-950 p-5 border-b border-zinc-800 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 bg-orange-500/20 text-orange-400 rounded-xl flex items-center justify-center font-black border border-orange-500/30"><i class="fa-solid fa-users"></i></div>
+          <div>
+            <h3 class="font-black text-white text-base uppercase tracking-wide">Divisão de Conta (Split Payment)</h3>
+            <p class="text-xs text-zinc-400">Mesa <span id="split-table-num" class="text-orange-500 font-bold"></span></p>
+          </div>
+        </div>
+        <button onclick="closeModal('modal-split-payment')" class="text-zinc-500 hover:text-white transition bg-zinc-900 hover:bg-zinc-800 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <div class="p-5 overflow-y-auto space-y-5 flex-1 bg-zinc-900/50">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="bg-zinc-950 p-4 rounded-xl border border-zinc-800 flex flex-col justify-between">
+            <span class="text-[11px] text-zinc-400 uppercase font-bold tracking-wider">Valor Total da Comanda</span>
+            <span id="split-total-cmd" class="text-2xl font-black text-orange-400 mt-1">R$ 0,00</span>
+          </div>
+          <div class="bg-zinc-950 p-4 rounded-xl border border-zinc-800 flex flex-col justify-between">
+            <label class="block text-[11px] text-zinc-400 uppercase font-bold tracking-wider mb-1">Dividir em quantas pessoas?</label>
+            <div class="flex items-center space-x-3">
+              <input type="number" id="split-qtd-pessoas" min="1" max="20" value="1" oninput="recalcularSplit()" class="w-20 bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-center text-lg font-black text-white focus:outline-none focus:border-orange-500 transition">
+              <span class="text-xs text-zinc-400 font-medium">Pessoas</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-zinc-950 p-4 rounded-2xl border border-zinc-800 shadow-inner">
+          <div class="flex justify-between items-center mb-3">
+            <h4 class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Partilha por Pessoa</h4>
+            <span id="split-status-validacao" class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-circle-check mr-1"></i> Total batendo certo</span>
+          </div>
+          <div id="split-pessoas-list" class="space-y-2.5 max-h-60 overflow-y-auto pr-2 custom-scrollbar"></div>
+        </div>
+      </div>
+
+      <div class="bg-zinc-950 p-5 border-t border-zinc-800 flex justify-between items-center">
+        <div>
+          <span class="text-[11px] text-zinc-400 block font-bold uppercase">Soma das Partes</span>
+          <span id="split-soma-partes" class="text-xl font-black text-white">R$ 0,00</span>
+        </div>
+        <button onclick="concluirPagamentoSplit()" class="bg-orange-500 hover:bg-orange-400 text-black font-black px-6 py-3.5 rounded-xl text-xs uppercase tracking-wider transition shadow-lg shadow-orange-500/20 flex items-center space-x-2">
+          <i class="fa-solid fa-check-double text-base"></i> <span>Confirmar Pagamento Total</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: SELECIONAR ITENS PARA IMPRESSÃO -->
   <div id="modal-impressao" class="hidden fixed inset-0 z-[60] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
     <div class="bg-zinc-900 border border-zinc-800 w-full max-w-md rounded-2xl shadow-2xl flex flex-col overflow-hidden max-h-[90vh]">
       <div class="bg-zinc-950 p-4 border-b border-zinc-800 flex justify-between items-center">
@@ -292,7 +329,6 @@
         <p class="text-xs text-zinc-400 mb-3">Selecione os itens para enviar para a cozinha. <br>Itens novos já vêm marcados automaticamente.</p>
         
         <div id="lista-checkboxes-imprimir" class="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar bg-zinc-950 p-3 rounded-xl border border-zinc-800">
-            <!-- Checkboxes gerados via JS -->
         </div>
       </div>
 
@@ -305,9 +341,7 @@
     </div>
   </div>
 
-  <!-- AREA OCULTA PARA GERAR O HTML DO CUPOM DA IMPRESSORA -->
   <div id="area-cupom-impresso"></div>
-
 
   <!-- MODAL: SELETOR DE CARDÁPIO DO PAINEL -->
   <div id="modal-admin-menu" class="hidden fixed inset-0 z-[60] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
@@ -320,10 +354,7 @@
         <button onclick="closeModal('modal-admin-menu')" class="text-zinc-400 hover:text-white p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
       </div>
 
-      <!-- Categorias -->
       <div class="p-3 bg-zinc-950/60 border-b border-zinc-800 overflow-x-auto flex space-x-2 custom-scrollbar" id="admin-categories-container"></div>
-
-      <!-- Lista de Itens do Cardápio -->
       <div class="p-4 overflow-y-auto flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 custom-scrollbar" id="admin-dishes-grid"></div>
     </div>
   </div>
@@ -387,7 +418,6 @@
   </div>
 
   <style>
-    /* Estilos extras para barra de rolagem customizada no painel para ficar chique */
     .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #3f3f46; border-radius: 10px; }
@@ -399,11 +429,9 @@
     let tablesState = [];
     let currentEditingTableId = null;
     let audioCtx = null;
-
-    // NOVO: Memória de itens que já foram impressos para a cozinha
     let itensImpressosGlobais = new Set();
+    let splitSubtotalGlobal = 0;
 
-    // CARDÁPIO CACHEADO
     const MENU_DATA = [
         { id: 'h1', name: 'Smash Bacon Supreme', category: 'hamburgueres', price: 34.90, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80', description: 'Dois smashes artesanais 90g, cheddar, bacon crocante.' },
         { id: 'h2', name: 'Double Cheddar Melt', category: 'hamburgueres', price: 38.90, image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80', description: 'Blend especial 180g, muito creme cheddar melt.' },
@@ -658,7 +686,6 @@
         document.getElementById('modal-historico').classList.remove('hidden');
     }
 
-    // FUNÇÃO AUXILIAR PARA TRADUZIR DIAS DA SEMANA
     function traduzirDiaSemana(diaIngles) {
         if (!diaIngles) return '---';
         const dias = {
@@ -676,24 +703,56 @@
 
     async function carregarEstatisticas() {
         try {
-            const res = await fetch(`${API_URL}/api/estatisticas`);
-            const data = await res.json();
+            const [resStats, resHist] = await Promise.all([
+                fetch(`${API_URL}/api/estatisticas`),
+                fetch(`${API_URL}/api/historico`)
+            ]);
+            const data = await resStats.json();
+            const historico = await resHist.json();
 
             const fatDia = parseFloat(data.faturamento.dia || 0);
             const fatSemana = parseFloat(data.faturamento.semana || 0);
             const fatMes = parseFloat(data.faturamento.mes || 0);
 
-            // Valores de Faturamento
             document.getElementById('stat-fat-dia').innerText = `R$ ${fatDia.toFixed(2).replace('.', ',')}`;
             document.getElementById('stat-fat-semana').innerText = `R$ ${fatSemana.toFixed(2).replace('.', ',')}`;
             document.getElementById('stat-fat-mes').innerText = `R$ ${fatMes.toFixed(2).replace('.', ',')}`;
 
-            // Médias de Faturamento para comparação
-            document.getElementById('stat-media-dia').innerText = `R$ ${fatDia.toFixed(2).replace('.', ',')} (Hoje)`;
-            document.getElementById('stat-media-semana').innerText = `R$ ${(fatSemana / 7).toFixed(2).replace('.', ',')} / dia`;
-            document.getElementById('stat-media-mes').innerText = `R$ ${(fatMes / 30).toFixed(2).replace('.', ',')} / dia`;
+            // Calcular médias gerais reais com base em todo o histórico
+            let mediaDiariaGeral = 0;
+            let mediaSemanalGeral = 0;
+            let mediaMensalGeral = 0;
 
-            document.getElementById('stat-hora-pico').innerText = data.horaPico;
+            if (historico && historico.length > 0) {
+                let diasUnicos = new Set();
+                let semanasUnicas = new Set();
+                let mesesUnicos = new Set();
+                let faturamentoTotalGeral = 0;
+
+                historico.forEach(cmd => {
+                    const val = parseFloat(cmd.valor_total_final || 0);
+                    faturamentoTotalGeral += val;
+                    const d = new Date(cmd.data_fechamento);
+                    diasUnicos.add(d.toISOString().split('T')[0]);
+
+                    const ano = d.getFullYear();
+                    const primeiraSemana = new Date(ano, 0, 1);
+                    const semanaNum = Math.ceil((((d - primeiraSemana) / 86400000) + primeiraSemana.getDay() + 1) / 7);
+                    semanasUnicas.add(`${ano}-W${semanaNum}`);
+
+                    mesesUnicos.add(`${d.getFullYear()}-${d.getMonth()}`);
+                });
+
+                mediaDiariaGeral = faturamentoTotalGeral / Math.max(1, diasUnicos.size);
+                mediaSemanalGeral = faturamentoTotalGeral / Math.max(1, semanasUnicas.size);
+                mediaMensalGeral = faturamentoTotalGeral / Math.max(1, mesesUnicos.size);
+            }
+
+            document.getElementById('stat-media-dia').innerText = `Média diária: R$ ${mediaDiariaGeral.toFixed(2).replace('.', ',')}`;
+            document.getElementById('stat-media-semana').innerText = `Média semanal: R$ ${mediaSemanalGeral.toFixed(2).replace('.', ',')}`;
+            document.getElementById('stat-media-mes').innerText = `Média mensal: R$ ${mediaMensalGeral.toFixed(2).replace('.', ',')}`;
+
+            document.getElementById('stat-hora-pico').innerText = data.horaPico || '--:--';
             document.getElementById('stat-dia-pico').innerText = traduzirDiaSemana(data.diaPico);
 
             const topList = document.getElementById('stat-top-itens');
@@ -701,7 +760,7 @@
             topList.innerHTML = '';
             lowList.innerHTML = '';
 
-            if (data.itens.length > 0) {
+            if (data.itens && data.itens.length > 0) {
                 data.itens.slice(0, 5).forEach(i => {
                     topList.innerHTML += `<div class="flex justify-between items-center text-sm bg-zinc-950 p-3 rounded-xl border border-zinc-800"><span class="font-bold text-white">${i.nome_item}</span><span class="bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded text-xs font-black">${i.total_qtd}x</span></div>`;
                 });
@@ -805,7 +864,150 @@
         document.getElementById('modal-comanda').classList.remove('hidden');
     }
 
-    // ========== NOVA FUNCIONALIDADE: IMPRESSÃO ==========
+    // ==========================================
+    // LÓGICA DO SPLIT PAYMENT
+    // ==========================================
+
+    function abrirSplitPayment() {
+        const table = tablesState.find(t => t.id === currentEditingTableId);
+        if (!table || table.items.length === 0) {
+            showToast("Mesa vazia. Nada a cobrar.", "rose");
+            return;
+        }
+        
+        splitSubtotalGlobal = table.items.reduce((s, i) => s + (i.price * i.qty), 0);
+        document.getElementById('split-table-num').innerText = table.number;
+        document.getElementById('split-total-cmd').innerText = `R$ ${splitSubtotalGlobal.toFixed(2).replace('.', ',')}`;
+        document.getElementById('split-qtd-pessoas').value = '1';
+        
+        closeModal('modal-comanda');
+        document.getElementById('modal-split-payment').classList.remove('hidden');
+        recalcularSplit();
+    }
+
+    function recalcularSplit() {
+        const qtdInput = parseInt(document.getElementById('split-qtd-pessoas').value) || 1;
+        const qtd = Math.max(1, qtdInput);
+        const container = document.getElementById('split-pessoas-list');
+        container.innerHTML = '';
+
+        let valorBase = Math.floor((splitSubtotalGlobal / qtd) * 100) / 100;
+        let valores = [];
+        let somaCalculada = 0;
+
+        for (let i = 0; i < qtd; i++) {
+            valores.push(valorBase);
+            somaCalculada += valorBase;
+        }
+
+        let diferenca = Math.round((splitSubtotalGlobal - somaCalculada) * 100);
+        if (diferenca !== 0 && valores.length > 0) {
+            valores[0] = Math.round((valores[0] + (diferenca / 100)) * 100) / 100;
+        }
+
+        for (let i = 0; i < qtd; i++) {
+            let valExibido = valores[i];
+            container.innerHTML += `
+                <div class="bg-zinc-900 p-3 rounded-xl border border-zinc-800 flex items-center justify-between gap-4">
+                    <span class="text-xs font-bold text-white flex items-center"><i class="fa-solid fa-user text-orange-500 mr-2"></i> Pessoa ${i + 1}</span>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-xs text-zinc-400 font-bold">R$</span>
+                        <input type="number" step="0.01" value="${valExibido.toFixed(2)}" oninput="ajustarSplitManual(${i})" class="split-input-valor w-32 bg-zinc-950 border border-zinc-800 rounded-lg p-2 text-right text-sm font-black text-emerald-400 focus:outline-none focus:border-orange-500 transition">
+                    </div>
+                </div>
+            `;
+        }
+        atualizarSomaPartes();
+    }
+
+    function ajustarSplitManual(indexAlterado) {
+        const inputs = document.querySelectorAll('.split-input-valor');
+        const qtd = inputs.length;
+        
+        let valorAlterado = parseFloat(inputs[indexAlterado].value.replace(',', '.')) || 0;
+        let indicesRestantes = [];
+
+        for (let i = 0; i < qtd; i++) {
+            if (i !== indexAlterado) indicesRestantes.push(i);
+        }
+
+        if (indicesRestantes.length > 0) {
+            let restoParaDividir = splitSubtotalGlobal - valorAlterado;
+            if (restoParaDividir < 0) restoParaDividir = 0;
+
+            let valorPorRestante = Math.floor((restoParaDividir / indicesRestantes.length) * 100) / 100;
+            let somaParcialRestantes = 0;
+
+            indicesRestantes.forEach((idx, pos) => {
+                if (pos === indicesRestantes.length - 1) {
+                    let valUltimo = splitSubtotalGlobal - valorAlterado - somaParcialRestantes;
+                    inputs[idx].value = Math.max(0, valUltimo).toFixed(2);
+                } else {
+                    inputs[idx].value = valorPorRestante.toFixed(2);
+                    somaParcialRestantes += valorPorRestante;
+                }
+            });
+        }
+        atualizarSomaPartes();
+    }
+
+    function atualizarSomaPartes() {
+        const inputs = document.querySelectorAll('.split-input-valor');
+        let soma = 0;
+        inputs.forEach(inp => soma += parseFloat(inp.value.replace(',', '.')) || 0);
+
+        document.getElementById('split-soma-partes').innerText = `R$ ${soma.toFixed(2).replace('.', ',')}`;
+        const statusEl = document.getElementById('split-status-validacao');
+        const diff = Math.abs(soma - splitSubtotalGlobal);
+
+        if (diff < 0.05) {
+            statusEl.innerHTML = '<i class="fa-solid fa-circle-check mr-1"></i> Total batendo certo';
+            statusEl.className = "text-xs font-bold text-emerald-400";
+        } else {
+            statusEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1"></i> Divergência no valor';
+            statusEl.className = "text-xs font-bold text-rose-400";
+        }
+    }
+
+    async function concluirPagamentoSplit() {
+        const table = tablesState.find(t => t.id === currentEditingTableId);
+        if (!table) return;
+
+        const inputs = document.querySelectorAll('.split-input-valor');
+        let soma = 0;
+        inputs.forEach(inp => soma += parseFloat(inp.value.replace(',', '.')) || 0);
+
+        if (Math.abs(soma - splitSubtotalGlobal) > 0.05) {
+            showToast("A soma dos pagamentos diverge do total da comanda!", "rose");
+            return;
+        }
+
+        try {
+            await fetch(`${API_URL}/api/checkout`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    comanda_id: table.comandaId,
+                    mesa_id: table.id,
+                    forma_pagamento: 'SPLIT_PAYMENT',
+                    subtotal: splitSubtotalGlobal,
+                    taxa: 0,
+                    desconto: 0,
+                    final: splitSubtotalGlobal
+                })
+            });
+            
+            table.items.forEach(i => itensImpressosGlobais.delete(i.id));
+
+            closeModal('modal-split-payment');
+            showToast(`Mesa ${table.number} fechada via Split Payment com sucesso!`);
+            carregarMesas();
+        } catch (e) {
+            showToast("Erro ao concluir checkout", "rose");
+        }
+    }
+
+    // ==========================================
 
     function abrirModalImpressao() {
       const table = tablesState.find(t => t.id === currentEditingTableId);
@@ -860,7 +1062,6 @@
         
         table.items.forEach((item) => {
             const checkbox = document.getElementById(`check-print-${item.id}`);
-            
             if (checkbox && checkbox.checked) {
                 htmlCupom += `
                     <div style="margin-bottom: 10px;">
@@ -889,7 +1090,6 @@
         fecharModalImpressao();
         setTimeout(() => { window.print(); }, 100);
     }
-    // ======================================================
 
     function openAdminMenuPicker() {
         renderAdminCategories();
@@ -983,9 +1183,7 @@
         if (!confirm("Remover este item da comanda?")) return;
         try {
             await fetch(`${API_URL}/api/admin/comanda-item/${itemId}`, { method: 'DELETE' });
-            
             itensImpressosGlobais.delete(itemId);
-            
             showToast("Item removido da mesa!");
             await carregarMesas();
             openTableModal(currentEditingTableId);
@@ -1014,39 +1212,6 @@
             carregarMesas();
         } catch (e) {
             showToast("Erro ao cancelar mesa", "rose");
-        }
-    }
-
-    async function realizarCheckout() {
-        const table = tablesState.find(t => t.id === currentEditingTableId);
-        if (!table || table.items.length === 0) {
-            showToast("Mesa vazia. Nada a cobrar.", "rose");
-            return;
-        }
-        const subtotal = table.items.reduce((s, i) => s + (i.price * i.qty), 0);
-
-        try {
-            await fetch(`${API_URL}/api/checkout`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    comanda_id: table.comandaId,
-                    mesa_id: table.id,
-                    forma_pagamento: 'BALCAO',
-                    subtotal: subtotal,
-                    taxa: 0,
-                    desconto: 0,
-                    final: subtotal
-                })
-            });
-            
-            table.items.forEach(i => itensImpressosGlobais.delete(i.id));
-
-            closeModal('modal-comanda');
-            showToast(`Mesa ${table.number} fechada e paga!`);
-            carregarMesas();
-        } catch (e) {
-            showToast("Erro ao fechar comanda", "rose");
         }
     }
 
