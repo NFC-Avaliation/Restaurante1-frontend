@@ -264,14 +264,14 @@
     </div>
   </div>
 
-  <!-- MODAL: SPLIT PAYMENT (DIVISÃO INTELIGENTE) -->
+  <!-- MODAL: DIVISÃO DE CONTA -->
   <div id="modal-split-payment" class="hidden fixed inset-0 z-[70] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
     <div class="bg-zinc-900 border border-zinc-800 w-full max-w-xl rounded-2xl shadow-2xl flex flex-col overflow-hidden max-h-[90vh]">
       <div class="bg-zinc-950 p-5 border-b border-zinc-800 flex justify-between items-center">
         <div class="flex items-center space-x-3">
           <div class="w-10 h-10 bg-orange-500/20 text-orange-400 rounded-xl flex items-center justify-center font-black border border-orange-500/30"><i class="fa-solid fa-users"></i></div>
           <div>
-            <h3 class="font-black text-white text-base uppercase tracking-wide">Divisão de Conta (Split Payment)</h3>
+            <h3 class="font-black text-white text-base uppercase tracking-wide">Divisão de Conta</h3>
             <p class="text-xs text-zinc-400">Mesa <span id="split-table-num" class="text-orange-500 font-bold"></span></p>
           </div>
         </div>
@@ -718,7 +718,6 @@
             document.getElementById('stat-fat-semana').innerText = `R$ ${fatSemana.toFixed(2).replace('.', ',')}`;
             document.getElementById('stat-fat-mes').innerText = `R$ ${fatMes.toFixed(2).replace('.', ',')}`;
 
-            // Calcular médias gerais reais com base em todo o histórico
             let mediaDiariaGeral = 0;
             let mediaSemanalGeral = 0;
             let mediaMensalGeral = 0;
@@ -865,7 +864,7 @@
     }
 
     // ==========================================
-    // LÓGICA DO SPLIT PAYMENT
+    // LÓGICA DE DIVISÃO DE CONTA (SEQUENCIAL INTELIGENTE)
     // ==========================================
 
     function abrirSplitPayment() {
@@ -924,29 +923,29 @@
         const inputs = document.querySelectorAll('.split-input-valor');
         const qtd = inputs.length;
         
-        let valorAlterado = parseFloat(inputs[indexAlterado].value.replace(',', '.')) || 0;
-        let indicesRestantes = [];
-
-        for (let i = 0; i < qtd; i++) {
-            if (i !== indexAlterado) indicesRestantes.push(i);
+        // Fixa os valores da Pessoa 0 até a Pessoa que foi alterada, e divide o resto entre as seguintes
+        let somaFixada = 0;
+        for (let i = 0; i <= indexAlterado; i++) {
+            somaFixada += parseFloat(inputs[i].value.replace(',', '.')) || 0;
         }
 
-        if (indicesRestantes.length > 0) {
-            let restoParaDividir = splitSubtotalGlobal - valorAlterado;
-            if (restoParaDividir < 0) restoParaDividir = 0;
+        let resto = splitSubtotalGlobal - somaFixada;
+        let pessoasRestantes = qtd - (indexAlterado + 1);
 
-            let valorPorRestante = Math.floor((restoParaDividir / indicesRestantes.length) * 100) / 100;
-            let somaParcialRestantes = 0;
+        if (pessoasRestantes > 0) {
+            if (resto < 0) resto = 0;
+            let valorPorRestante = Math.floor((resto / pessoasRestantes) * 100) / 100;
+            let somaParcial = 0;
 
-            indicesRestantes.forEach((idx, pos) => {
-                if (pos === indicesRestantes.length - 1) {
-                    let valUltimo = splitSubtotalGlobal - valorAlterado - somaParcialRestantes;
-                    inputs[idx].value = Math.max(0, valUltimo).toFixed(2);
+            for (let i = indexAlterado + 1; i < qtd; i++) {
+                if (i === qtd - 1) {
+                    let ultimoValor = splitSubtotalGlobal - somaFixada - somaParcial;
+                    inputs[i].value = Math.max(0, ultimoValor).toFixed(2);
                 } else {
-                    inputs[idx].value = valorPorRestante.toFixed(2);
-                    somaParcialRestantes += valorPorRestante;
+                    inputs[i].value = valorPorRestante.toFixed(2);
+                    somaParcial += valorPorRestante;
                 }
-            });
+            }
         }
         atualizarSomaPartes();
     }
@@ -1000,7 +999,7 @@
             table.items.forEach(i => itensImpressosGlobais.delete(i.id));
 
             closeModal('modal-split-payment');
-            showToast(`Mesa ${table.number} fechada via Split Payment com sucesso!`);
+            showToast(`Mesa ${table.number} fechada com divisão de conta com sucesso!`);
             carregarMesas();
         } catch (e) {
             showToast("Erro ao concluir checkout", "rose");
