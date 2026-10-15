@@ -153,20 +153,43 @@
     <!-- JANELA 3: ESTATÍSTICAS E MÉTRICAS -->
     <div id="view-estatisticas" class="hidden space-y-6">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg relative overflow-hidden group hover:border-orange-500/50 transition-colors">
+        <!-- FATURAMENTO HOJE + MÉDIA -->
+        <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg relative overflow-hidden group hover:border-orange-500/50 transition-colors flex flex-col justify-between">
           <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i class="fa-solid fa-money-bill-wave text-5xl text-orange-500"></i></div>
-          <span class="text-xs text-zinc-400 uppercase font-bold tracking-wider">Faturamento (Hoje)</span>
-          <div id="stat-fat-dia" class="text-3xl font-black text-white mt-2">R$ 0,00</div>
+          <div>
+            <span class="text-xs text-zinc-400 uppercase font-bold tracking-wider">Faturamento (Hoje)</span>
+            <div id="stat-fat-dia" class="text-3xl font-black text-white mt-2">R$ 0,00</div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-zinc-800/80">
+            <span class="text-[11px] text-zinc-400 block font-medium">Média Diária Geral:</span>
+            <span id="stat-media-dia" class="text-sm font-bold text-orange-400">R$ 0,00</span>
+          </div>
         </div>
-        <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg relative overflow-hidden group hover:border-emerald-500/50 transition-colors">
+
+        <!-- FATURAMENTO 7 DIAS + MÉDIA -->
+        <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg relative overflow-hidden group hover:border-emerald-500/50 transition-colors flex flex-col justify-between">
           <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i class="fa-solid fa-chart-line text-5xl text-emerald-500"></i></div>
-          <span class="text-xs text-zinc-400 uppercase font-bold tracking-wider">Faturamento (7 Dias)</span>
-          <div id="stat-fat-semana" class="text-3xl font-black text-emerald-400 mt-2">R$ 0,00</div>
+          <div>
+            <span class="text-xs text-zinc-400 uppercase font-bold tracking-wider">Faturamento (7 Dias)</span>
+            <div id="stat-fat-semana" class="text-3xl font-black text-emerald-400 mt-2">R$ 0,00</div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-zinc-800/80">
+            <span class="text-[11px] text-zinc-400 block font-medium">Média por Dia (7d):</span>
+            <span id="stat-media-semana" class="text-sm font-bold text-emerald-400">R$ 0,00 / dia</span>
+          </div>
         </div>
-        <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg relative overflow-hidden group hover:border-blue-500/50 transition-colors">
+
+        <!-- FATURAMENTO 30 DIAS + MÉDIA -->
+        <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg relative overflow-hidden group hover:border-blue-500/50 transition-colors flex flex-col justify-between">
           <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i class="fa-solid fa-calendar-check text-5xl text-blue-500"></i></div>
-          <span class="text-xs text-zinc-400 uppercase font-bold tracking-wider">Faturamento (30 Dias)</span>
-          <div id="stat-fat-mes" class="text-3xl font-black text-blue-400 mt-2">R$ 0,00</div>
+          <div>
+            <span class="text-xs text-zinc-400 uppercase font-bold tracking-wider">Faturamento (30 Dias)</span>
+            <div id="stat-fat-mes" class="text-3xl font-black text-blue-400 mt-2">R$ 0,00</div>
+          </div>
+          <div class="mt-4 pt-3 border-t border-zinc-800/80">
+            <span class="text-[11px] text-zinc-400 block font-medium">Média por Dia (30d):</span>
+            <span id="stat-media-mes" class="text-sm font-bold text-blue-400">R$ 0,00 / dia</span>
+          </div>
         </div>
       </div>
 
@@ -625,7 +648,7 @@
                     <div class="bg-zinc-950 p-3 rounded-xl border border-zinc-800 flex justify-between items-center text-sm">
                         <div>
                             <span class="font-bold text-white">${item.quantidade}x ${item.nome_item}</span>
-                            ${item.observacoes ? `<div class="text-[11px] text-zinc-400 mt-0.5"><i class="fa-solid fa-comment-dots mr-1"></i> ${item.observacoes}</div>` : ''}
+                            ${item.observacoes ? `<div class="text-[11px] text-zinc-400 mt-0.5"><i class="fa-solid fa-comment-dots text-zinc-600 mr-1"></i> ${item.observacoes}</div>` : ''}
                         </div>
                         <span class="text-zinc-300 font-bold">R$ ${sub.toFixed(2).replace('.', ',')}</span>
                     </div>
@@ -635,16 +658,43 @@
         document.getElementById('modal-historico').classList.remove('hidden');
     }
 
+    // FUNÇÃO AUXILIAR PARA TRADUZIR DIAS DA SEMANA
+    function traduzirDiaSemana(diaIngles) {
+        if (!diaIngles) return '---';
+        const dias = {
+            'Monday': 'Segunda-feira',
+            'Tuesday': 'Terça-feira',
+            'Wednesday': 'Quarta-feira',
+            'Thursday': 'Quinta-feira',
+            'Friday': 'Sexta-feira',
+            'Saturday': 'Sábado',
+            'Sunday': 'Domingo'
+        };
+        const limpo = diaIngles.trim();
+        return dias[limpo] || limpo;
+    }
+
     async function carregarEstatisticas() {
         try {
             const res = await fetch(`${API_URL}/api/estatisticas`);
             const data = await res.json();
 
-            document.getElementById('stat-fat-dia').innerText = `R$ ${parseFloat(data.faturamento.dia || 0).toFixed(2).replace('.', ',')}`;
-            document.getElementById('stat-fat-semana').innerText = `R$ ${parseFloat(data.faturamento.semana || 0).toFixed(2).replace('.', ',')}`;
-            document.getElementById('stat-fat-mes').innerText = `R$ ${parseFloat(data.faturamento.mes || 0).toFixed(2).replace('.', ',')}`;
+            const fatDia = parseFloat(data.faturamento.dia || 0);
+            const fatSemana = parseFloat(data.faturamento.semana || 0);
+            const fatMes = parseFloat(data.faturamento.mes || 0);
+
+            // Valores de Faturamento
+            document.getElementById('stat-fat-dia').innerText = `R$ ${fatDia.toFixed(2).replace('.', ',')}`;
+            document.getElementById('stat-fat-semana').innerText = `R$ ${fatSemana.toFixed(2).replace('.', ',')}`;
+            document.getElementById('stat-fat-mes').innerText = `R$ ${fatMes.toFixed(2).replace('.', ',')}`;
+
+            // Médias de Faturamento para comparação
+            document.getElementById('stat-media-dia').innerText = `R$ ${fatDia.toFixed(2).replace('.', ',')} (Hoje)`;
+            document.getElementById('stat-media-semana').innerText = `R$ ${(fatSemana / 7).toFixed(2).replace('.', ',')} / dia`;
+            document.getElementById('stat-media-mes').innerText = `R$ ${(fatMes / 30).toFixed(2).replace('.', ',')} / dia`;
+
             document.getElementById('stat-hora-pico').innerText = data.horaPico;
-            document.getElementById('stat-dia-pico').innerText = data.diaPico;
+            document.getElementById('stat-dia-pico').innerText = traduzirDiaSemana(data.diaPico);
 
             const topList = document.getElementById('stat-top-itens');
             const lowList = document.getElementById('stat-low-itens');
@@ -734,7 +784,6 @@
             table.items.forEach(item => {
                 const t = item.price * item.qty;
                 total += t;
-                // Adicionei uma borda laranja se o item nunca foi impresso (opcional visual)
                 const isImpresso = itensImpressosGlobais.has(item.id);
                 const borderClass = isImpresso ? "border-zinc-800" : "border-orange-500/30 bg-orange-500/5";
 
@@ -770,7 +819,6 @@
       listaDiv.innerHTML = ''; 
       
       table.items.forEach((item) => {
-          // A INTELIGÊNCIA: Se o ID do item NÃO estiver na nossa memória global, a checkbox já vem marcada (checked).
           const isJaImpresso = itensImpressosGlobais.has(item.id);
           const checkedStr = isJaImpresso ? '' : 'checked';
           
@@ -810,11 +858,9 @@
         
         let itensSelecionados = 0;
         
-        // Passa por todos os itens da mesa
         table.items.forEach((item) => {
             const checkbox = document.getElementById(`check-print-${item.id}`);
             
-            // Se o funcionário deixou a caixa marcada
             if (checkbox && checkbox.checked) {
                 htmlCupom += `
                     <div style="margin-bottom: 10px;">
@@ -823,8 +869,6 @@
                     </div>
                 `;
                 itensSelecionados++;
-                
-                // Grava na memória que este item específico já foi mandado para a impressora!
                 itensImpressosGlobais.add(item.id);
             }
         });
@@ -841,11 +885,8 @@
             return;
         }
         
-        // Injeta o HTML na área invisível e chama a impressão do navegador
         areaCupom.innerHTML = htmlCupom;
         fecharModalImpressao();
-        
-        // Timeout rápido para garantir que o modal fechou antes da tela de imprimir abrir
         setTimeout(() => { window.print(); }, 100);
     }
     // ======================================================
@@ -943,7 +984,6 @@
         try {
             await fetch(`${API_URL}/api/admin/comanda-item/${itemId}`, { method: 'DELETE' });
             
-            // Quando removemos um item, também o apagamos da memória da impressora para não haver falhas futuras
             itensImpressosGlobais.delete(itemId);
             
             showToast("Item removido da mesa!");
@@ -967,7 +1007,6 @@
                 body: JSON.stringify({ mesa_id: table.id, comanda_id: table.comandaId })
             });
             
-            // Limpa a memória de impressão desta mesa ao cancelar
             if(table.items) { table.items.forEach(i => itensImpressosGlobais.delete(i.id)); }
 
             closeModal('modal-comanda');
@@ -1001,7 +1040,6 @@
                 })
             });
             
-            // Limpa a memória de impressão desta mesa pois a comanda foi fechada
             table.items.forEach(i => itensImpressosGlobais.delete(i.id));
 
             closeModal('modal-comanda');
