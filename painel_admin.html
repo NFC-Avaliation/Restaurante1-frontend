@@ -144,7 +144,6 @@
     <!-- JANELA 3: ESTATÍSTICAS E MÉTRICAS -->
     <div id="view-estatisticas" class="hidden space-y-6">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- FATURAMENTO HOJE + MÉDIA DIÁRIA GERAL -->
         <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg relative overflow-hidden group hover:border-orange-500/50 transition-colors flex flex-col justify-between">
           <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i class="fa-solid fa-money-bill-wave text-5xl text-orange-500"></i></div>
           <div>
@@ -156,7 +155,6 @@
           </div>
         </div>
 
-        <!-- FATURAMENTO 7 DIAS + MÉDIA SEMANAL GERAL -->
         <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg relative overflow-hidden group hover:border-emerald-500/50 transition-colors flex flex-col justify-between">
           <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i class="fa-solid fa-chart-line text-5xl text-emerald-500"></i></div>
           <div>
@@ -168,7 +166,6 @@
           </div>
         </div>
 
-        <!-- FATURAMENTO 30 DIAS + MÉDIA MENSAL GERAL -->
         <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg relative overflow-hidden group hover:border-blue-500/50 transition-colors flex flex-col justify-between">
           <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><i class="fa-solid fa-calendar-check text-5xl text-blue-500"></i></div>
           <div>
@@ -220,7 +217,6 @@
       </div>
       
       <div class="p-5 overflow-y-auto space-y-5 flex-1 bg-zinc-900/50">
-        <!-- ALERTA DE GARÇOM SE HOUVER -->
         <div id="modal-waiter-section" class="hidden bg-amber-950/30 p-4 rounded-xl border border-amber-500/50 flex justify-between items-center shadow-lg shadow-amber-900/20">
           <div class="flex items-center space-x-3 text-amber-400 font-bold text-sm tracking-wide">
             <i class="fa-solid fa-bell animate-bounce text-xl"></i>
@@ -229,19 +225,16 @@
           <button onclick="atenderGarcomModal()" class="bg-amber-500 hover:bg-amber-400 text-black font-black px-4 py-2 rounded-lg text-xs uppercase tracking-wider transition shadow-md">Atender</button>
         </div>
 
-        <!-- LISTA DE ITENS ATUAIS -->
         <div class="bg-zinc-950 p-4 rounded-2xl border border-zinc-800 shadow-inner">
           <h4 class="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-3">Itens na Comanda</h4>
           <div id="modal-items-list" class="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar"></div>
         </div>
 
-        <!-- BOTÃO PARA ABRIR O CARDÁPIO E ADICIONAR ITEM -->
         <button onclick="openAdminMenuPicker()" class="w-full bg-zinc-900 hover:bg-zinc-800 border border-dashed border-zinc-700 hover:border-orange-500 text-zinc-300 hover:text-orange-400 font-bold py-4 rounded-2xl text-sm transition group">
           <i class="fa-solid fa-plus text-orange-500 mr-2 group-hover:scale-125 transition-transform"></i> Adicionar Novo Item à Mesa
         </button>
       </div>
 
-      <!-- RODAPÉ DE AÇÕES -->
       <div class="bg-zinc-950 p-5 border-t border-zinc-800 space-y-4">
         <div class="flex justify-between items-end bg-zinc-900 p-4 rounded-xl border border-zinc-800">
           <span class="text-zinc-400 text-xs font-bold uppercase tracking-wider">Total Acumulado</span>
@@ -256,7 +249,7 @@
             <i class="fa-solid fa-print mr-2"></i> Imprimir
           </button>
           
-          <button onclick="abrirSplitPayment()" class="bg-orange-500 hover:bg-orange-400 text-black font-black py-3 rounded-xl text-xs uppercase tracking-wider transition shadow-lg shadow-orange-500/20 flex justify-center items-center">
+          <button onclick="abrirModalEscolhaFechamento()" class="bg-orange-500 hover:bg-orange-400 text-black font-black py-3 rounded-xl text-xs uppercase tracking-wider transition shadow-lg shadow-orange-500/20 flex justify-center items-center">
             <i class="fa-solid fa-cash-register mr-2"></i> Fechar Comanda
           </button>
         </div>
@@ -264,7 +257,150 @@
     </div>
   </div>
 
-  <!-- MODAL: DIVISÃO DE CONTA -->
+  <!-- NOVO MODAL: TELA DE ESCOLHA DE FECHAMENTO -->
+  <div id="modal-escolha-fechamento" class="hidden fixed inset-0 z-[70] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-zinc-900 border border-zinc-800 w-full max-w-md rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+      <div class="bg-zinc-950 p-5 border-b border-zinc-800 flex justify-between items-center">
+        <h3 class="font-black text-white text-base uppercase tracking-wide">Fechar Comanda - Mesa <span id="escolha-table-num" class="text-orange-500"></span></h3>
+        <button onclick="closeModal('modal-escolha-fechamento')" class="text-zinc-500 hover:text-white transition bg-zinc-900 hover:bg-zinc-800 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <div class="p-6 space-y-4 bg-zinc-900">
+        <p class="text-xs text-zinc-400 mb-2">Selecione como deseja proceder com o pagamento:</p>
+        
+        <button onclick="selecionarOpcaoFechamento('valor')" class="w-full bg-zinc-950 hover:bg-zinc-800 border border-zinc-800 hover:border-orange-500 p-4 rounded-xl text-left flex items-center justify-between transition group">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-lg bg-orange-500/10 text-orange-400 flex items-center justify-center text-lg"><i class="fa-solid fa-users"></i></div>
+            <div>
+              <div class="font-bold text-white text-sm">Dividir conta por valor</div>
+              <div class="text-[11px] text-zinc-400">Divida o total igualmente ou por valores customizados</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-zinc-600 group-hover:text-orange-500 transition"></i>
+        </button>
+
+        <button id="btn-opcao-itens" onclick="selecionarOpcaoFechamento('itens')" class="w-full bg-zinc-950 hover:bg-zinc-800 border border-zinc-800 hover:border-orange-500 p-4 rounded-xl text-left flex items-center justify-between transition group">
+          <div class="flex items-center space-x-3">
+            <div id="icon-opcao-itens" class="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg"><i class="fa-solid fa-utensils"></i></div>
+            <div>
+              <div id="title-opcao-itens" class="font-bold text-white text-sm">Dividir conta por itens</div>
+              <div id="desc-opcao-itens" class="text-[11px] text-zinc-400">Arraste os itens consumidos para cada pessoa</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-zinc-600 group-hover:text-orange-500 transition"></i>
+        </button>
+
+        <button onclick="selecionarOpcaoFechamento('unico')" class="w-full bg-zinc-950 hover:bg-zinc-800 border border-zinc-800 hover:border-orange-500 p-4 rounded-xl text-left flex items-center justify-between transition group">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center text-lg"><i class="fa-solid fa-wallet"></i></div>
+            <div>
+              <div class="font-bold text-white text-sm">Não dividir conta</div>
+              <div class="text-[11px] text-zinc-400">Pagamento único do valor total da comanda</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-zinc-600 group-hover:text-orange-500 transition"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: PERGUNTAR QUANTIDADE DE PESSOAS PARA DIVISÃO POR ITENS -->
+  <div id="modal-qtd-pessoas-itens" class="hidden fixed inset-0 z-[75] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-zinc-900 border border-zinc-800 w-full max-w-md rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+      <div class="bg-zinc-950 p-5 border-b border-zinc-800 flex justify-between items-center">
+        <h3 class="font-black text-white text-base uppercase tracking-wide">Divisão por Itens</h3>
+        <button onclick="closeModal('modal-qtd-pessoas-itens')" class="text-zinc-500 hover:text-white transition bg-zinc-900 hover:bg-zinc-800 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <div class="p-6 space-y-4 bg-zinc-950">
+        <label class="block text-xs font-bold text-zinc-300 uppercase tracking-wider">Para quantas pessoas você deseja dividir os itens?</label>
+        <input type="number" id="input-qtd-pessoas-itens" min="2" max="20" value="2" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-center text-xl font-black text-white focus:outline-none focus:border-orange-500 transition">
+      </div>
+      <div class="p-5 border-t border-zinc-800 bg-zinc-950 flex justify-end space-x-3">
+        <button onclick="closeModal('modal-qtd-pessoas-itens')" class="bg-zinc-800 hover:bg-zinc-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition">Cancelar</button>
+        <button onclick="prosseguirParaDragDropItens()" class="bg-orange-500 hover:bg-orange-400 text-black font-black px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider transition shadow-lg shadow-orange-500/20">Continuar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: TELA DE ARRASTAR E SOLTAR ITENS POR PESSOA -->
+  <div id="modal-divisao-itens" class="hidden fixed inset-0 z-[80] bg-black/95 backdrop-blur-md flex items-center justify-center p-4">
+    <div id="drag-drop-container-box" class="bg-zinc-900 border border-zinc-800 w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col overflow-hidden max-h-[92vh]">
+      <div class="bg-zinc-950 p-4 border-b border-zinc-800 flex justify-between items-center shrink-0">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 bg-orange-500/20 text-orange-400 rounded-xl flex items-center justify-center font-black border border-orange-500/30"><i class="fa-solid fa-hand-holding-hand"></i></div>
+          <div>
+            <h3 class="font-black text-white text-sm uppercase tracking-wide">Arraste os itens para cada pessoa</h3>
+            <p class="text-xs text-zinc-400">Mesa <span id="itens-table-num" class="text-orange-500 font-bold"></span></p>
+          </div>
+        </div>
+        <button onclick="closeModal('modal-divisao-itens')" class="text-zinc-500 hover:text-white transition bg-zinc-900 hover:bg-zinc-800 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <div class="p-5 overflow-y-auto space-y-5 flex-1 bg-zinc-900/50 custom-scrollbar">
+        <!-- CAMPO HORIZONTAL SUPERIOR COM TODOS OS ITENS -->
+        <div class="bg-zinc-950 p-4 rounded-xl border border-zinc-800">
+          <h4 class="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-3">Itens Disponíveis (Arraste para uma pessoa abaixo)</h4>
+          <div id="itens-disponiveis-scroll" class="flex space-x-3 overflow-x-auto pb-2 custom-scrollbar"></div>
+        </div>
+
+        <!-- CAMPOS HORIZONTAIS / GRID PARA CADA PESSOA -->
+        <div id="grid-pessoas-itens" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+      </div>
+
+      <div class="bg-zinc-950 p-4 border-t border-zinc-800 flex justify-between items-center shrink-0">
+        <div class="text-xs text-zinc-400">
+          Total da Comanda: <strong id="itens-total-geral-lbl" class="text-white font-black">R$ 0,00</strong>
+        </div>
+        <button onclick="concluirSelecaoItensParaResumo()" class="bg-orange-500 hover:bg-orange-400 text-black font-black px-6 py-3 rounded-xl text-xs uppercase tracking-wider transition shadow-lg shadow-orange-500/20 flex items-center space-x-2">
+          <span>Continuar</span> <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: RESUMO FINAL DA DIVISÃO POR ITENS -->
+  <div id="modal-resumo-itens" class="hidden fixed inset-0 z-[85] bg-black/95 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-zinc-900 border border-zinc-800 w-full max-w-xl rounded-2xl shadow-2xl flex flex-col overflow-hidden max-h-[90vh]">
+      <div class="bg-zinc-950 p-5 border-b border-zinc-800 flex justify-between items-center">
+        <h3 class="font-black text-white text-base uppercase tracking-wide">Resumo do Pagamento por Itens</h3>
+        <button onclick="closeModal('modal-resumo-itens')" class="text-zinc-500 hover:text-white transition bg-zinc-900 hover:bg-zinc-800 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+
+      <div id="resumo-pessoas-list" class="p-5 overflow-y-auto space-y-3 flex-1 bg-zinc-900/50 custom-scrollbar"></div>
+
+      <div class="bg-zinc-950 p-5 border-t border-zinc-800 flex justify-between items-center">
+        <div>
+          <span class="text-[11px] text-zinc-400 block font-bold uppercase">Total Geral</span>
+          <span id="resumo-total-geral" class="text-xl font-black text-white">R$ 0,00</span>
+        </div>
+        <button onclick="confirmarPagamentoFinalItens()" class="bg-orange-500 hover:bg-orange-400 text-black font-black px-6 py-3.5 rounded-xl text-xs uppercase tracking-wider transition shadow-lg shadow-orange-500/20 flex items-center space-x-2">
+          <i class="fa-solid fa-check-double text-base"></i> <span>Confirmar Pagamento Total</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: PAGAMENTO ÚNICO (NÃO DIVIDIR CONTA) -->
+  <div id="modal-pagamento-unico" class="hidden fixed inset-0 z-[75] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-zinc-900 border border-zinc-800 w-full max-w-md rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+      <div class="bg-zinc-950 p-5 border-b border-zinc-800 flex justify-between items-center">
+        <h3 class="font-black text-white text-base uppercase tracking-wide">Pagamento Único</h3>
+        <button onclick="closeModal('modal-pagamento-unico')" class="text-zinc-500 hover:text-white transition bg-zinc-900 hover:bg-zinc-800 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <div class="p-8 text-center space-y-4 bg-zinc-950">
+        <span class="text-xs text-zinc-400 uppercase font-bold tracking-wider block">Valor Total da Comanda (Mesa <span id="unico-table-num" class="text-orange-500"></span>)</span>
+        <div id="unico-total-val" class="text-4xl font-black text-orange-400">R$ 0,00</div>
+      </div>
+      <div class="p-5 border-t border-zinc-800 bg-zinc-950 flex justify-end space-x-3">
+        <button onclick="closeModal('modal-pagamento-unico')" class="bg-zinc-800 hover:bg-zinc-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition">Cancelar</button>
+        <button onclick="concluirPagamentoUnico()" class="bg-orange-500 hover:bg-orange-400 text-black font-black px-6 py-3 rounded-xl text-xs uppercase tracking-wider transition shadow-lg shadow-orange-500/20 flex items-center space-x-2">
+          <i class="fa-solid fa-check-double text-base"></i> <span>Confirmar Pagamento Total</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: SPLIT PAYMENT (DIVISÃO POR VALOR) -->
   <div id="modal-split-payment" class="hidden fixed inset-0 z-[70] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
     <div class="bg-zinc-900 border border-zinc-800 w-full max-w-xl rounded-2xl shadow-2xl flex flex-col overflow-hidden max-h-[90vh]">
       <div class="bg-zinc-950 p-5 border-b border-zinc-800 flex justify-between items-center">
@@ -431,6 +567,7 @@
     let audioCtx = null;
     let itensImpressosGlobais = new Set();
     let splitSubtotalGlobal = 0;
+    let itensComandaGlobal = [];
 
     const MENU_DATA = [
         { id: 'h1', name: 'Smash Bacon Supreme', category: 'hamburgueres', price: 34.90, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80', description: 'Dois smashes artesanais 90g, cheddar, bacon crocante.' },
@@ -864,7 +1001,303 @@
     }
 
     // ==========================================
-    // LÓGICA DE DIVISÃO DE CONTA (SEQUENCIAL INTELIGENTE)
+    // FLUXO DE ESCOLHA DE FECHAMENTO
+    // ==========================================
+
+    function abrirModalEscolhaFechamento() {
+        const table = tablesState.find(t => t.id === currentEditingTableId);
+        if (!table || table.items.length === 0) {
+            showToast("Mesa vazia. Nada a cobrar.", "rose");
+            return;
+        }
+
+        itensComandaGlobal = table.items;
+        document.getElementById('escolha-table-num').innerText = table.number;
+
+        // Validar obs2: se a comanda tem apenas 1 item (ou 1 quantidade total), desativar divisão por itens
+        const totalQtdItens = table.items.reduce((s, i) => s + i.qty, 0);
+        const btnItens = document.getElementById('btn-opcao-itens');
+        const iconItens = document.getElementById('icon-opcao-itens');
+        const titleItens = document.getElementById('title-opcao-itens');
+        const descItens = document.getElementById('desc-opcao-itens');
+
+        if (totalQtdItens <= 1) {
+            btnItens.disabled = true;
+            btnItens.className = "w-full bg-zinc-950 border border-zinc-900 p-4 rounded-xl text-left flex items-center justify-between opacity-40 cursor-not-allowed";
+            iconItens.className = "w-10 h-10 rounded-lg bg-zinc-800 text-zinc-600 flex items-center justify-center text-lg";
+            titleItens.className = "font-bold text-zinc-500 text-sm";
+            descItens.className = "text-[11px] text-zinc-600";
+        } else {
+            btnItens.disabled = false;
+            btnItens.className = "w-full bg-zinc-950 hover:bg-zinc-800 border border-zinc-800 hover:border-orange-500 p-4 rounded-xl text-left flex items-center justify-between transition group";
+            iconItens.className = "w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg";
+            titleItens.className = "font-bold text-white text-sm";
+            descItens.className = "text-[11px] text-zinc-400";
+        }
+
+        closeModal('modal-comanda');
+        document.getElementById('modal-escolha-fechamento').classList.remove('hidden');
+    }
+
+    function selecionarOpcaoFechamento(tipo) {
+        closeModal('modal-escolha-fechamento');
+        const table = tablesState.find(t => t.id === currentEditingTableId);
+        if (!table) return;
+
+        if (tipo === 'valor') {
+            abrirSplitPayment();
+        } else if (tipo === 'itens') {
+            document.getElementById('input-qtd-pessoas-itens').value = '2';
+            document.getElementById('modal-qtd-pessoas-itens').classList.remove('hidden');
+        } else if (tipo === 'unico') {
+            const total = table.items.reduce((s, i) => s + (i.price * i.qty), 0);
+            document.getElementById('unico-table-num').innerText = table.number;
+            document.getElementById('unico-total-val').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            document.getElementById('modal-pagamento-unico').classList.remove('hidden');
+        }
+    }
+
+    async function concluirPagamentoUnico() {
+        const table = tablesState.find(t => t.id === currentEditingTableId);
+        if (!table) return;
+        const total = table.items.reduce((s, i) => s + (i.price * i.qty), 0);
+
+        try {
+            await fetch(`${API_URL}/api/checkout`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    comanda_id: table.comandaId,
+                    mesa_id: table.id,
+                    forma_pagamento: 'PAGAMENTO_UNICO',
+                    subtotal: total,
+                    taxa: 0,
+                    desconto: 0,
+                    final: total
+                })
+            });
+            
+            table.items.forEach(i => itensImpressosGlobais.delete(i.id));
+            closeModal('modal-pagamento-unico');
+            showToast(`Mesa ${table.number} fechada com sucesso!`);
+            carregarMesas();
+        } catch (e) {
+            showToast("Erro ao concluir checkout", "rose");
+        }
+    }
+
+    // ==========================================
+    // LÓGICA DE DIVISÃO POR ITENS (DRAG & DROP)
+    // ==========================================
+
+    let itensAtuaisDragDrop = [];
+    let pessoasItensState = [];
+
+    function prosseguirParaDragDropItens() {
+        const qtd = parseInt(document.getElementById('input-qtd-pessoas-itens').value) || 2;
+        if (qtd < 2) {
+            showToast("Selecione pelo menos 2 pessoas para divisão por itens.", "rose");
+            return;
+        }
+
+        const table = tablesState.find(t => t.id === currentEditingTableId);
+        if (!table) return;
+
+        document.getElementById('itens-table-num').innerText = table.number;
+        closeModal('modal-qtd-pessoas-itens');
+
+        // Expandir itens compostos em unidades individuais para drag & drop facilitado
+        itensAtuaisDragDrop = [];
+        let idUnicoContador = 1;
+        table.items.forEach(item => {
+            for (let q = 0; q < item.qty; q++) {
+                itensAtuaisDragDrop.push({
+                    uid: idUnicoContador++,
+                    name: item.name,
+                    price: item.price,
+                    notes: item.notes
+                });
+            }
+        });
+
+        // Inicializar estado das pessoas (cada pessoa tem um array de itens atribuídos)
+        pessoasItensState = [];
+        for (let i = 0; i < qtd; i++) {
+            pessoasItensState.push({ id: i, nome: `Pessoa ${i + 1}`, itens: [] });
+        }
+
+        renderizarInterfaceDragDrop();
+        document.getElementById('modal-divisao-itens').classList.remove('hidden');
+    }
+
+    function renderizarInterfaceDragDrop() {
+        // Renderizar topo horizontal com itens disponíveis
+        const scrollContainer = document.getElementById('itens-disponiveis-scroll');
+        scrollContainer.innerHTML = '';
+
+        if (itensAtuaisDragDrop.length === 0) {
+            scrollContainer.innerHTML = '<div class="text-xs text-zinc-500 italic p-2">Todos os itens foram distribuídos!</div>';
+        } else {
+            itensAtuaisDragDrop.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-zinc-900 border border-zinc-700 hover:border-orange-500 p-3 rounded-xl cursor-grab shrink-0 w-44 flex flex-col justify-between transition select-none shadow-md";
+                card.draggable = true;
+                card.ondragstart = (e) => {
+                    e.dataTransfer.setData('text/plain', JSON.stringify(item));
+                };
+                card.innerHTML = `
+                    <div>
+                        <div class="text-xs font-bold text-white line-clamp-2">${item.name}</div>
+                        ${item.notes ? `<div class="text-[10px] text-zinc-400 mt-1 truncate">Obs: ${item.notes}</div>` : ''}
+                    </div>
+                    <div class="text-xs font-black text-orange-400 mt-2">R$ ${item.price.toFixed(2).replace('.', ',')}</div>
+                `;
+                scrollContainer.appendChild(card);
+            });
+        }
+
+        // Renderizar grade de pessoas abaixo
+        const gridPessoas = document.getElementById('grid-pessoas-itens');
+        gridPessoas.innerHTML = '';
+
+        let totalGeral = 0;
+        tableItemsTotal = tablesState.find(t => t.id === currentEditingTableId)?.items.reduce((s, i) => s + (i.price * i.qty), 0) || 0;
+        document.getElementById('itens-total-geral-lbl').innerText = `R$ ${tableItemsTotal.toFixed(2).replace('.', ',')}`;
+
+        pessoasItensState.forEach((pessoa, index) => {
+            const subtotalPessoa = pessoa.itens.reduce((s, i) => s + i.price, 0);
+
+            const box = document.createElement('div');
+            box.className = "bg-zinc-950 border border-zinc-800 p-4 rounded-2xl flex flex-col justify-between transition min-h-[160px]";
+            box.ondragover = (e) => e.preventDefault();
+            box.ondrop = (e) => {
+                e.preventDefault();
+                const rawData = e.dataTransfer.getData('text/plain');
+                if (!rawData) return;
+                const itemMovido = JSON.parse(rawData);
+
+                // Remover do array geral de disponíveis
+                itensAtuaisDragDrop = itensAtuaisDragDrop.filter(i => i.uid !== itemMovido.uid);
+                // Adicionar para esta pessoa
+                pessoa.itens.push(itemMovido);
+
+                renderizarInterfaceDragDrop();
+            };
+
+            let itensHtml = '';
+            if (pessoa.itens.length === 0) {
+                itensHtml = '<div class="text-xs text-zinc-600 italic py-4 text-center border border-dashed border-zinc-800 rounded-xl">Arraste os itens para aqui</div>';
+            } else {
+                pessoa.itens.forEach(itemAssinado => {
+                    itensHtml += `
+                        <div class="bg-zinc-900 p-2 rounded-lg border border-zinc-800 flex justify-between items-center text-xs mb-1.5">
+                            <span class="font-bold text-white truncate max-w-[180px]">${itemAssinado.name}</span>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-emerald-400 font-bold">R$ ${itemAssinado.price.toFixed(2).replace('.', ',')}</span>
+                                <button onclick="reverterItemParaDisponivel(${pessoa.id}, ${itemAssinado.uid})" class="text-zinc-500 hover:text-rose-400 transition"><i class="fa-solid fa-xmark"></i></button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            box.innerHTML = `
+                <div>
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-xs font-black text-orange-400 uppercase tracking-wider flex items-center"><i class="fa-solid fa-user mr-2"></i> ${pessoa.nome}</span>
+                        <span class="text-xs font-bold text-zinc-400">Itens: ${pessoa.itens.length}</span>
+                    </div>
+                    <div class="space-y-1 mb-3 max-h-40 overflow-y-auto pr-1 custom-scrollbar">${itensHtml}</div>
+                </div>
+                <div class="pt-3 border-t border-zinc-900 flex justify-between items-end">
+                    <span class="text-[10px] text-zinc-500 uppercase font-bold">Total Parcial</span>
+                    <span class="text-base font-black text-emerald-400">R$ ${subtotalPessoa.toFixed(2).replace('.', ',')}</span>
+                </div>
+            `;
+            gridPessoas.appendChild(box);
+        });
+    }
+
+    function reverterItemParaDisponivel(pessoaId, uid) {
+        const pessoa = pessoasItensState.find(p => p.id === pessoaId);
+        if (!pessoa) return;
+
+        const index = pessoa.itens.findIndex(i => i.uid === uid);
+        if (index !== -1) {
+            const itemRemovido = pessoa.itens.splice(index, 1)[0];
+            itensAtuaisDragDrop.push(itemRemovido);
+            renderizarInterfaceDragDrop();
+        }
+    }
+
+    function concluirSelecaoItensParaResumo() {
+        if (itensAtuaisDragDrop.length > 0) {
+            showToast("Ainda há itens não atribuídos a nenhuma pessoa!", "rose");
+            return;
+        }
+
+        closeModal('modal-divisao-itens');
+
+        // Montar modal de resumo final com campo grande e botão de confirmar pagamento total
+        const resumoContainer = document.getElementById('resumo-pessoas-list');
+        resumoContainer.innerHTML = '';
+
+        let totalGeral = 0;
+        pessoasItensState.forEach(pessoa => {
+            const sub = pessoa.itens.reduce((s, i) => s + i.price, 0);
+            totalGeral += sub;
+
+            resumoContainer.innerHTML += `
+                <div class="bg-zinc-950 p-4 rounded-xl border border-zinc-800 flex justify-between items-center">
+                    <div>
+                        <span class="text-xs font-bold text-zinc-400 uppercase tracking-wider block">${pessoa.nome}</span>
+                        <span class="text-2xl font-black text-emerald-400">R$ ${sub.toFixed(2).replace('.', ',')}</span>
+                    </div>
+                    <div class="text-right text-[11px] text-zinc-500">
+                        ${pessoa.itens.length} itens consumidos
+                    </div>
+                </div>
+            `;
+        });
+
+        document.getElementById('resumo-total-geral').innerText = `R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
+        document.getElementById('modal-resumo-itens').classList.remove('hidden');
+    }
+
+    async function confirmarPagamentoFinalItens() {
+        const table = tablesState.find(t => t.id === currentEditingTableId);
+        if (!table) return;
+
+        let totalGeral = 0;
+        pessoasItensState.forEach(p => totalGeral += p.itens.reduce((s, i) => s + i.price, 0));
+
+        try {
+            await fetch(`${API_URL}/api/checkout`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    comanda_id: table.comandaId,
+                    mesa_id: table.id,
+                    forma_pagamento: 'DIVISAO_POR_ITENS',
+                    subtotal: totalGeral,
+                    taxa: 0,
+                    desconto: 0,
+                    final: totalGeral
+                })
+            });
+            
+            table.items.forEach(i => itensImpressosGlobais.delete(i.id));
+
+            closeModal('modal-resumo-itens');
+            showToast(`Mesa ${table.number} fechada por divisão de itens com sucesso!`);
+            carregarMesas();
+        } catch (e) {
+            showToast("Erro ao concluir checkout", "rose");
+        }
+    }
+
+    // ==========================================
+    // LÓGICA DO SPLIT PAYMENT (DIVISÃO POR VALOR)
     // ==========================================
 
     function abrirSplitPayment() {
@@ -879,7 +1312,6 @@
         document.getElementById('split-total-cmd').innerText = `R$ ${splitSubtotalGlobal.toFixed(2).replace('.', ',')}`;
         document.getElementById('split-qtd-pessoas').value = '1';
         
-        closeModal('modal-comanda');
         document.getElementById('modal-split-payment').classList.remove('hidden');
         recalcularSplit();
     }
@@ -923,7 +1355,6 @@
         const inputs = document.querySelectorAll('.split-input-valor');
         const qtd = inputs.length;
         
-        // Fixa os valores da Pessoa 0 até a Pessoa que foi alterada, e divide o resto entre as seguintes
         let somaFixada = 0;
         for (let i = 0; i <= indexAlterado; i++) {
             somaFixada += parseFloat(inputs[i].value.replace(',', '.')) || 0;
