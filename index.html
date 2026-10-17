@@ -45,8 +45,8 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
-        .animate-fade-in { animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .animate-slide-up { animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-fade-in { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-slide-up { animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
         .active-category-btn {
             background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
@@ -528,7 +528,7 @@
             
             toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-full');
             clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => { toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-full'); }, 1000);
+            toastTimeout = setTimeout(() => { toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-full'); }, 1300);
         }
 
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
