@@ -456,6 +456,7 @@
         function confirmAddToCart() {
             cart.push({
                 cartId: Date.now(),
+                dishId: currentDish.id,
                 name: currentDish.name,
                 image: currentDish.image,
                 quantity: customizeQty,
