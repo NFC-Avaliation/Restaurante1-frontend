@@ -11,38 +11,79 @@
 
   <script>
     tailwind.config = {
-      theme: { extend: { colors: { orange: { 400: '#fb923c', 500: '#f97316' } } } }
+      theme: {
+        extend: {
+          colors: {
+            orange: {
+              400: '#fb923c',
+              500: '#f97316'
+            }
+          }
+        }
+      }
     }
   </script>
 
-  <!-- ESTILOS PARA A IMPRESSORA TÉRMICA E SCROLLBAR -->
   <style>
-    #area-cupom-impresso { display: none; }
-    @media print {
-      body * { visibility: hidden; }
-      #area-cupom-impresso, #area-cupom-impresso * { visibility: visible; }
-      #area-cupom-impresso {
-        display: block !important; position: absolute; left: 0; top: 0; width: 80mm;
-        margin: 0; padding: 0; font-family: 'Courier New', Courier, monospace;
-        font-size: 14px; color: #000; background: #fff;
-      }
-      body { background-color: white !important; }
+    #area-cupom-impresso { 
+      display: none; 
     }
-    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #3f3f46; border-radius: 10px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #f97316; }
+
+    @media print {
+      body * { 
+        visibility: hidden; 
+      }
+      #area-cupom-impresso, #area-cupom-impresso * { 
+        visibility: visible; 
+      }
+      #area-cupom-impresso { 
+        display: block !important; 
+        position: absolute; 
+        left: 0; 
+        top: 0; 
+        width: 80mm; 
+        margin: 0; 
+        padding: 0; 
+        font-family: 'Courier New', Courier, monospace; 
+        font-size: 14px; 
+        color: #000; 
+        background: #fff; 
+      }
+      body { 
+        background-color: white !important; 
+      }
+    }
+
+    .custom-scrollbar::-webkit-scrollbar { 
+      width: 6px; 
+      height: 6px; 
+    }
+    .custom-scrollbar::-webkit-scrollbar-track { 
+      background: transparent; 
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb { 
+      background-color: #3f3f46; 
+      border-radius: 10px; 
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { 
+      background-color: #f97316; 
+    }
   </style>
 </head>
 <body class="h-full font-sans text-zinc-100 bg-zinc-950 flex flex-col selection:bg-orange-500 selection:text-white">
 
+  <!-- ========================================== -->
   <!-- TELA DE LOGIN -->
+  <!-- ========================================== -->
   <div id="login-screen" style="display: flex;" class="fixed inset-0 z-50 bg-zinc-950 items-center justify-center p-4">
     <div class="bg-zinc-900 border border-zinc-800 w-full max-w-md rounded-2xl shadow-2xl p-8 space-y-6">
       <div class="text-center space-y-2">
-        <div class="w-12 h-12 bg-orange-500/20 text-orange-400 rounded-2xl flex items-center justify-center font-bold text-lg border border-orange-500/30 mx-auto">R1</div>
+        <div class="w-12 h-12 bg-orange-500/20 text-orange-400 rounded-2xl flex items-center justify-center font-bold text-lg border border-orange-500/30 mx-auto">
+          R1
+        </div>
         <h2 class="text-xl font-bold text-white">Painel de Gestão</h2>
       </div>
+
       <div class="space-y-4">
         <div>
           <label class="block text-xs font-bold text-zinc-400 uppercase mb-1">Utilizador</label>
@@ -52,7 +93,9 @@
           <label class="block text-xs font-bold text-zinc-400 uppercase mb-1">Senha</label>
           <input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter') fazerLogin()" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition">
         </div>
+        
         <div id="login-error" class="hidden text-rose-400 text-xs font-medium text-center bg-rose-500/10 p-2 rounded-lg border border-rose-500/20"></div>
+        
         <button id="btn-login" onclick="fazerLogin()" class="w-full bg-orange-500 hover:bg-orange-400 text-black font-bold py-3 rounded-xl text-sm transition shadow-lg flex justify-center items-center">
           Entrar no Painel
         </button>
@@ -60,245 +103,486 @@
     </div>
   </div>
 
+  <!-- ========================================== -->
   <!-- NAVBAR COM ABAS DE NAVEGAÇÃO -->
+  <!-- ========================================== -->
   <nav class="bg-zinc-900 border-b border-zinc-800 px-4 py-3 flex flex-wrap items-center justify-between gap-4">
     <div class="flex items-center space-x-4">
-      <div class="w-10 h-10 bg-orange-500/20 text-orange-400 rounded-xl flex items-center justify-center font-black border border-orange-500/30">R1</div>
+      <div class="w-10 h-10 bg-orange-500/20 text-orange-400 rounded-xl flex items-center justify-center font-black border border-orange-500/30">
+        R1
+      </div>
       <h2 class="font-bold text-zinc-100 hidden md:block tracking-wide uppercase text-sm">Painel de Gestão</h2>
     </div>
 
-    <!-- ABAS / JANELAS -->
+    <!-- Abas -->
     <div class="flex items-center space-x-1 sm:space-x-2 bg-zinc-950 p-1 rounded-xl border border-zinc-800 shadow-inner overflow-x-auto custom-scrollbar max-w-full">
-      <button onclick="switchTab('mesas')" id="tab-btn-mesas" class="px-4 py-2 rounded-lg text-xs font-bold transition bg-orange-500 text-black flex items-center space-x-2 shadow-sm shadow-orange-500/20 whitespace-nowrap"><i class="fa-solid fa-chair"></i> <span class="hidden sm:inline">Mesas</span></button>
-      <button onclick="switchTab('caixa')" id="tab-btn-caixa" class="px-4 py-2 rounded-lg text-xs font-bold transition text-zinc-400 hover:text-white flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-cash-register"></i> <span class="hidden sm:inline">Caixa</span></button>
-      <button onclick="switchTab('historico')" id="tab-btn-historico" class="px-4 py-2 rounded-lg text-xs font-bold transition text-zinc-400 hover:text-white flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-clock-rotate-left"></i> <span class="hidden sm:inline">Histórico</span></button>
-      <button onclick="switchTab('estatisticas')" id="tab-btn-estatisticas" class="px-4 py-2 rounded-lg text-xs font-bold transition text-zinc-400 hover:text-white flex items-center space-x-2 whitespace-nowrap"><i class="fa-solid fa-chart-pie"></i> <span class="hidden sm:inline">Estatísticas</span></button>
+      <button onclick="switchTab('mesas')" id="tab-btn-mesas" class="px-4 py-2 rounded-lg text-xs font-bold transition bg-orange-500 text-black flex items-center space-x-2">
+        <i class="fa-solid fa-chair"></i> <span class="hidden sm:inline">Mesas</span>
+      </button>
+      <button onclick="switchTab('caixa')" id="tab-btn-caixa" class="px-4 py-2 rounded-lg text-xs font-bold transition text-zinc-400 hover:text-white flex items-center space-x-2">
+        <i class="fa-solid fa-cash-register"></i> <span class="hidden sm:inline">Caixa</span>
+      </button>
+      <button onclick="switchTab('historico')" id="tab-btn-historico" class="px-4 py-2 rounded-lg text-xs font-bold transition text-zinc-400 hover:text-white flex items-center space-x-2">
+        <i class="fa-solid fa-clock-rotate-left"></i> <span class="hidden sm:inline">Histórico</span>
+      </button>
+      <button onclick="switchTab('estatisticas')" id="tab-btn-estatisticas" class="px-4 py-2 rounded-lg text-xs font-bold transition text-zinc-400 hover:text-white flex items-center space-x-2">
+        <i class="fa-solid fa-chart-pie"></i> <span class="hidden sm:inline">Estatísticas</span>
+      </button>
     </div>
 
+    <!-- Menus Direitos -->
     <div class="flex items-center space-x-4 shrink-0">
       <div class="relative">
         <button id="waiter-queue-btn" onclick="toggleWaiterQueue()" class="bg-zinc-950 hover:bg-zinc-800 transition border border-zinc-800 px-3 py-2 rounded-xl text-xs font-bold flex items-center space-x-2">
-          <i class="fa-solid fa-bell text-amber-400"></i><span class="hidden lg:inline text-zinc-300">Fila Garçom</span><span id="waiter-queue-count" class="hidden bg-amber-500 text-black text-[10px] font-black px-2 py-0.5 rounded-full shadow-lg shadow-amber-500/20">0</span>
+          <i class="fa-solid fa-bell text-amber-400"></i>
+          <span class="hidden lg:inline text-zinc-300">Fila Garçom</span>
+          <span id="waiter-queue-count" class="hidden bg-amber-500 text-black text-[10px] font-black px-2 py-0.5 rounded-full shadow-lg">0</span>
         </button>
-        <div id="waiter-queue-drawer" class="hidden absolute right-0 mt-2 w-72 bg-zinc-900 border border-zinc-800 rounded-xl shadow-2xl z-50 p-2"><div id="waiter-queue-list" class="space-y-2"></div></div>
+        <div id="waiter-queue-drawer" class="hidden absolute right-0 mt-2 w-72 bg-zinc-900 border border-zinc-800 rounded-xl shadow-2xl z-50 p-2">
+          <div id="waiter-queue-list" class="space-y-2"></div>
+        </div>
       </div>
+      
       <span id="server-status-badge" class="hidden sm:inline-flex items-center px-2 py-1.5 rounded-lg text-[10px] font-bold bg-zinc-950 text-rose-400 border border-zinc-800 shadow-inner">
         <span class="w-2 h-2 rounded-full bg-rose-500 me-2 animate-pulse"></span> Offline
       </span>
-      <button onclick="fazerLogout()" title="Terminar Sessão" class="bg-zinc-800 hover:bg-rose-500/20 text-zinc-400 hover:text-rose-400 px-3 py-2 rounded-xl text-xs transition"><i class="fa-solid fa-right-from-bracket"></i></button>
+      
+      <button onclick="fazerLogout()" class="bg-zinc-800 hover:bg-rose-500/20 text-zinc-400 hover:text-rose-400 px-3 py-2 rounded-xl text-xs transition">
+        <i class="fa-solid fa-right-from-bracket"></i>
+      </button>
     </div>
   </nav>
 
   <main class="flex-1 p-4 sm:p-6 overflow-y-auto">
+    
+    <!-- ========================================== -->
     <!-- JANELA 1: MESAS AO VIVO -->
+    <!-- ========================================== -->
     <div id="view-mesas" class="space-y-4">
       <div id="tables-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
     </div>
 
-    <!-- JANELA 2: MÓDULO DE CAIXA -->
+    <!-- ========================================== -->
+    <!-- JANELA 2: CAIXA -->
+    <!-- ========================================== -->
     <div id="view-caixa" class="hidden space-y-6 max-w-6xl mx-auto">
+      
+      <!-- Caixa Fechado -->
       <div id="caixa-fechado-banner" class="hidden bg-zinc-900 border border-zinc-800 rounded-2xl p-8 text-center space-y-4 shadow-lg mt-10">
-        <div class="w-20 h-20 bg-rose-500/10 text-rose-500 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 border border-rose-500/20"><i class="fa-solid fa-lock"></i></div>
+        <div class="w-20 h-20 bg-rose-500/10 text-rose-500 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 border border-rose-500/20">
+          <i class="fa-solid fa-lock"></i>
+        </div>
         <h3 class="text-2xl font-black text-white">O Caixa está Fechado</h3>
-        <p class="text-sm text-zinc-400">Abra o caixa para iniciar as operações e registar os pagamentos das comandas.</p>
-        <div class="pt-6"><button onclick="abrirCaixa()" class="bg-orange-500 hover:bg-orange-400 text-black font-black px-8 py-4 rounded-xl text-sm uppercase tracking-wider transition shadow-lg flex items-center justify-center space-x-2 mx-auto"><i class="fa-solid fa-key text-lg"></i> <span>Abrir Caixa Agora</span></button></div>
+        <div class="pt-6">
+          <button onclick="abrirCaixa()" class="bg-orange-500 text-black font-black px-8 py-4 rounded-xl text-sm uppercase transition shadow-lg flex mx-auto space-x-2">
+            <i class="fa-solid fa-key text-lg"></i> <span>Abrir Caixa</span>
+          </button>
+        </div>
       </div>
 
+      <!-- Caixa Aberto -->
       <div id="caixa-aberto-container" class="hidden space-y-6">
-        <div class="bg-emerald-950/20 border border-emerald-500/30 p-6 rounded-2xl shadow-lg flex flex-col md:flex-row justify-between items-center gap-4 relative overflow-hidden">
-          <div class="absolute right-0 top-0 opacity-5"><i class="fa-solid fa-cash-register text-9xl"></i></div>
+        <div class="bg-emerald-950/20 border border-emerald-500/30 p-6 rounded-2xl shadow-lg flex flex-col md:flex-row justify-between items-center gap-4">
           <div class="z-10 text-center md:text-left">
-            <span class="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-black bg-emerald-500 text-black uppercase mb-2 shadow-sm"><span class="w-2 h-2 rounded-full bg-black me-2 animate-pulse"></span> Em Operação</span>
+            <span class="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-black bg-emerald-500 text-black uppercase mb-2">
+              <span class="w-2 h-2 rounded-full bg-black me-2 animate-pulse"></span> Em Operação
+            </span>
             <h3 class="text-xl font-black text-white">Caixa Aberto</h3>
             <p id="caixa-data-abertura" class="text-xs text-emerald-400/80 font-medium"></p>
           </div>
-          <div class="z-10 flex gap-3 w-full md:w-auto"><button onclick="fecharCaixa()" class="flex-1 md:flex-none bg-rose-500 hover:bg-rose-600 text-white font-black px-6 py-3.5 rounded-xl text-xs uppercase transition shadow-lg flex items-center justify-center space-x-2"><i class="fa-solid fa-lock text-base"></i> <span>Fechar Caixa</span></button></div>
+          <button onclick="fecharCaixa()" class="bg-rose-500 text-white font-black px-6 py-3.5 rounded-xl text-xs uppercase shadow-lg flex items-center space-x-2">
+            <i class="fa-solid fa-lock text-base"></i> <span>Fechar Caixa</span>
+          </button>
         </div>
+
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <!-- Bloco PIX -->
-          <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl shadow-lg flex flex-col justify-between hover:border-emerald-500/50 transition"><div class="flex justify-between items-start mb-4"><span class="text-xs text-zinc-400 uppercase font-bold tracking-wider">Total PIX</span><div class="w-10 h-10 bg-emerald-500/10 text-emerald-400 rounded-xl flex items-center justify-center text-lg"><i class="fa-brands fa-pix"></i></div></div><div id="caixa-tot-pix" class="text-2xl font-black text-white">R$ 0,00</div></div>
-          <!-- Bloco Crédito -->
-          <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl shadow-lg flex flex-col justify-between hover:border-blue-500/50 transition"><div class="flex justify-between items-start mb-4"><span class="text-xs text-zinc-400 uppercase font-bold tracking-wider">Cartão Crédito</span><div class="w-10 h-10 bg-blue-500/10 text-blue-400 rounded-xl flex items-center justify-center text-lg"><i class="fa-solid fa-credit-card"></i></div></div><div id="caixa-tot-credito" class="text-2xl font-black text-white">R$ 0,00</div></div>
-          <!-- Bloco Débito -->
-          <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl shadow-lg flex flex-col justify-between hover:border-indigo-500/50 transition"><div class="flex justify-between items-start mb-4"><span class="text-xs text-zinc-400 uppercase font-bold tracking-wider">Cartão Débito</span><div class="w-10 h-10 bg-indigo-500/10 text-indigo-400 rounded-xl flex items-center justify-center text-lg"><i class="fa-solid fa-money-check"></i></div></div><div id="caixa-tot-debito" class="text-2xl font-black text-white">R$ 0,00</div></div>
-          <!-- Bloco Dinheiro -->
-          <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl shadow-lg flex flex-col justify-between hover:border-amber-500/50 transition"><div class="flex justify-between items-start mb-4"><span class="text-xs text-zinc-400 uppercase font-bold tracking-wider">Dinheiro</span><div class="w-10 h-10 bg-amber-500/10 text-amber-500 rounded-xl flex items-center justify-center text-lg"><i class="fa-solid fa-money-bill-1-wave"></i></div></div><div id="caixa-tot-dinheiro" class="text-2xl font-black text-white">R$ 0,00</div></div>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg flex items-center justify-between"><div><span class="text-[10px] text-zinc-500 uppercase font-bold tracking-widest block mb-1">Fundo de Caixa (Inicial)</span><span id="caixa-saldo-inicial" class="text-xl font-bold text-zinc-300">R$ 0,00</span></div><i class="fa-solid fa-piggy-bank text-zinc-700 text-3xl"></i></div>
-          <div class="bg-zinc-900 border border-orange-500/30 bg-orange-500/5 p-6 rounded-2xl shadow-lg flex items-center justify-between"><div><span class="text-[10px] text-orange-500 uppercase font-black tracking-widest block mb-1">Total Movimentado</span><span id="caixa-tot-geral" class="text-3xl font-black text-orange-400">R$ 0,00</span></div><i class="fa-solid fa-scale-balanced text-orange-500/20 text-4xl"></i></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- JANELA 3: HISTÓRICO DE PEDIDOS (Minificada para espaço) -->
-    <div id="view-historico" class="hidden space-y-4"><div class="flex flex-wrap justify-between items-center gap-4 bg-zinc-900 p-4 rounded-2xl border border-zinc-800 shadow-lg"><h3 class="font-bold text-white text-sm uppercase tracking-wide">Histórico de Comandas Fechadas</h3><div class="flex items-center space-x-2 bg-zinc-950 p-1 rounded-xl border border-zinc-800"><button onclick="carregarHistorico('dia')" id="btn-hist-dia" class="px-4 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-xs rounded-lg font-bold text-zinc-300 transition">Hoje</button><button onclick="carregarHistorico('semana')" id="btn-hist-semana" class="px-4 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-xs rounded-lg font-bold text-zinc-300 transition">7 Dias</button><button onclick="carregarHistorico('mes')" id="btn-hist-mes" class="px-4 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-xs rounded-lg font-bold text-zinc-300 transition">30 Dias</button><button onclick="carregarHistorico('todos')" id="btn-hist-todos" class="px-4 py-1.5 bg-orange-500 text-black text-xs rounded-lg font-black shadow-sm transition">Todos</button></div></div><div class="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-x-auto shadow-2xl"><table class="w-full text-left border-collapse min-w-[600px]"><thead><tr class="bg-zinc-950 text-zinc-400 text-xs uppercase tracking-wider border-b border-zinc-800"><th class="p-4 font-bold">Mesa</th><th class="p-4 font-bold">Comanda</th><th class="p-4 font-bold">Data</th><th class="p-4 font-bold">Valor Total</th></tr></thead><tbody id="historico-table-body" class="divide-y divide-zinc-800/50 text-sm"><tr><td colspan="4" class="p-8 text-center text-zinc-500 font-medium">A carregar histórico...</td></tr></tbody></table></div></div>
-
-    <!-- JANELA 4: ESTATÍSTICAS (Minificada) -->
-    <div id="view-estatisticas" class="hidden space-y-6"><div class="grid grid-cols-1 md:grid-cols-3 gap-4"><div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg relative overflow-hidden"><div><span class="text-xs text-zinc-400 uppercase font-bold tracking-wider">Faturamento (Hoje)</span><div id="stat-fat-dia" class="text-3xl font-black text-white mt-2">R$ 0,00</div></div></div><div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg relative overflow-hidden"><div><span class="text-xs text-zinc-400 uppercase font-bold tracking-wider">Faturamento (7 Dias)</span><div id="stat-fat-semana" class="text-3xl font-black text-emerald-400 mt-2">R$ 0,00</div></div></div><div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg relative overflow-hidden"><div><span class="text-xs text-zinc-400 uppercase font-bold tracking-wider">Faturamento (30 Dias)</span><div id="stat-fat-mes" class="text-3xl font-black text-blue-400 mt-2">R$ 0,00</div></div></div></div><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg"><h4 class="text-xs font-black text-emerald-400 uppercase mb-4">Itens Mais Vendidos</h4><div id="stat-top-itens" class="space-y-2.5"></div></div><div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg"><h4 class="text-xs font-black text-rose-400 uppercase mb-4">Itens Menos Vendidos</h4><div id="stat-low-itens" class="space-y-2.5"></div></div></div></div>
-  </main>
-
-  <!-- MODAL: DETALHES DA MESA -->
-  <div id="modal-comanda" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-zinc-900 border border-zinc-800 w-full max-w-2xl rounded-2xl shadow-2xl flex flex-col overflow-hidden max-h-[90vh]">
-      <div class="bg-zinc-950 p-5 border-b border-zinc-800 flex justify-between items-center"><h3 class="font-black text-white text-lg tracking-wide uppercase">Mesa <span id="modal-table-num" class="text-orange-500"></span></h3><button onclick="closeModal('modal-comanda')" class="text-zinc-500 hover:text-white transition bg-zinc-900 hover:bg-zinc-800 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fa-solid fa-xmark text-lg"></i></button></div>
-      <div class="p-5 overflow-y-auto space-y-5 flex-1 bg-zinc-900/50">
-        <div id="modal-waiter-section" class="hidden bg-amber-950/30 p-4 rounded-xl border border-amber-500/50 flex justify-between items-center shadow-lg"><div class="flex items-center space-x-3 text-amber-400 font-bold text-sm"><i class="fa-solid fa-bell animate-bounce text-xl"></i><span>Cliente chamou o garçom!</span></div><button onclick="atenderGarcomModal()" class="bg-amber-500 text-black font-black px-4 py-2 rounded-lg text-xs uppercase">Atender</button></div>
-        <div class="bg-zinc-950 p-4 rounded-2xl border border-zinc-800 shadow-inner"><h4 class="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-3">Itens na Comanda</h4><div id="modal-items-list" class="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar"></div></div>
-      </div>
-      <div class="bg-zinc-950 p-5 border-t border-zinc-800 space-y-4">
-        <div class="flex justify-between items-end bg-zinc-900 p-4 rounded-xl border border-zinc-800"><span class="text-zinc-400 text-xs font-bold uppercase tracking-wider">Total Acumulado</span><span id="modal-total-value" class="text-3xl font-black text-orange-400">R$ 0,00</span></div>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <button onclick="cancelarMesaCompleta()" class="bg-rose-500/10 text-rose-400 border border-rose-500/20 font-bold py-3 rounded-xl text-xs uppercase transition">Cancelar</button>
-          <button onclick="abrirModalImpressao()" class="bg-zinc-800 text-white font-bold py-3 rounded-xl text-xs uppercase border border-zinc-700 transition flex justify-center items-center"><i class="fa-solid fa-print mr-2"></i> Imprimir</button>
-          <button onclick="abrirModalEscolhaFechamento()" class="bg-orange-500 text-black font-black py-3 rounded-xl text-xs uppercase transition shadow-lg flex justify-center items-center"><i class="fa-solid fa-cash-register mr-2"></i> Fechar Comanda</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL: ESCOLHA DE TIPO DE DIVISÃO -->
-  <div id="modal-escolha-fechamento" class="hidden fixed inset-0 z-[70] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-zinc-900 border border-zinc-800 w-full max-w-md rounded-2xl shadow-2xl flex flex-col overflow-hidden">
-      <div class="bg-zinc-950 p-5 border-b border-zinc-800 flex justify-between items-center"><h3 class="font-black text-white text-base uppercase tracking-wide">Fechar Comanda - Mesa <span id="escolha-table-num" class="text-orange-500"></span></h3><button onclick="closeModal('modal-escolha-fechamento')" class="text-zinc-500 hover:text-white transition"><i class="fa-solid fa-xmark text-lg"></i></button></div>
-      <div class="p-6 space-y-4 bg-zinc-900">
-        <p class="text-xs text-zinc-400 mb-2">Selecione como deseja proceder com a divisão da conta:</p>
-        <button onclick="selecionarOpcaoFechamento('valor')" class="w-full bg-zinc-950 hover:bg-zinc-800 border border-zinc-800 hover:border-orange-500 p-4 rounded-xl text-left flex items-center justify-between transition group"><div class="flex items-center space-x-3"><div class="w-10 h-10 rounded-lg bg-orange-500/10 text-orange-400 flex items-center justify-center text-lg"><i class="fa-solid fa-users"></i></div><div><div class="font-bold text-white text-sm">Dividir conta por valor</div><div class="text-[11px] text-zinc-400">Divida o total da mesa pelas pessoas</div></div></div><i class="fa-solid fa-chevron-right text-zinc-600 group-hover:text-orange-500 transition"></i></button>
-        <button id="btn-opcao-itens" onclick="selecionarOpcaoFechamento('itens')" class="w-full bg-zinc-950 hover:bg-zinc-800 border border-zinc-800 hover:border-orange-500 p-4 rounded-xl text-left flex items-center justify-between transition group"><div class="flex items-center space-x-3"><div id="icon-opcao-itens" class="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-lg"><i class="fa-solid fa-utensils"></i></div><div><div id="title-opcao-itens" class="font-bold text-white text-sm">Dividir conta por itens</div><div id="desc-opcao-itens" class="text-[11px] text-zinc-400">Arraste os itens consumidos para cada pessoa</div></div></div><i class="fa-solid fa-chevron-right text-zinc-600 group-hover:text-orange-500 transition"></i></button>
-        <button onclick="selecionarOpcaoFechamento('unico')" class="w-full bg-zinc-950 hover:bg-zinc-800 border border-zinc-800 hover:border-orange-500 p-4 rounded-xl text-left flex items-center justify-between transition group"><div class="flex items-center space-x-3"><div class="w-10 h-10 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center text-lg"><i class="fa-solid fa-wallet"></i></div><div><div class="font-bold text-white text-sm">Não dividir conta</div><div class="text-[11px] text-zinc-400">Pagamento único do valor total da comanda</div></div></div><i class="fa-solid fa-chevron-right text-zinc-600 group-hover:text-orange-500 transition"></i></button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAIS DE DIVISÃO INTERMÉDIOS -->
-  <div id="modal-pagamento-unico" class="hidden fixed inset-0 z-[75] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-zinc-900 w-full max-w-md rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-zinc-800"><div class="bg-zinc-950 p-5 border-b border-zinc-800 flex justify-between"><h3 class="font-black text-white">Pagamento Único</h3><button onclick="closeModal('modal-pagamento-unico')" class="text-zinc-500"><i class="fa-solid fa-xmark"></i></button></div><div class="p-8 text-center bg-zinc-950"><span class="text-xs text-zinc-400 uppercase">Total Comanda</span><div id="unico-total-val" class="text-4xl font-black text-orange-400 mt-2"></div></div><div class="p-5 border-t border-zinc-800 bg-zinc-950 flex justify-end"><button onclick="concluirPagamentoUnico()" class="bg-orange-500 text-black font-black px-6 py-3 rounded-xl text-xs uppercase transition">Avançar para Caixa</button></div></div>
-  </div>
-
-  <div id="modal-split-payment" class="hidden fixed inset-0 z-[70] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-zinc-900 w-full max-w-xl rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-zinc-800"><div class="bg-zinc-950 p-5 border-b border-zinc-800 flex justify-between"><div class="flex items-center space-x-3"><div class="w-10 h-10 bg-orange-500/20 text-orange-400 rounded-xl flex items-center justify-center"><i class="fa-solid fa-users"></i></div><div><h3 class="font-black text-white text-base uppercase">Divisão de Conta</h3><p class="text-xs text-zinc-400">Mesa <span id="split-table-num" class="text-orange-500 font-bold"></span></p></div></div><button onclick="closeModal('modal-split-payment')" class="text-zinc-500"><i class="fa-solid fa-xmark"></i></button></div><div class="p-5 overflow-y-auto space-y-5 flex-1"><div class="grid grid-cols-2 gap-4"><div class="bg-zinc-950 p-4 rounded-xl border border-zinc-800"><span class="text-[11px] text-zinc-400 uppercase">Total</span><span id="split-total-cmd" class="text-2xl font-black text-orange-400 block mt-1"></span></div><div class="bg-zinc-950 p-4 rounded-xl border border-zinc-800"><label class="block text-[11px] text-zinc-400 uppercase mb-1">Pessoas?</label><input type="number" id="split-qtd-pessoas" min="1" max="20" value="1" oninput="recalcularSplit()" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-center text-lg font-black text-white focus:outline-none focus:border-orange-500"></div></div><div class="bg-zinc-950 p-4 rounded-2xl border border-zinc-800"><div class="flex justify-between items-center mb-3"><h4 class="text-[10px] font-black text-zinc-500 uppercase">Partilha</h4><span id="split-status-validacao" class="text-xs font-bold text-emerald-400"></span></div><div id="split-pessoas-list" class="space-y-2.5 max-h-40 overflow-y-auto pr-2 custom-scrollbar"></div></div></div><div class="bg-zinc-950 p-5 border-t border-zinc-800 flex justify-between items-center"><div><span class="text-[11px] text-zinc-400 uppercase block">Soma</span><span id="split-soma-partes" class="text-xl font-black text-white"></span></div><button onclick="concluirPagamentoSplit()" class="bg-orange-500 text-black font-black px-6 py-3.5 rounded-xl text-xs uppercase transition">Avançar para Caixa</button></div></div>
-  </div>
-
-  <div id="modal-resumo-itens" class="hidden fixed inset-0 z-[85] bg-black/95 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-zinc-900 w-full max-w-xl rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-zinc-800"><div class="bg-zinc-950 p-5 border-b border-zinc-800 flex justify-between"><h3 class="font-black text-white">Resumo da Divisão</h3><button onclick="closeModal('modal-resumo-itens')" class="text-zinc-500"><i class="fa-solid fa-xmark"></i></button></div><div id="resumo-pessoas-list" class="p-5 overflow-y-auto space-y-3 flex-1 custom-scrollbar"></div><div class="bg-zinc-950 p-5 border-t border-zinc-800 flex justify-between"><div><span class="text-[11px] text-zinc-400 uppercase">Total</span><span id="resumo-total-geral" class="text-xl font-black text-white block"></span></div><button onclick="confirmarPagamentoFinalItens()" class="bg-orange-500 text-black font-black px-6 py-3 rounded-xl text-xs uppercase transition">Avançar para Caixa</button></div></div>
-  </div>
-  
-  <div id="modal-qtd-pessoas-itens" class="hidden fixed inset-0 z-[75] bg-black/90 backdrop-blur-md flex items-center justify-center p-4"><div class="bg-zinc-900 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden border border-zinc-800"><div class="bg-zinc-950 p-5 border-b border-zinc-800 flex justify-between"><h3 class="font-black text-white text-base">Divisão por Itens</h3><button onclick="closeModal('modal-qtd-pessoas-itens')" class="text-zinc-500 hover:text-white"><i class="fa-solid fa-xmark"></i></button></div><div class="p-6 bg-zinc-950"><label class="block text-xs font-bold text-zinc-300 uppercase mb-2">Quantas pessoas?</label><input type="number" id="input-qtd-pessoas-itens" min="2" max="20" value="2" class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-center text-xl font-black text-white focus:outline-none focus:border-orange-500"></div><div class="p-5 border-t border-zinc-800 bg-zinc-950 flex justify-end space-x-3"><button onclick="prosseguirParaDragDropItens()" class="bg-orange-500 text-black font-black px-6 py-2.5 rounded-xl text-xs uppercase transition">Continuar</button></div></div></div>
-  <div id="modal-divisao-itens" class="hidden fixed inset-0 z-[80] bg-black/95 backdrop-blur-md flex items-center justify-center p-4"><div class="bg-zinc-900 w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col overflow-hidden max-h-[92vh] border border-zinc-800"><div class="bg-zinc-950 p-4 border-b border-zinc-800 flex justify-between"><div class="flex space-x-3"><div class="w-10 h-10 bg-orange-500/20 text-orange-400 rounded-xl flex items-center justify-center"><i class="fa-solid fa-hand-holding-hand"></i></div><div><h3 class="font-black text-white text-sm uppercase">Arraste os itens</h3><p class="text-xs text-zinc-400">Mesa <span id="itens-table-num" class="text-orange-500"></span></p></div></div><button onclick="closeModal('modal-divisao-itens')" class="text-zinc-500"><i class="fa-solid fa-xmark text-lg"></i></button></div><div class="p-5 overflow-y-auto space-y-5 flex-1 custom-scrollbar"><div class="bg-zinc-950 p-4 rounded-xl border border-zinc-800"><h4 class="text-[10px] font-black text-zinc-500 uppercase mb-3">Itens Disponíveis</h4><div id="itens-disponiveis-scroll" class="flex space-x-3 overflow-x-auto pb-2 custom-scrollbar"></div></div><div id="grid-pessoas-itens" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div></div><div class="bg-zinc-950 p-4 border-t border-zinc-800 flex justify-between"><div class="text-xs text-zinc-400">Total: <strong id="itens-total-geral-lbl" class="text-white"></strong></div><button onclick="concluirSelecaoItensParaResumo()" class="bg-orange-500 text-black font-black px-6 py-3 rounded-xl text-xs uppercase transition">Continuar</button></div></div></div>
-
-
-  <!-- =========================================================================
-       NOVO MODAL: TELA DE CAIXA PDV (PAGAMENTOS PARCIAIS / MÚLTIPLOS)
-       ========================================================================= -->
-  <div id="modal-pdv-caixa" class="hidden fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-zinc-900 border border-zinc-800 w-full max-w-3xl rounded-2xl shadow-2xl flex flex-col overflow-hidden max-h-[95vh]">
-      
-      <!-- Cabeçalho -->
-      <div class="bg-zinc-950 p-5 border-b border-zinc-800 flex justify-between items-center shrink-0">
-        <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-lg bg-orange-500 text-black flex items-center justify-center text-xl"><i class="fa-solid fa-cash-register"></i></div>
-          <div>
-            <h3 class="font-black text-white text-base uppercase tracking-wide">Registar Pagamentos da Mesa</h3>
-            <p class="text-[11px] text-zinc-400">Adicione os valores pagos pelas pessoas para abater na conta total.</p>
+          <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl shadow-lg hover:border-emerald-500/50 transition">
+            <div class="flex justify-between items-start mb-4">
+              <span class="text-xs text-zinc-400 uppercase font-bold tracking-wider">Total PIX</span>
+              <i class="fa-brands fa-pix text-emerald-400 text-lg"></i>
+            </div>
+            <div id="caixa-tot-pix" class="text-2xl font-black text-white">R$ 0,00</div>
+          </div>
+          
+          <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl shadow-lg hover:border-blue-500/50 transition">
+            <div class="flex justify-between items-start mb-4">
+              <span class="text-xs text-zinc-400 uppercase font-bold tracking-wider">Crédito</span>
+              <i class="fa-solid fa-credit-card text-blue-400 text-lg"></i>
+            </div>
+            <div id="caixa-tot-credito" class="text-2xl font-black text-white">R$ 0,00</div>
+          </div>
+          
+          <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl shadow-lg hover:border-indigo-500/50 transition">
+            <div class="flex justify-between items-start mb-4">
+              <span class="text-xs text-zinc-400 uppercase font-bold tracking-wider">Débito</span>
+              <i class="fa-solid fa-money-check text-indigo-400 text-lg"></i>
+            </div>
+            <div id="caixa-tot-debito" class="text-2xl font-black text-white">R$ 0,00</div>
+          </div>
+          
+          <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl shadow-lg hover:border-amber-500/50 transition">
+            <div class="flex justify-between items-start mb-4">
+              <span class="text-xs text-zinc-400 uppercase font-bold tracking-wider">Dinheiro</span>
+              <i class="fa-solid fa-money-bill-1-wave text-amber-500 text-lg"></i>
+            </div>
+            <div id="caixa-tot-dinheiro" class="text-2xl font-black text-white">R$ 0,00</div>
           </div>
         </div>
-        <button onclick="fecharModalPdv()" class="text-zinc-500 hover:text-white transition bg-zinc-900 hover:bg-zinc-800 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- JANELA 3: HISTÓRICO -->
+    <!-- ========================================== -->
+    <div id="view-historico" class="hidden space-y-4">
+      <div class="flex flex-wrap justify-between bg-zinc-900 p-4 rounded-2xl border border-zinc-800 shadow-lg">
+        <h3 class="font-bold text-white text-sm uppercase">Histórico de Comandas</h3>
+        <div class="flex space-x-2 bg-zinc-950 p-1 rounded-xl">
+          <button onclick="carregarHistorico('dia')" class="px-4 py-1 bg-zinc-800 text-xs rounded-lg text-zinc-300">Hoje</button>
+          <button onclick="carregarHistorico('todos')" class="px-4 py-1 bg-orange-500 text-black text-xs rounded-lg font-black">Todos</button>
+        </div>
+      </div>
+      <div class="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-x-auto shadow-2xl">
+        <table class="w-full text-left border-collapse">
+          <tbody id="historico-table-body" class="divide-y divide-zinc-800 text-sm"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- JANELA 4: ESTATÍSTICAS COM MÉDIAS ADICIONADAS -->
+    <!-- ========================================== -->
+    <div id="view-estatisticas" class="hidden space-y-6">
+      
+      <!-- Linha 1: Faturamentos Totais -->
+      <h3 class="text-xs font-black text-zinc-500 uppercase tracking-widest border-b border-zinc-800 pb-2">Faturamentos Realizados</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg relative">
+          <span class="text-[10px] text-zinc-400 uppercase font-bold tracking-wider">Acumulado Hoje</span>
+          <div id="stat-fat-dia" class="text-3xl font-black text-white mt-1">R$ 0,00</div>
+        </div>
+        <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg relative">
+          <span class="text-[10px] text-zinc-400 uppercase font-bold tracking-wider">Acumulado 7 Dias</span>
+          <div id="stat-fat-semana" class="text-3xl font-black text-emerald-400 mt-1">R$ 0,00</div>
+        </div>
+        <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg relative">
+          <span class="text-[10px] text-zinc-400 uppercase font-bold tracking-wider">Acumulado 30 Dias</span>
+          <div id="stat-fat-mes" class="text-3xl font-black text-blue-400 mt-1">R$ 0,00</div>
+        </div>
+      </div>
+
+      <!-- Linha 2: Médias Históricas -->
+      <h3 class="text-xs font-black text-zinc-500 uppercase tracking-widest border-b border-zinc-800 pb-2 mt-6">Médias Históricas (Desempenho)</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-zinc-950 border border-zinc-800 p-5 rounded-xl shadow-inner flex justify-between items-center">
+          <div class="space-y-1">
+            <span class="text-[10px] text-zinc-500 uppercase font-bold">Média por Dia</span>
+            <div id="stat-media-dia" class="text-xl font-bold text-zinc-300">R$ 0,00</div>
+          </div>
+          <i class="fa-solid fa-calendar-day text-zinc-700 text-2xl"></i>
+        </div>
+        
+        <div class="bg-zinc-950 border border-zinc-800 p-5 rounded-xl shadow-inner flex justify-between items-center">
+          <div class="space-y-1">
+            <span class="text-[10px] text-zinc-500 uppercase font-bold">Média por Semana</span>
+            <div id="stat-media-semana" class="text-xl font-bold text-zinc-300">R$ 0,00</div>
+          </div>
+          <i class="fa-solid fa-calendar-week text-zinc-700 text-2xl"></i>
+        </div>
+        
+        <div class="bg-zinc-950 border border-zinc-800 p-5 rounded-xl shadow-inner flex justify-between items-center">
+          <div class="space-y-1">
+            <span class="text-[10px] text-zinc-500 uppercase font-bold">Média por Mês</span>
+            <div id="stat-media-mes" class="text-xl font-bold text-zinc-300">R$ 0,00</div>
+          </div>
+          <i class="fa-solid fa-calendar-days text-zinc-700 text-2xl"></i>
+        </div>
+      </div>
+
+      <!-- Tops -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+        <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg">
+          <h4 class="text-xs font-black text-emerald-400 uppercase mb-4">Itens Mais Vendidos</h4>
+          <div id="stat-top-itens" class="space-y-2.5"></div>
+        </div>
+        <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg">
+          <h4 class="text-xs font-black text-rose-400 uppercase mb-4">Itens Menos Vendidos</h4>
+          <div id="stat-low-itens" class="space-y-2.5"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ========================================== -->
+  <!-- MODAL: DETALHES DA MESA -->
+  <!-- ========================================== -->
+  <div id="modal-comanda" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-zinc-900 border border-zinc-800 w-full max-w-2xl rounded-2xl shadow-2xl flex flex-col overflow-hidden max-h-[90vh]">
+      <div class="bg-zinc-950 p-5 border-b border-zinc-800 flex justify-between items-center">
+        <h3 class="font-black text-white text-lg tracking-wide uppercase">Mesa <span id="modal-table-num" class="text-orange-500"></span></h3>
+        <button onclick="closeModal('modal-comanda')" class="text-zinc-500">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      
+      <div class="p-5 overflow-y-auto space-y-5 flex-1 bg-zinc-900/50">
+        <div id="modal-items-list" class="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar"></div>
+      </div>
+      
+      <div class="bg-zinc-950 p-5 border-t border-zinc-800 space-y-4">
+        <div class="flex justify-between items-end bg-zinc-900 p-4 rounded-xl border border-zinc-800">
+          <span class="text-zinc-400 text-xs font-bold uppercase tracking-wider">Total Acumulado</span>
+          <span id="modal-total-value" class="text-3xl font-black text-orange-400">R$ 0,00</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <button onclick="cancelarMesaCompleta()" class="bg-rose-500/10 text-rose-400 py-3 rounded-xl text-xs uppercase transition">
+            Cancelar
+          </button>
+          <button onclick="abrirModalImpressao()" class="bg-zinc-800 text-white font-bold py-3 rounded-xl text-xs uppercase border border-zinc-700">
+            Imprimir
+          </button>
+          <button onclick="abrirModalEscolhaFechamento()" class="bg-orange-500 text-black font-black py-3 rounded-xl text-xs uppercase transition shadow-lg">
+            Fechar Comanda
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAIS DE DIVISÃO DA CONTA (ESCOLHA) -->
+  <!-- ========================================== -->
+  <div id="modal-escolha-fechamento" class="hidden fixed inset-0 z-[70] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-zinc-900 border border-zinc-800 w-full max-w-md rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+      <div class="bg-zinc-950 p-5 border-b border-zinc-800 flex justify-between items-center">
+        <h3 class="font-black text-white text-base uppercase">Fechar Comanda</h3>
+        <button onclick="closeModal('modal-escolha-fechamento')" class="text-zinc-500 hover:text-white">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="p-6 space-y-4 bg-zinc-900">
+        <button onclick="selecionarOpcaoFechamento('valor')" class="w-full bg-zinc-950 border border-zinc-800 hover:border-orange-500 p-4 rounded-xl text-left flex justify-between transition">
+          <div class="font-bold text-white text-sm">Dividir por valor (Pessoas)</div>
+        </button>
+        <button onclick="selecionarOpcaoFechamento('itens')" class="w-full bg-zinc-950 border border-zinc-800 hover:border-orange-500 p-4 rounded-xl text-left flex justify-between transition">
+          <div class="font-bold text-white text-sm">Dividir por itens (Arraste)</div>
+        </button>
+        <button onclick="selecionarOpcaoFechamento('unico')" class="w-full bg-zinc-950 border border-zinc-800 hover:border-orange-500 p-4 rounded-xl text-left flex justify-between transition">
+          <div class="font-bold text-white text-sm">Não dividir (1 Pagador)</div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DIVISÃO SPLIT VALOR -->
+  <div id="modal-split-payment" class="hidden fixed inset-0 z-[70] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-zinc-900 w-full max-w-xl rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-zinc-800">
+      <div class="bg-zinc-950 p-5 border-b border-zinc-800 flex justify-between">
+        <h3 class="font-black text-white uppercase">Divisão por Pessoas</h3>
+        <button onclick="closeModal('modal-split-payment')" class="text-zinc-500">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="p-5 space-y-5 flex-1">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-zinc-950 p-4 rounded-xl border border-zinc-800">
+            <span class="text-[11px] text-zinc-400 uppercase">Total Mesa</span>
+            <span id="split-total-cmd" class="text-xl font-black text-orange-400 block mt-1"></span>
+          </div>
+          <div>
+            <label class="block text-[11px] text-zinc-400 uppercase mb-1">Quantas Pessoas?</label>
+            <input type="number" id="split-qtd-pessoas" min="1" value="1" oninput="recalcularSplit()" class="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-center text-lg font-black text-white">
+          </div>
+        </div>
+        <div class="bg-zinc-950 p-4 rounded-2xl border border-zinc-800">
+          <div id="split-pessoas-list" class="space-y-2.5 max-h-40 overflow-y-auto"></div>
+        </div>
+      </div>
+      <div class="bg-zinc-950 p-5 border-t border-zinc-800 flex justify-end">
+        <button onclick="concluirPagamentoSplit()" class="bg-orange-500 text-black font-black px-6 py-3 rounded-xl text-xs uppercase">
+          Avançar para Caixa
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAIS DIVISÃO DRAG/DROP ITENS -->
+  <div id="modal-qtd-pessoas-itens" class="hidden fixed inset-0 z-[75] bg-black/90 flex items-center justify-center p-4">
+    <div class="bg-zinc-900 w-full max-w-sm rounded-2xl p-6 border border-zinc-800 text-center">
+      <label class="block text-xs font-bold text-zinc-300 uppercase mb-4">Quantas pessoas vão dividir itens?</label>
+      <input type="number" id="input-qtd-pessoas-itens" min="2" value="2" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-center text-xl font-black text-white focus:outline-none focus:border-orange-500 mb-4">
+      <div class="flex gap-2">
+        <button onclick="closeModal('modal-qtd-pessoas-itens')" class="flex-1 bg-zinc-800 py-3 rounded-lg text-white font-bold text-xs uppercase">
+          Cancelar
+        </button>
+        <button onclick="prosseguirParaDragDropItens()" class="flex-1 bg-orange-500 text-black font-black py-3 rounded-lg text-xs uppercase">
+          Continuar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-divisao-itens" class="hidden fixed inset-0 z-[80] bg-black/95 flex items-center justify-center p-4">
+    <div class="bg-zinc-900 w-full max-w-4xl rounded-2xl flex flex-col max-h-[92vh] border border-zinc-800">
+      <div class="p-4 border-b border-zinc-800 flex justify-between">
+        <h3 class="font-black text-white">Arraste os itens</h3>
+        <button onclick="closeModal('modal-divisao-itens')" class="text-zinc-500">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="p-5 flex-1 overflow-y-auto">
+        <div class="bg-zinc-950 p-4 rounded-xl border border-zinc-800 mb-4">
+          <h4 class="text-[10px] font-black text-zinc-500 uppercase mb-2">Disponíveis</h4>
+          <div id="itens-disponiveis-scroll" class="flex space-x-3 overflow-x-auto pb-2 custom-scrollbar"></div>
+        </div>
+        <div id="grid-pessoas-itens" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+      </div>
+      <div class="p-4 border-t border-zinc-800 flex justify-end">
+        <button onclick="confirmarPagamentoFinalItens()" class="bg-orange-500 text-black font-black px-6 py-3 rounded-xl text-xs uppercase">
+          Avançar para Caixa
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================================================================= -->
+  <!-- NOVO MODAL DE CAIXA PDV (Com suporte a Multi-Pessoas e Multi-Pagamentos)  -->
+  <!-- ========================================================================= -->
+  <div id="modal-pdv-caixa" class="hidden fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex items-center justify-center p-2 sm:p-4">
+    <div class="bg-zinc-900 border border-zinc-800 w-full max-w-5xl rounded-2xl shadow-2xl flex flex-col overflow-hidden max-h-[95vh]">
+      
+      <!-- Cabeçalho -->
+      <div class="bg-zinc-950 p-4 sm:p-5 border-b border-zinc-800 flex justify-between items-center shrink-0">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-lg bg-orange-500 text-black flex items-center justify-center text-xl">
+            <i class="fa-solid fa-cash-register"></i>
+          </div>
+          <div>
+            <h3 class="font-black text-white text-base uppercase tracking-wide">Caixa PDV: Pagamentos por Cliente</h3>
+            <p class="text-[11px] text-zinc-400">Total da Mesa: <strong id="pdv-header-total-mesa" class="text-orange-400"></strong></p>
+          </div>
+        </div>
+        <button onclick="fecharModalPdv()" class="text-zinc-500 hover:text-white transition w-8 h-8 rounded-lg flex items-center justify-center bg-zinc-900 hover:bg-zinc-800">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
       </div>
 
       <div class="flex flex-col md:flex-row flex-1 overflow-hidden">
         
-        <!-- Esquerda: Inserir Valores e Botões de Metódos -->
-        <div class="w-full md:w-3/5 p-6 bg-zinc-900 space-y-6 overflow-y-auto custom-scrollbar border-b md:border-b-0 md:border-r border-zinc-800">
-          
-          <div class="flex justify-between items-center bg-zinc-950 p-4 rounded-xl border border-zinc-800">
-            <span class="text-xs font-bold text-zinc-400 uppercase tracking-widest">Valor Total a Pagar</span>
-            <span id="pdv-total-comanda" class="text-xl font-black text-white">R$ 0,00</span>
+        <!-- COLUNA 1: Lista de Pessoas (Seletor Lateral) -->
+        <div class="w-full md:w-1/4 bg-zinc-950 border-b md:border-b-0 md:border-r border-zinc-800 flex flex-col">
+          <div class="p-4 text-[10px] font-black text-zinc-500 uppercase tracking-widest bg-zinc-900/50">Quem está pagando?</div>
+          <div id="pdv-lista-pessoas" class="flex-1 overflow-y-auto p-2 space-y-2 custom-scrollbar">
+            <!-- Gerado via JS: Cartões das Pessoas -->
+          </div>
+        </div>
+
+        <!-- COLUNA 2: Lançamento de Valores (Para a pessoa selecionada) -->
+        <div class="w-full md:w-2/4 p-4 sm:p-6 bg-zinc-900 flex flex-col border-b md:border-b-0 md:border-r border-zinc-800">
+          <div class="mb-4">
+             <span class="text-xs font-bold text-zinc-400 uppercase">Lançar para:</span>
+             <h4 id="pdv-cliente-ativo-nome" class="text-xl font-black text-orange-500">Pessoa X</h4>
           </div>
 
-          <div class="space-y-3">
-            <label class="block text-[11px] font-black text-zinc-400 uppercase tracking-widest">Digitar valor recebido</label>
-            <div class="flex items-center bg-zinc-950 border border-zinc-700 rounded-xl px-4 py-2 focus-within:border-orange-500 focus-within:ring-1 focus-within:ring-orange-500 transition shadow-inner">
+          <div class="bg-zinc-950 p-4 rounded-xl border border-zinc-800 mb-6 flex justify-between items-center shadow-inner">
+            <span class="text-xs font-bold text-zinc-400 uppercase tracking-widest">Falta desta pessoa</span>
+            <span id="pdv-cliente-ativo-falta" class="text-3xl font-black text-rose-400">R$ 0,00</span>
+          </div>
+
+          <div class="space-y-3 flex-1">
+            <label class="block text-[11px] font-black text-zinc-400 uppercase tracking-widest">Valor a receber agora</label>
+            <div class="flex items-center bg-zinc-950 border border-zinc-700 rounded-xl px-4 py-2 focus-within:border-orange-500 transition shadow-inner">
               <span class="text-zinc-500 font-bold mr-3 text-xl">R$</span>
               <input type="number" id="pdv-input-valor" class="w-full bg-transparent py-2 text-3xl font-black text-emerald-400 focus:outline-none" step="0.01" placeholder="0.00">
             </div>
-          </div>
 
-          <div class="space-y-3">
-            <label class="block text-[11px] font-black text-zinc-400 uppercase tracking-widest">Selecione como este valor foi pago</label>
+            <label class="block text-[11px] font-black text-zinc-400 uppercase tracking-widest pt-3">Forma de Pagamento</label>
             <div class="grid grid-cols-2 gap-3">
-              <button onclick="adicionarPgtoParcial('PIX')" class="bg-zinc-950 hover:bg-emerald-950/40 border border-zinc-800 hover:border-emerald-500 text-white p-4 rounded-xl flex flex-col items-center justify-center gap-2 transition group">
-                <i class="fa-brands fa-pix text-2xl text-emerald-500 group-hover:scale-110 transition-transform"></i><span class="text-xs font-bold uppercase">PIX</span>
+              <button onclick="adicionarPgtoParcial('PIX')" class="bg-zinc-950 hover:bg-emerald-950/40 border border-zinc-800 hover:border-emerald-500 text-white p-3 rounded-xl flex items-center justify-center gap-2 transition group">
+                <i class="fa-brands fa-pix text-emerald-500 group-hover:scale-110 transition-transform"></i>
+                <span class="text-xs font-bold uppercase">PIX</span>
               </button>
-              <button onclick="adicionarPgtoParcial('CREDITO')" class="bg-zinc-950 hover:bg-blue-950/40 border border-zinc-800 hover:border-blue-500 text-white p-4 rounded-xl flex flex-col items-center justify-center gap-2 transition group">
-                <i class="fa-solid fa-credit-card text-2xl text-blue-500 group-hover:scale-110 transition-transform"></i><span class="text-xs font-bold uppercase">Crédito</span>
+              
+              <button onclick="adicionarPgtoParcial('CREDITO')" class="bg-zinc-950 hover:bg-blue-950/40 border border-zinc-800 hover:border-blue-500 text-white p-3 rounded-xl flex items-center justify-center gap-2 transition group">
+                <i class="fa-solid fa-credit-card text-blue-500 group-hover:scale-110 transition-transform"></i>
+                <span class="text-xs font-bold uppercase">Crédito</span>
               </button>
-              <button onclick="adicionarPgtoParcial('DEBITO')" class="bg-zinc-950 hover:bg-indigo-950/40 border border-zinc-800 hover:border-indigo-500 text-white p-4 rounded-xl flex flex-col items-center justify-center gap-2 transition group">
-                <i class="fa-solid fa-money-check text-2xl text-indigo-500 group-hover:scale-110 transition-transform"></i><span class="text-xs font-bold uppercase">Débito</span>
+              
+              <button onclick="adicionarPgtoParcial('DEBITO')" class="bg-zinc-950 hover:bg-indigo-950/40 border border-zinc-800 hover:border-indigo-500 text-white p-3 rounded-xl flex items-center justify-center gap-2 transition group">
+                <i class="fa-solid fa-money-check text-indigo-500 group-hover:scale-110 transition-transform"></i>
+                <span class="text-xs font-bold uppercase">Débito</span>
               </button>
-              <button onclick="adicionarPgtoParcial('DINHEIRO')" class="bg-zinc-950 hover:bg-amber-950/40 border border-zinc-800 hover:border-amber-500 text-white p-4 rounded-xl flex flex-col items-center justify-center gap-2 transition group">
-                <i class="fa-solid fa-money-bill-1-wave text-2xl text-amber-500 group-hover:scale-110 transition-transform"></i><span class="text-xs font-bold uppercase">Dinheiro</span>
+              
+              <button onclick="adicionarPgtoParcial('DINHEIRO')" class="bg-zinc-950 hover:bg-amber-950/40 border border-zinc-800 hover:border-amber-500 text-white p-3 rounded-xl flex items-center justify-center gap-2 transition group">
+                <i class="fa-solid fa-money-bill-1-wave text-amber-500 group-hover:scale-110 transition-transform"></i>
+                <span class="text-xs font-bold uppercase">Dinheiro</span>
               </button>
             </div>
           </div>
         </div>
 
-        <!-- Direita: Resumo, Troco e Finalizar -->
-        <div class="w-full md:w-2/5 flex flex-col bg-zinc-950">
-          
-          <!-- Fita de Resumo (Falta Pagar) -->
-          <div class="p-6 bg-zinc-900/50 border-b border-zinc-800 text-center flex-shrink-0">
-            <span class="text-[10px] font-black text-rose-500 uppercase tracking-widest block mb-1">Falta Pagar</span>
-            <div id="pdv-falta-pagar" class="text-4xl font-black text-rose-400">R$ 0,00</div>
+        <!-- COLUNA 3: Resumo dos Pagamentos desta Pessoa e Finalização Geral -->
+        <div class="w-full md:w-1/4 flex flex-col bg-zinc-950">
+          <div class="p-4 bg-zinc-900/50 border-b border-zinc-800 text-center flex-shrink-0">
+            <span class="text-[10px] font-black text-zinc-400 uppercase tracking-widest block mb-1">Pagos por <span id="pdv-resumo-nome"></span></span>
+            <div id="pdv-cliente-ativo-pago" class="text-xl font-black text-emerald-400">R$ 0,00</div>
             
-            <div id="pdv-troco-box" class="hidden mt-3 bg-amber-500/10 border border-amber-500/30 rounded-lg p-2">
-              <span class="text-[10px] font-black text-amber-500 uppercase">Troco a devolver</span>
-              <div id="pdv-valor-troco" class="text-xl font-black text-amber-400">R$ 0,00</div>
+            <div id="pdv-troco-box" class="hidden mt-2 bg-amber-500/10 border border-amber-500/30 rounded-lg p-2">
+              <span class="text-[10px] font-black text-amber-500 uppercase">Devolver Troco</span>
+              <div id="pdv-valor-troco" class="text-lg font-black text-amber-400">R$ 0,00</div>
             </div>
           </div>
-
-          <!-- Lista de Pagamentos Lançados -->
-          <div class="flex-1 p-4 overflow-y-auto custom-scrollbar">
-            <h4 class="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-3 text-center">Valores Lançados</h4>
-            <div id="pdv-lista-pagamentos" class="space-y-2">
-              <!-- JS renderiza a lista de pagamentos parciais aqui -->
-            </div>
+          
+          <div class="flex-1 p-3 overflow-y-auto custom-scrollbar">
+            <div id="pdv-lista-pagamentos-pessoa" class="space-y-2"></div>
           </div>
-
-          <!-- Rodapé do Lado Direito -->
-          <div class="p-4 border-t border-zinc-800 shrink-0">
-            <div class="flex justify-between items-center mb-4">
-              <span class="text-xs font-bold text-zinc-400 uppercase tracking-wider">Total Registado</span>
-              <span id="pdv-total-registado" class="text-lg font-black text-emerald-400">R$ 0,00</span>
-            </div>
-            <button id="btn-pdv-finalizar" onclick="finalizarComandaPdv()" class="w-full bg-zinc-800 text-zinc-500 font-black py-4 rounded-xl text-sm uppercase tracking-wider cursor-not-allowed transition" disabled>
-              Aguardando Saldo...
+          
+          <div class="p-4 border-t border-zinc-800 shrink-0 mt-auto bg-zinc-900">
+            <button id="btn-pdv-finalizar" onclick="finalizarComandaPdv()" class="w-full bg-zinc-800 text-zinc-500 font-black py-4 rounded-xl text-sm uppercase transition" disabled>
+              Pague Todos 1º
             </button>
           </div>
-
         </div>
+
       </div>
     </div>
   </div>
 
 
-  <!-- MODAL: SELECIONAR ITENS PARA IMPRESSÃO -->
-  <div id="modal-impressao" class="hidden fixed inset-0 z-[60] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-zinc-900 border border-zinc-800 w-full max-w-md rounded-2xl shadow-2xl flex flex-col overflow-hidden max-h-[90vh]">
-      <div class="bg-zinc-950 p-4 border-b border-zinc-800 flex justify-between items-center"><div class="flex items-center space-x-2"><i class="fa-solid fa-print text-orange-500"></i><h3 class="font-bold text-white text-sm uppercase tracking-wider">Imprimir Pedido - Mesa <span id="impressao-num-mesa" class="text-orange-500"></span></h3></div><button onclick="fecharModalImpressao()" class="text-zinc-400 hover:text-white p-2"><i class="fa-solid fa-xmark text-lg"></i></button></div>
-      <div class="p-4 bg-zinc-900"><div id="lista-checkboxes-imprimir" class="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar bg-zinc-950 p-3 rounded-xl border border-zinc-800"></div></div>
-      <div class="bg-zinc-950 p-4 border-t border-zinc-800 flex space-x-3"><button onclick="fecharModalImpressao()" class="flex-1 bg-zinc-800 text-white font-bold py-2.5 rounded-xl text-xs transition">Cancelar</button><button onclick="gerarEImprimirCupom()" class="flex-1 bg-orange-500 text-black font-black py-2.5 rounded-xl text-xs uppercase transition shadow-lg">Confirmar Impressão</button></div>
-    </div>
-  </div>
-
+  <!-- ========================================== -->
+  <!-- TOAST NOTIFICAÇÃO E IMPRESSÃO INVISÍVEL -->
+  <!-- ========================================== -->
   <div id="toast" class="fixed bottom-5 right-5 z-[200] transform translate-y-20 opacity-0 transition-all duration-300 bg-zinc-900 border border-zinc-700 text-white px-5 py-4 rounded-xl shadow-2xl flex items-center space-x-3">
     <i id="toast-icon" class="fa-solid fa-info-circle text-orange-400 text-xl"></i>
     <span id="toast-message" class="text-sm font-bold">Ação realizada!</span>
   </div>
-
+  
   <div id="area-cupom-impresso"></div>
 
-  <!-- SCRIPTS -->
+  <!-- MODAL IMPRESSÃO -->
+  <div id="modal-impressao" class="hidden fixed inset-0 z-[60] bg-black/90 flex items-center justify-center p-4">
+    <div class="bg-zinc-900 w-full max-w-md rounded-2xl flex flex-col border border-zinc-800">
+      <div class="p-4 border-b border-zinc-800 flex justify-between">
+        <h3 class="font-bold text-white">Imprimir</h3>
+        <button onclick="fecharModalImpressao()" class="text-zinc-500">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="p-4">
+        <div id="lista-checkboxes-imprimir" class="space-y-2 max-h-60 overflow-y-auto custom-scrollbar"></div>
+      </div>
+      <div class="p-4 border-t border-zinc-800">
+        <button onclick="gerarEImprimirCupom()" class="w-full bg-orange-500 text-black font-black py-3 rounded-xl text-xs uppercase">
+          Confirmar Impressão
+        </button>
+      </div>
+    </div>
+  </div>
   <script>
+    // ==========================================
+    // CONFIGURAÇÕES GERAIS E VARIÁVEIS DE ESTADO
+    // ==========================================
     const API_URL = 'https://restaurante1-backend.onrender.com';
     
     let tablesState = [];
@@ -306,224 +590,677 @@
     let audioCtx = null;
     let itensImpressosGlobais = new Set();
     
-    // Variáveis do Split
+    // Variáveis do Split (Divisão de Conta)
     let splitSubtotalGlobal = 0;
     let itensAtuaisDragDrop = [];
     let pessoasItensState = [];
     
-    // Variáveis do Novo PDV Caixa (Múltiplos Pagamentos)
-    let pdvTotalComanda = 0;
-    let pdvPagamentosLancados = [];
+    // Variáveis do PDV (Caixa Multi-Pessoas / Multi-Pagamentos)
+    let pdvClientes = []; 
+    // Estrutura esperada: [{ nome: "Pessoa 1", totalDaPessoa: 50.00, faltaPagar: 50.00, pagamentosLancados: [] }, ...]
+    let pdvClienteAtualIdx = 0;
     let pdvModalOrigem = null;
+    let pdvTotalMesaGeral = 0;
+
 
     // ==========================================
-    // SISTEMA CENTRAL DE REQUISIÇÕES (COM JWT)
+    // SISTEMA CENTRAL DE REQUISIÇÕES (API)
     // ==========================================
     async function fetchAPI(endpoint, options = {}) {
         const token = localStorage.getItem('admin_token');
-        if (!token) { fazerLogout(); throw new Error("Sessão não encontrada"); }
-        const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`, ...(options.headers || {}) };
+        
+        if (!token) {
+            fazerLogout();
+            throw new Error("Sessão não encontrada");
+        }
+
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+            ...(options.headers || {})
+        };
+
         const res = await fetch(`${API_URL}${endpoint}`, { ...options, headers });
-        if (res.status === 401 || res.status === 403) { showToast("Sessão expirada. Faça login novamente.", "rose"); fazerLogout(); throw new Error("Sessão Expirada"); }
+        
+        if (res.status === 401 || res.status === 403) {
+            showToast("Sessão expirada. Faça login novamente.", "rose");
+            fazerLogout();
+            throw new Error("Sessão Expirada");
+        }
+        
         return res;
     }
 
+
     // ==========================================
-    // INICIALIZAÇÃO & LOGIN SEGURO
+    // INICIALIZAÇÃO & LOGIN
     // ==========================================
     window.onload = function() {
         if (localStorage.getItem('admin_token')) {
             document.getElementById('login-screen').style.display = 'none';
-            carregarMesas(); iniciarSocket();
-        } else { document.getElementById('login-screen').style.display = 'flex'; }
+            carregarMesas();
+            iniciarSocket();
+        } else {
+            document.getElementById('login-screen').style.display = 'flex';
+        }
     };
 
     async function fazerLogin() {
         const user = document.getElementById('login-user').value.trim();
         const pass = document.getElementById('login-pass').value.trim();
-        const err = document.getElementById('login-error'); const btn = document.getElementById('btn-login');
+        const err = document.getElementById('login-error');
+        const btn = document.getElementById('btn-login');
+
         if(!user || !pass) return;
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> A entrar...'; btn.disabled = true;
+
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> A entrar...';
+        btn.disabled = true;
+
         try {
-            const res = await fetch(`${API_URL}/api/admin/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ user, pass }) });
+            const res = await fetch(`${API_URL}/api/admin/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user, pass })
+            });
             const data = await res.json();
+            
             if (res.ok && data.token) {
-                localStorage.setItem('admin_token', data.token); err.classList.add('hidden'); document.getElementById('login-screen').style.display = 'none'; carregarMesas(); iniciarSocket();
-            } else { err.innerText = data.error || 'Utilizador ou senha incorretos!'; err.classList.remove('hidden'); }
-        } catch (e) { err.innerText = 'Falha de comunicação.'; err.classList.remove('hidden'); } finally { btn.innerHTML = 'Entrar no Painel'; btn.disabled = false; }
+                localStorage.setItem('admin_token', data.token);
+                err.classList.add('hidden');
+                document.getElementById('login-screen').style.display = 'none';
+                carregarMesas();
+                iniciarSocket();
+            } else {
+                err.innerText = data.error || 'Utilizador ou senha incorretos!';
+                err.classList.remove('hidden');
+            }
+        } catch (e) {
+            err.innerText = 'Falha de comunicação com o servidor.';
+            err.classList.remove('hidden');
+        } finally {
+            btn.innerHTML = 'Entrar no Painel';
+            btn.disabled = false;
+        }
     }
 
-    function fazerLogout() { localStorage.removeItem('admin_token'); document.getElementById('login-screen').style.display = 'flex'; }
+    function fazerLogout() {
+        localStorage.removeItem('admin_token');
+        document.getElementById('login-screen').style.display = 'flex';
+    }
+
 
     // ==========================================
-    // WEBSOCKETS E PAINEL AO VIVO
+    // WEBSOCKETS (COMUNICAÇÃO AO VIVO)
     // ==========================================
     function iniciarSocket() {
         const socket = typeof io !== 'undefined' ? io(API_URL) : null;
         if (socket) {
-            socket.on('connect', () => { atualizarStatusServidor(true); carregarMesas(); });
-            socket.on('disconnect', () => atualizarStatusServidor(false));
-            socket.on('atualizacao_dados', () => carregarMesas());
-            socket.on('chamada_garcom', (dados) => { playWaiterChimeSound(); showToast(`Mesa ${dados.mesa} chamando garçom!`, 'amber'); carregarMesas(); });
+            socket.on('connect', () => {
+                atualizarStatusServidor(true);
+                carregarMesas();
+            });
+            
+            socket.on('disconnect', () => {
+                atualizarStatusServidor(false);
+            });
+            
+            socket.on('atualizacao_dados', () => {
+                carregarMesas();
+            });
+            
+            socket.on('chamada_garcom', (dados) => {
+                playWaiterChimeSound();
+                showToast(`Mesa ${dados.mesa} chamando garçom!`, 'amber');
+                carregarMesas();
+            });
         }
     }
+
     function atualizarStatusServidor(online) {
         const badge = document.getElementById('server-status-badge');
-        if (online) { badge.className = "hidden sm:inline-flex items-center px-3 py-1.5 rounded-lg text-[10px] font-bold bg-zinc-950 text-emerald-400 border border-zinc-800 shadow-inner"; badge.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 me-2 animate-pulse"></span> Servidor Conectado'; } 
-        else { badge.className = "hidden sm:inline-flex items-center px-3 py-1.5 rounded-lg text-[10px] font-bold bg-zinc-950 text-rose-400 border border-zinc-800 shadow-inner"; badge.innerHTML = '<span class="w-2 h-2 rounded-full bg-rose-500 me-2"></span> Offline'; }
+        if (online) {
+            badge.className = "hidden sm:inline-flex items-center px-3 py-1.5 rounded-lg text-[10px] font-bold bg-zinc-950 text-emerald-400 border border-zinc-800 shadow-inner";
+            badge.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 me-2 animate-pulse"></span> Servidor Conectado';
+        } else {
+            badge.className = "hidden sm:inline-flex items-center px-3 py-1.5 rounded-lg text-[10px] font-bold bg-zinc-950 text-rose-400 border border-zinc-800 shadow-inner";
+            badge.innerHTML = '<span class="w-2 h-2 rounded-full bg-rose-500 me-2"></span> Offline';
+        }
     }
 
+
     // ==========================================
-    // ABAS DE NAVEGAÇÃO
+    // NAVEGAÇÃO DE ABAS
     // ==========================================
     function switchTab(tab) {
-        ['mesas','caixa','historico','estatisticas'].forEach(t => { document.getElementById(`view-${t}`).classList.add('hidden'); document.getElementById(`tab-btn-${t}`).className = "px-4 py-2 rounded-lg text-xs font-bold transition text-zinc-400 hover:text-white flex items-center space-x-2 whitespace-nowrap"; });
+        // Esconder todas as abas
+        ['mesas', 'caixa', 'historico', 'estatisticas'].forEach(t => {
+            document.getElementById(`view-${t}`).classList.add('hidden');
+            document.getElementById(`tab-btn-${t}`).className = "px-4 py-2 rounded-lg text-xs font-bold transition text-zinc-400 hover:text-white flex items-center space-x-2";
+        });
+
+        // Mostrar a aba selecionada
         document.getElementById(`view-${tab}`).classList.remove('hidden');
-        document.getElementById(`tab-btn-${tab}`).className = "px-4 py-2 rounded-lg text-xs font-bold transition bg-orange-500 text-black flex items-center space-x-2 shadow-sm shadow-orange-500/20 whitespace-nowrap";
-        if (tab === 'mesas') carregarMesas(); else if (tab === 'caixa') carregarCaixa(); else if (tab === 'historico') carregarHistorico('todos'); else if (tab === 'estatisticas') carregarEstatisticas();
+        document.getElementById(`tab-btn-${tab}`).className = "px-4 py-2 rounded-lg text-xs font-bold transition bg-orange-500 text-black flex items-center space-x-2 shadow-sm shadow-orange-500/20";
+
+        // Chamar as funções de atualização específicas
+        if (tab === 'mesas') carregarMesas();
+        else if (tab === 'caixa') carregarCaixa();
+        else if (tab === 'historico') carregarHistorico('todos');
+        else if (tab === 'estatisticas') carregarEstatisticas();
     }
 
+
     // ==========================================
-    // MÓDULO DE CAIXA
+    // MÓDULO DE CAIXA (ABERTURA E FECHAMENTO)
     // ==========================================
     async function carregarCaixa() {
         try {
-            const res = await fetchAPI('/api/caixa/resumo'); const data = await res.json();
-            const fechadoBanner = document.getElementById('caixa-fechado-banner'); const abertoContainer = document.getElementById('caixa-aberto-container');
-            if (!data.aberto) { fechadoBanner.classList.remove('hidden'); abertoContainer.classList.add('hidden'); } 
-            else {
-                fechadoBanner.classList.add('hidden'); abertoContainer.classList.remove('hidden');
+            const res = await fetchAPI('/api/caixa/resumo');
+            const data = await res.json();
+            
+            const fechadoBanner = document.getElementById('caixa-fechado-banner');
+            const abertoContainer = document.getElementById('caixa-aberto-container');
+
+            if (!data.aberto) {
+                fechadoBanner.classList.remove('hidden');
+                abertoContainer.classList.add('hidden');
+            } else {
+                fechadoBanner.classList.add('hidden');
+                abertoContainer.classList.remove('hidden');
+
                 document.getElementById('caixa-data-abertura').innerText = `Aberto em: ${new Date(data.caixa.data_abertura).toLocaleString('pt-BR')}`;
-                document.getElementById('caixa-saldo-inicial').innerText = `R$ ${parseFloat(data.caixa.saldo_inicial || 0).toFixed(2).replace('.',',')}`;
-                let [totPix, totCredito, totDebito, totDinheiro, totGeral] = [0,0,0,0,0];
+                
+                let totPix = 0, totCredito = 0, totDebito = 0, totDinheiro = 0;
+                
                 if(data.vendas) {
                     data.vendas.forEach(v => {
-                        const val = parseFloat(v.total); totGeral += val;
-                        if(v.forma_pagamento === 'PIX') totPix += val; else if(v.forma_pagamento === 'CREDITO') totCredito += val; else if(v.forma_pagamento === 'DEBITO') totDebito += val; else if(v.forma_pagamento === 'DINHEIRO') totDinheiro += val;
+                        const val = parseFloat(v.total);
+                        if (v.forma_pagamento === 'PIX') totPix += val;
+                        else if (v.forma_pagamento === 'CREDITO') totCredito += val;
+                        else if (v.forma_pagamento === 'DEBITO') totDebito += val;
+                        else if (v.forma_pagamento === 'DINHEIRO') totDinheiro += val;
                     });
                 }
-                document.getElementById('caixa-tot-pix').innerText = `R$ ${totPix.toFixed(2).replace('.',',')}`; document.getElementById('caixa-tot-credito').innerText = `R$ ${totCredito.toFixed(2).replace('.',',')}`; document.getElementById('caixa-tot-debito').innerText = `R$ ${totDebito.toFixed(2).replace('.',',')}`; document.getElementById('caixa-tot-dinheiro').innerText = `R$ ${totDinheiro.toFixed(2).replace('.',',')}`; document.getElementById('caixa-tot-geral').innerText = `R$ ${totGeral.toFixed(2).replace('.',',')}`;
+
+                document.getElementById('caixa-tot-pix').innerText = `R$ ${totPix.toFixed(2).replace('.',',')}`;
+                document.getElementById('caixa-tot-credito').innerText = `R$ ${totCredito.toFixed(2).replace('.',',')}`;
+                document.getElementById('caixa-tot-debito').innerText = `R$ ${totDebito.toFixed(2).replace('.',',')}`;
+                document.getElementById('caixa-tot-dinheiro').innerText = `R$ ${totDinheiro.toFixed(2).replace('.',',')}`;
             }
-        } catch (e) { showToast("Erro caixa", "rose"); }
+        } catch (e) {
+            showToast("Erro ao carregar dados do caixa.", "rose");
+        }
     }
+
     async function abrirCaixa() {
-        let saldoStr = prompt("Introduza o Fundo de Caixa Inicial (Ex: 50.00):", "0.00"); if (saldoStr === null) return;
-        let saldoFloat = parseFloat(saldoStr.replace(',','.')); if (isNaN(saldoFloat)) saldoFloat = 0;
-        try { await fetchAPI('/api/caixa/abrir', { method: 'POST', body: JSON.stringify({ saldo_inicial: saldoFloat }) }); showToast("Caixa aberto!", "emerald"); carregarCaixa(); } catch(e) { showToast("Erro ao abrir.", "rose"); }
+        let saldoStr = prompt("Introduza o Fundo de Caixa Inicial (Ex: 50.00):", "0.00");
+        if (saldoStr === null) return;
+        
+        let saldoFloat = parseFloat(saldoStr.replace(',','.'));
+        if (isNaN(saldoFloat)) saldoFloat = 0;
+
+        try {
+            await fetchAPI('/api/caixa/abrir', { 
+                method: 'POST', 
+                body: JSON.stringify({ saldo_inicial: saldoFloat }) 
+            });
+            showToast("Caixa aberto com sucesso!", "emerald");
+            carregarCaixa();
+        } catch(e) {
+            showToast("Erro ao abrir caixa. Pode já existir um aberto.", "rose");
+        }
     }
+
     async function fecharCaixa() {
         if (!confirm("Tem a certeza absoluta que deseja FECHAR o caixa?")) return;
-        try { await fetchAPI('/api/caixa/fechar', { method: 'POST' }); showToast("Caixa fechado!", "emerald"); carregarCaixa(); } catch(e) { showToast("Erro.", "rose"); }
+        try {
+            await fetchAPI('/api/caixa/fechar', { method: 'POST' });
+            showToast("Caixa fechado com sucesso!", "emerald");
+            carregarCaixa();
+        } catch(e) {
+            showToast("Erro ao fechar caixa.", "rose");
+        }
     }
+
 
     // ==========================================
     // MESAS E ATENDIMENTO
     // ==========================================
     async function carregarMesas() {
         try {
-            const res = await fetchAPI('/api/mesas'); const data = await res.json();
-            tablesState = data.map(m => ({ id: m.mesa_id, number: m.numero, status: m.status === 'ocupada' ? 'busy' : 'free', comandaId: m.comanda_id || null, comandaNum: m.comanda_codigo || null, waiterCalledAt: m.chamando_garcom ? true : false, items: m.items ? m.items.map(i => ({ id: i.id, name: i.nome_item, price: parseFloat(i.preco_unitario), qty: i.quantidade, notes: i.observacoes })) : [] }));
+            const res = await fetchAPI('/api/mesas');
+            const data = await res.json();
+            
+            tablesState = data.map(m => ({
+                id: m.mesa_id,
+                number: m.numero,
+                status: m.status === 'ocupada' ? 'busy' : 'free',
+                comandaId: m.comanda_id || null,
+                comandaNum: m.comanda_codigo || null,
+                waiterCalledAt: m.chamando_garcom ? true : false,
+                items: m.items ? m.items.map(i => ({ 
+                    id: i.id, 
+                    name: i.nome_item, 
+                    price: parseFloat(i.preco_unitario), 
+                    qty: i.quantidade, 
+                    notes: i.observacoes 
+                })) : []
+            }));
+            
             tablesState.sort((a, b) => parseInt(a.number, 10) - parseInt(b.number, 10));
-            atualizarStatusServidor(true); renderTablesGrid(); renderWaiterQueue();
-        } catch (error) { atualizarStatusServidor(false); }
-    }
-    function renderTablesGrid() {
-      const grid = document.getElementById('tables-grid'); grid.innerHTML = '';
-      tablesState.forEach(table => {
-        const isBusy = table.status === 'busy'; const isCalling = table.waiterCalledAt; const total = isBusy ? table.items.reduce((s, i) => s + (i.price * i.qty), 0) : 0;
-        let bgClass = isBusy ? "bg-emerald-950/20 border-emerald-500/50" : "bg-zinc-900 border-zinc-800";
-        if (isCalling) bgClass = "bg-amber-950/40 border-amber-400 animate-pulse shadow-lg shadow-amber-900/40";
-        const card = document.createElement('div'); card.className = `p-5 rounded-2xl border flex flex-col justify-between cursor-pointer transition-all duration-300 transform hover:-translate-y-1 ${bgClass}`;
-        card.onclick = () => openTableModal(table.id);
-        card.innerHTML = `<div><div class="flex justify-between items-center mb-3"><span class="text-[10px] text-zinc-500 font-bold uppercase tracking-widest"><i class="fa-solid fa-chair"></i> MESA</span>${isCalling ? '<span class="bg-amber-500 text-black px-2 py-0.5 rounded text-[10px] font-black">GARÇOM</span>' : ''}${isBusy && !isCalling ? '<span class="bg-emerald-500 text-black px-2 py-0.5 rounded text-[10px] font-black">ATIVA</span>' : ''}</div><div class="text-4xl font-black text-white">${table.number}</div><div class="text-xs text-zinc-400 mt-2">${isBusy ? `${table.items.reduce((s,i)=>s+i.qty,0)} itens` : 'Disponível'}</div></div><div class="mt-4 pt-3 border-t ${isBusy ? 'border-emerald-500/20' : 'border-zinc-800'} flex justify-between items-center"><span class="text-[10px] text-zinc-500 uppercase font-bold">Total</span>${isBusy ? `<span class="text-emerald-400 font-black text-lg">R$ ${total.toFixed(2).replace('.', ',')}</span>` : `<span class="text-zinc-600 font-bold">--</span>`}</div>`;
-        grid.appendChild(card);
-      });
+            
+            atualizarStatusServidor(true);
+            renderTablesGrid();
+            renderWaiterQueue();
+        } catch (error) {
+            atualizarStatusServidor(false);
+        }
     }
 
-    function toggleWaiterQueue() { document.getElementById('waiter-queue-drawer').classList.toggle('hidden'); }
-    function renderWaiterQueue() {
-        const queueList = document.getElementById('waiter-queue-list'); const badge = document.getElementById('waiter-queue-count');
-        const callingTables = tablesState.filter(t => t.waiterCalledAt); queueList.innerHTML = ''; badge.innerText = callingTables.length; badge.classList.toggle('hidden', callingTables.length === 0);
-        if (callingTables.length === 0) { queueList.innerHTML = '<div class="text-xs text-zinc-500 text-center p-4">Nenhuma chamada.</div>'; return; }
-        callingTables.forEach(table => { queueList.innerHTML += `<div class="bg-amber-950/30 border border-amber-500/20 p-3 rounded-xl flex justify-between items-center"><span class="text-sm font-black text-amber-400"><i class="fa-solid fa-bell mr-2"></i> Mesa ${table.number}</span><button onclick="atenderGarcom(${table.id})" class="bg-amber-500 text-black text-xs font-black px-3 py-1.5 rounded-lg uppercase">Atender</button></div>`; });
+    function renderTablesGrid() {
+        const grid = document.getElementById('tables-grid');
+        grid.innerHTML = '';
+        
+        tablesState.forEach(table => {
+            const isBusy = table.status === 'busy';
+            const isCalling = table.waiterCalledAt;
+            const total = isBusy ? table.items.reduce((s, i) => s + (i.price * i.qty), 0) : 0;
+            
+            let bgClass = isBusy ? "bg-emerald-950/20 border-emerald-500/50" : "bg-zinc-900 border-zinc-800";
+            if (isCalling) bgClass = "bg-amber-950/40 border-amber-400 animate-pulse shadow-lg shadow-amber-900/40";
+            
+            const card = document.createElement('div');
+            card.className = `p-5 rounded-2xl border flex flex-col justify-between cursor-pointer transition-all duration-300 transform hover:-translate-y-1 ${bgClass}`;
+            card.onclick = () => openTableModal(table.id);
+            
+            card.innerHTML = `
+                <div>
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-[10px] text-zinc-500 font-bold uppercase tracking-widest"><i class="fa-solid fa-chair"></i> MESA</span>
+                        ${isCalling ? '<span class="bg-amber-500 text-black px-2 py-0.5 rounded text-[10px] font-black">GARÇOM</span>' : ''}
+                        ${isBusy && !isCalling ? '<span class="bg-emerald-500 text-black px-2 py-0.5 rounded text-[10px] font-black">ATIVA</span>' : ''}
+                    </div>
+                    <div class="text-4xl font-black text-white">${table.number}</div>
+                    <div class="text-xs text-zinc-400 mt-2">${isBusy ? `${table.items.reduce((s,i)=>s+i.qty,0)} itens` : 'Disponível'}</div>
+                </div>
+                <div class="mt-4 pt-3 border-t ${isBusy ? 'border-emerald-500/20' : 'border-zinc-800'} flex justify-between items-center">
+                    <span class="text-[10px] text-zinc-500 uppercase font-bold">Total</span>
+                    ${isBusy ? `<span class="text-emerald-400 font-black text-lg">R$ ${total.toFixed(2).replace('.', ',')}</span>` : `<span class="text-zinc-600 font-bold">--</span>`}
+                </div>
+            `;
+            
+            grid.appendChild(card);
+        });
     }
-    async function atenderGarcom(tableId) { try { await fetchAPI('/api/garcom/atender', { method: 'POST', body: JSON.stringify({ mesa_id: tableId }) }); showToast("Atendimento registado!", "emerald"); carregarMesas(); } catch (e) {} }
-    async function atenderGarcomModal() { if (!currentEditingTableId) return; await atenderGarcom(currentEditingTableId); const table = tablesState.find(t => t.id === currentEditingTableId); if (table) table.waiterCalledAt = false; openTableModal(currentEditingTableId); }
+
+    function toggleWaiterQueue() {
+        document.getElementById('waiter-queue-drawer').classList.toggle('hidden');
+    }
+
+    function renderWaiterQueue() {
+        const queueList = document.getElementById('waiter-queue-list');
+        const badge = document.getElementById('waiter-queue-count');
+        
+        const callingTables = tablesState.filter(t => t.waiterCalledAt);
+        queueList.innerHTML = '';
+        badge.innerText = callingTables.length;
+        badge.classList.toggle('hidden', callingTables.length === 0);
+        
+        if (callingTables.length === 0) {
+            queueList.innerHTML = '<div class="text-xs text-zinc-500 text-center p-4">Nenhuma chamada.</div>';
+            return;
+        }
+        
+        callingTables.forEach(table => {
+            queueList.innerHTML += `
+                <div class="bg-amber-950/30 border border-amber-500/20 p-3 rounded-xl flex justify-between items-center">
+                    <span class="text-sm font-black text-amber-400"><i class="fa-solid fa-bell mr-2"></i> Mesa ${table.number}</span>
+                    <button onclick="atenderGarcom(${table.id})" class="bg-amber-500 text-black text-xs font-black px-3 py-1.5 rounded-lg uppercase">Atender</button>
+                </div>
+            `;
+        });
+    }
+
+    async function atenderGarcom(tableId) {
+        try {
+            await fetchAPI('/api/garcom/atender', { 
+                method: 'POST', 
+                body: JSON.stringify({ mesa_id: tableId }) 
+            });
+            showToast("Atendimento registado!", "emerald");
+            carregarMesas();
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async function atenderGarcomModal() {
+        if (!currentEditingTableId) return;
+        await atenderGarcom(currentEditingTableId);
+        const table = tablesState.find(t => t.id === currentEditingTableId);
+        if (table) table.waiterCalledAt = false;
+        openTableModal(currentEditingTableId);
+    }
 
     function openTableModal(tableId) {
-        const table = tablesState.find(t => t.id === tableId); if (!table) return;
-        currentEditingTableId = tableId; document.getElementById('modal-table-num').innerText = table.number; document.getElementById('modal-waiter-section').classList.toggle('hidden', !table.waiterCalledAt);
-        const list = document.getElementById('modal-items-list'); let total = 0; list.innerHTML = '';
-        if (table.items.length === 0) { list.innerHTML = `<div class="text-xs text-zinc-500 text-center py-6 italic">Comanda vazia.</div>`; } 
-        else {
+        const table = tablesState.find(t => t.id === tableId);
+        if (!table) return;
+        
+        currentEditingTableId = tableId;
+        document.getElementById('modal-table-num').innerText = table.number;
+        
+        const list = document.getElementById('modal-items-list');
+        let total = 0;
+        list.innerHTML = '';
+        
+        if (table.items.length === 0) {
+            list.innerHTML = `<div class="text-xs text-zinc-500 text-center py-6 italic">Comanda vazia.</div>`;
+        } else {
             table.items.forEach(item => {
-                const t = item.price * item.qty; total += t; const borderClass = itensImpressosGlobais.has(item.id) ? "border-zinc-800" : "border-orange-500/30 bg-orange-500/5";
-                list.innerHTML += `<div class="p-3 rounded-xl flex justify-between items-center border ${borderClass} mb-2"><div><div class="text-sm font-bold text-white">${item.qty}x ${item.name}</div>${item.notes ? `<div class="text-[11px] text-zinc-400 mt-1">Obs: ${item.notes}</div>` : ''}</div><div class="flex items-center space-x-4"><span class="text-zinc-300 text-sm font-bold">R$ ${t.toFixed(2).replace('.', ',')}</span></div></div>`;
+                const t = item.price * item.qty;
+                total += t;
+                const borderClass = itensImpressosGlobais.has(item.id) ? "border-zinc-800" : "border-orange-500/30 bg-orange-500/5";
+                
+                list.innerHTML += `
+                    <div class="p-3 rounded-xl flex justify-between items-center border ${borderClass} mb-2">
+                        <div>
+                            <div class="text-sm font-bold text-white">${item.qty}x ${item.name}</div>
+                            ${item.notes ? `<div class="text-[11px] text-zinc-400 mt-1">Obs: ${item.notes}</div>` : ''}
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span class="text-zinc-300 text-sm font-bold">R$ ${t.toFixed(2).replace('.', ',')}</span>
+                        </div>
+                    </div>
+                `;
             });
         }
-        document.getElementById('modal-total-value').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`; document.getElementById('modal-comanda').classList.remove('hidden');
+        
+        document.getElementById('modal-total-value').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        document.getElementById('modal-comanda').classList.remove('hidden');
     }
-    async function cancelarMesaCompleta() { const table = tablesState.find(t => t.id === currentEditingTableId); if (!table || !confirm(`CANCELAR Mesa ${table.number}?`)) return; try { await fetchAPI('/api/admin/mesa/cancelar', { method: 'POST', body: JSON.stringify({ mesa_id: table.id, comanda_id: table.comandaId }) }); closeModal('modal-comanda'); showToast(`Mesa ${table.number} cancelada!`); carregarMesas(); } catch (e) { showToast("Erro", "rose"); } }
+
+    async function cancelarMesaCompleta() {
+        const table = tablesState.find(t => t.id === currentEditingTableId);
+        if (!table || !confirm(`Deseja realmente CANCELAR a Mesa ${table.number}?`)) return;
+        
+        try {
+            await fetchAPI('/api/admin/mesa/cancelar', { 
+                method: 'POST', 
+                body: JSON.stringify({ mesa_id: table.id, comanda_id: table.comandaId }) 
+            });
+            closeModal('modal-comanda');
+            showToast(`Mesa ${table.number} cancelada!`);
+            carregarMesas();
+        } catch (e) {
+            showToast("Erro ao cancelar mesa.", "rose");
+        }
+    }
 
 
     // ==========================================
-    // FLUXO DE DIVISÃO DE CONTA (MANTIDO)
+    // ROTAS DE DIVISÃO (SPLIT E DRAG&DROP)
     // ==========================================
     function abrirModalEscolhaFechamento() {
         const table = tablesState.find(t => t.id === currentEditingTableId);
-        if (!table || table.items.length === 0) { showToast("Mesa vazia.", "rose"); return; }
+        if (!table || table.items.length === 0) {
+            showToast("Não é possível fechar uma mesa vazia.", "rose");
+            return;
+        }
+
+        // Verifica primeiro se o caixa está aberto!
         fetchAPI('/api/caixa/status').then(res => res.json()).then(data => {
-            if(!data.aberto) { showToast("ERRO: Abra o CAIXA antes de cobrar comandos!", "rose"); switchTab('caixa'); closeModal('modal-comanda'); return; }
-            document.getElementById('escolha-table-num').innerText = table.number;
-            const btnItens = document.getElementById('btn-opcao-itens'); if (table.items.reduce((s, i) => s + i.qty, 0) <= 1) { btnItens.disabled = true; btnItens.style.opacity = 0.4; } else { btnItens.disabled = false; btnItens.style.opacity = 1; }
-            closeModal('modal-comanda'); document.getElementById('modal-escolha-fechamento').classList.remove('hidden');
+            if(!data.aberto) {
+                showToast("ERRO: Abra o CAIXA antes de cobrar comandas!", "rose");
+                switchTab('caixa');
+                closeModal('modal-comanda');
+                return;
+            }
+            
+            closeModal('modal-comanda');
+            document.getElementById('modal-escolha-fechamento').classList.remove('hidden');
         });
     }
+
     function selecionarOpcaoFechamento(tipo) {
-        closeModal('modal-escolha-fechamento'); const table = tablesState.find(t => t.id === currentEditingTableId);
-        if (tipo === 'valor') { splitSubtotalGlobal = table.items.reduce((s, i) => s + (i.price * i.qty), 0); document.getElementById('split-table-num').innerText = table.number; document.getElementById('split-total-cmd').innerText = `R$ ${splitSubtotalGlobal.toFixed(2).replace('.', ',')}`; document.getElementById('modal-split-payment').classList.remove('hidden'); recalcularSplit(); } 
-        else if (tipo === 'itens') { document.getElementById('modal-qtd-pessoas-itens').classList.remove('hidden'); } 
-        else if (tipo === 'unico') { const total = table.items.reduce((s, i) => s + (i.price * i.qty), 0); document.getElementById('unico-total-val').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`; document.getElementById('modal-pagamento-unico').classList.remove('hidden'); }
+        closeModal('modal-escolha-fechamento');
+        const table = tablesState.find(t => t.id === currentEditingTableId);
+        
+        if (tipo === 'valor') {
+            splitSubtotalGlobal = table.items.reduce((s, i) => s + (i.price * i.qty), 0);
+            document.getElementById('split-total-cmd').innerText = `R$ ${splitSubtotalGlobal.toFixed(2).replace('.', ',')}`;
+            document.getElementById('modal-split-payment').classList.remove('hidden');
+            recalcularSplit();
+        } else if (tipo === 'itens') {
+            document.getElementById('modal-qtd-pessoas-itens').classList.remove('hidden');
+        } else if (tipo === 'unico') {
+            const total = table.items.reduce((s, i) => s + (i.price * i.qty), 0);
+            concluirPagamentoUnico(total);
+        }
     }
 
-    // Integração dos Splitters com o novo Caixa PDV
-    function concluirPagamentoUnico() {
-        const total = tablesState.find(t => t.id === currentEditingTableId)?.items.reduce((s, i) => s + (i.price * i.qty), 0);
-        iniciarCaixaPdv(total, 'modal-pagamento-unico');
+    // ==== Ligações para o Novo Sistema de Caixa ====
+    function concluirPagamentoUnico(total) {
+        let clientes = [{ nome: "Comanda Inteira", totalDaPessoa: total }];
+        iniciarCaixaPdv(clientes, total, 'none');
     }
+
     function concluirPagamentoSplit() {
-        const inputs = document.querySelectorAll('.split-input-valor'); let soma = 0; inputs.forEach(inp => soma += parseFloat(inp.value.replace(',', '.')) || 0);
-        if (Math.abs(soma - splitSubtotalGlobal) > 0.05) { showToast("A soma diverge do total!", "rose"); return; }
-        iniciarCaixaPdv(splitSubtotalGlobal, 'modal-split-payment');
+        const inputs = document.querySelectorAll('.split-input-valor');
+        let soma = 0;
+        let clientes = [];
+        
+        inputs.forEach((inp, i) => {
+            const v = parseFloat(inp.value.replace(',', '.')) || 0;
+            soma += v;
+            clientes.push({ nome: `Pessoa ${i+1}`, totalDaPessoa: v });
+        });
+        
+        if (Math.abs(soma - splitSubtotalGlobal) > 0.05) {
+            showToast("A soma dos valores diverge do total da comanda!", "rose");
+            return;
+        }
+        iniciarCaixaPdv(clientes, splitSubtotalGlobal, 'modal-split-payment');
     }
+
     function confirmarPagamentoFinalItens() {
-        let totalGeral = 0; pessoasItensState.forEach(p => totalGeral += p.itens.reduce((s, i) => s + i.price, 0));
-        iniciarCaixaPdv(totalGeral, 'modal-resumo-itens');
+        let clientes = [];
+        let totalGeral = 0;
+        
+        pessoasItensState.forEach(p => {
+            const sub = p.itens.reduce((s, i) => s + i.price, 0);
+            if(sub > 0) {
+                clientes.push({ nome: p.nome, totalDaPessoa: sub });
+                totalGeral += sub;
+            }
+        });
+        iniciarCaixaPdv(clientes, totalGeral, 'modal-divisao-itens');
     }
 
-    // MÉTODOS SPLIT MATEMÁTICO... (Inalterados, ocultos por concisão mas presentes)
-    function recalcularSplit() { const qtd = Math.max(1, parseInt(document.getElementById('split-qtd-pessoas').value) || 1); const container = document.getElementById('split-pessoas-list'); container.innerHTML = ''; let valorBase = Math.floor((splitSubtotalGlobal / qtd) * 100) / 100; let valores = Array(qtd).fill(valorBase); let diferenca = Math.round((splitSubtotalGlobal - (valorBase * qtd)) * 100); if (diferenca !== 0 && valores.length > 0) valores[0] = Math.round((valores[0] + (diferenca / 100)) * 100) / 100; for (let i = 0; i < qtd; i++) { container.innerHTML += `<div class="bg-zinc-900 p-3 rounded-xl border border-zinc-800 flex justify-between gap-4"><span class="text-xs font-bold text-white flex items-center">Pessoa ${i + 1}</span><div class="flex space-x-2"><span class="text-xs text-zinc-400 font-bold mt-2">R$</span><input type="number" step="0.01" value="${valores[i].toFixed(2)}" oninput="ajustarSplitManual(${i})" class="split-input-valor w-24 bg-zinc-950 border border-zinc-800 rounded-lg p-2 text-right text-sm font-black text-emerald-400 focus:outline-none"></div></div>`; } atualizarSomaPartes(); }
-    function ajustarSplitManual(indexAlterado) { const inputs = document.querySelectorAll('.split-input-valor'); let somaFixada = 0; for (let i = 0; i <= indexAlterado; i++) somaFixada += parseFloat(inputs[i].value.replace(',', '.')) || 0; let resto = splitSubtotalGlobal - somaFixada; let pessoasRestantes = inputs.length - (indexAlterado + 1); if (pessoasRestantes > 0) { if (resto < 0) resto = 0; let valorPorRestante = Math.floor((resto / pessoasRestantes) * 100) / 100; let somaParcial = 0; for (let i = indexAlterado + 1; i < inputs.length; i++) { if (i === inputs.length - 1) inputs[i].value = Math.max(0, splitSubtotalGlobal - somaFixada - somaParcial).toFixed(2); else { inputs[i].value = valorPorRestante.toFixed(2); somaParcial += valorPorRestante; } } } atualizarSomaPartes(); }
-    function atualizarSomaPartes() { const inputs = document.querySelectorAll('.split-input-valor'); let soma = 0; inputs.forEach(inp => soma += parseFloat(inp.value.replace(',', '.')) || 0); document.getElementById('split-soma-partes').innerText = `R$ ${soma.toFixed(2).replace('.', ',')}`; const statusEl = document.getElementById('split-status-validacao'); if (Math.abs(soma - splitSubtotalGlobal) < 0.05) { statusEl.innerHTML = '<i class="fa-solid fa-circle-check"></i> Correto'; statusEl.className = "text-xs font-bold text-emerald-400"; } else { statusEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Divergência'; statusEl.className = "text-xs font-bold text-rose-400"; } }
+    // ==== Matemática do Split ====
+    function recalcularSplit() {
+        const qtd = Math.max(1, parseInt(document.getElementById('split-qtd-pessoas').value) || 1);
+        const container = document.getElementById('split-pessoas-list');
+        container.innerHTML = '';
+        
+        let valorBase = Math.floor((splitSubtotalGlobal / qtd) * 100) / 100;
+        let valores = Array(qtd).fill(valorBase);
+        let diferenca = Math.round((splitSubtotalGlobal - (valorBase * qtd)) * 100);
+        
+        if (diferenca !== 0 && valores.length > 0) {
+            valores[0] = Math.round((valores[0] + (diferenca / 100)) * 100) / 100;
+        }
+        
+        for (let i = 0; i < qtd; i++) {
+            container.innerHTML += `
+                <div class="bg-zinc-900 p-3 rounded-xl border border-zinc-800 flex justify-between gap-4">
+                    <span class="text-xs font-bold text-white flex items-center">Pessoa ${i + 1}</span>
+                    <div class="flex space-x-2">
+                        <span class="text-xs text-zinc-400 font-bold mt-2">R$</span>
+                        <input type="number" step="0.01" value="${valores[i].toFixed(2)}" oninput="ajustarSplitManual(${i})" class="split-input-valor w-24 bg-zinc-950 border border-zinc-800 rounded-lg p-2 text-right text-sm font-black text-emerald-400 focus:outline-none">
+                    </div>
+                </div>
+            `;
+        }
+    }
 
-    // MÉTODOS SPLIT ITENS (DRAG DROP)...
-    function prosseguirParaDragDropItens() { const qtd = parseInt(document.getElementById('input-qtd-pessoas-itens').value) || 2; const table = tablesState.find(t => t.id === currentEditingTableId); document.getElementById('itens-table-num').innerText = table.number; closeModal('modal-qtd-pessoas-itens'); itensAtuaisDragDrop = []; let idUnicoContador = 1; table.items.forEach(item => { for (let q = 0; q < item.qty; q++) itensAtuaisDragDrop.push({ uid: idUnicoContador++, name: item.name, price: item.price }); }); pessoasItensState = []; for (let i = 0; i < qtd; i++) pessoasItensState.push({ id: i, nome: `Pessoa ${i + 1}`, itens: [] }); renderizarInterfaceDragDrop(); document.getElementById('modal-divisao-itens').classList.remove('hidden'); }
-    function renderizarInterfaceDragDrop() { const scrollContainer = document.getElementById('itens-disponiveis-scroll'); scrollContainer.innerHTML = ''; if (itensAtuaisDragDrop.length === 0) scrollContainer.innerHTML = '<div class="text-xs text-zinc-500 italic p-2">Todos distribuídos!</div>'; else { itensAtuaisDragDrop.forEach(item => { const card = document.createElement('div'); card.className = "bg-zinc-900 border border-zinc-700 p-3 rounded-xl cursor-grab shrink-0 w-36 shadow-md"; card.draggable = true; card.ondragstart = (e) => e.dataTransfer.setData('text/plain', JSON.stringify(item)); card.innerHTML = `<div class="text-xs font-bold text-white truncate">${item.name}</div><div class="text-xs font-black text-orange-400 mt-2">R$ ${item.price.toFixed(2).replace('.', ',')}</div>`; scrollContainer.appendChild(card); }); } const gridPessoas = document.getElementById('grid-pessoas-itens'); gridPessoas.innerHTML = ''; const tableTotal = tablesState.find(t => t.id === currentEditingTableId)?.items.reduce((s, i) => s + (i.price * i.qty), 0) || 0; document.getElementById('itens-total-geral-lbl').innerText = `R$ ${tableTotal.toFixed(2).replace('.', ',')}`; pessoasItensState.forEach((pessoa) => { const sub = pessoa.itens.reduce((s, i) => s + i.price, 0); const box = document.createElement('div'); box.className = "bg-zinc-950 border border-zinc-800 p-4 rounded-2xl flex flex-col justify-between min-h-[160px]"; box.ondragover = (e) => e.preventDefault(); box.ondrop = (e) => { e.preventDefault(); const rawData = e.dataTransfer.getData('text/plain'); if(!rawData) return; const iMovido = JSON.parse(rawData); itensAtuaisDragDrop = itensAtuaisDragDrop.filter(i => i.uid !== iMovido.uid); pessoa.itens.push(iMovido); renderizarInterfaceDragDrop(); }; let html = pessoa.itens.length === 0 ? '<div class="text-xs text-zinc-600 text-center py-4 border border-dashed rounded">Arraste itens</div>' : ''; pessoa.itens.forEach(ia => html += `<div class="bg-zinc-900 p-2 rounded flex justify-between text-[10px] mb-1"><span class="truncate w-24">${ia.name}</span><button onclick="reverterItemParaDisponivel(${pessoa.id}, ${ia.uid})" class="text-rose-400"><i class="fa-solid fa-xmark"></i></button></div>`); box.innerHTML = `<div><div class="flex justify-between mb-2"><span class="text-xs font-black text-orange-400">${pessoa.nome}</span></div><div class="space-y-1 mb-2 overflow-y-auto max-h-24 custom-scrollbar">${html}</div></div><div class="border-t border-zinc-900 pt-2 flex justify-between"><span class="text-[10px] font-bold">Total</span><span class="text-sm font-black text-emerald-400">R$ ${sub.toFixed(2).replace('.',',')}</span></div>`; gridPessoas.appendChild(box); }); }
-    function reverterItemParaDisponivel(pId, uid) { const p = pessoasItensState.find(x => x.id === pId); if(!p) return; const idx = p.itens.findIndex(i => i.uid === uid); if (idx !== -1) { itensAtuaisDragDrop.push(p.itens.splice(idx, 1)[0]); renderizarInterfaceDragDrop(); } }
-    function concluirSelecaoItensParaResumo() { if (itensAtuaisDragDrop.length > 0) { showToast("Atribua todos!", "rose"); return; } closeModal('modal-divisao-itens'); const container = document.getElementById('resumo-pessoas-list'); container.innerHTML = ''; let tot = 0; pessoasItensState.forEach(p => { const sub = p.itens.reduce((s, i) => s + i.price, 0); tot += sub; container.innerHTML += `<div class="bg-zinc-950 p-4 border border-zinc-800 flex justify-between"><span>${p.nome}</span><span class="font-black text-emerald-400">R$ ${sub.toFixed(2).replace('.',',')}</span></div>`; }); document.getElementById('resumo-total-geral').innerText = `R$ ${tot.toFixed(2).replace('.', ',')}`; document.getElementById('modal-resumo-itens').classList.remove('hidden'); }
+    function ajustarSplitManual(indexAlterado) {
+        const inputs = document.querySelectorAll('.split-input-valor');
+        let somaFixada = 0;
+        
+        for (let i = 0; i <= indexAlterado; i++) {
+            somaFixada += parseFloat(inputs[i].value.replace(',', '.')) || 0;
+        }
+        
+        let resto = splitSubtotalGlobal - somaFixada;
+        let pessoasRestantes = inputs.length - (indexAlterado + 1);
+        
+        if (pessoasRestantes > 0) {
+            if (resto < 0) resto = 0;
+            let valorPorRestante = Math.floor((resto / pessoasRestantes) * 100) / 100;
+            let somaParcial = 0;
+            
+            for (let i = indexAlterado + 1; i < inputs.length; i++) {
+                if (i === inputs.length - 1) {
+                    inputs[i].value = Math.max(0, splitSubtotalGlobal - somaFixada - somaParcial).toFixed(2);
+                } else {
+                    inputs[i].value = valorPorRestante.toFixed(2);
+                    somaParcial += valorPorRestante;
+                }
+            }
+        }
+    }
+
+    // ==== Lógica Drag & Drop (Itens) ====
+    function prosseguirParaDragDropItens() {
+        const qtd = parseInt(document.getElementById('input-qtd-pessoas-itens').value) || 2;
+        const table = tablesState.find(t => t.id === currentEditingTableId);
+        
+        closeModal('modal-qtd-pessoas-itens');
+        
+        itensAtuaisDragDrop = [];
+        let idUnicoContador = 1;
+        
+        table.items.forEach(item => {
+            for (let q = 0; q < item.qty; q++) {
+                itensAtuaisDragDrop.push({ uid: idUnicoContador++, name: item.name, price: item.price });
+            }
+        });
+        
+        pessoasItensState = [];
+        for (let i = 0; i < qtd; i++) {
+            pessoasItensState.push({ id: i, nome: `Pessoa ${i + 1}`, itens: [] });
+        }
+        
+        renderizarInterfaceDragDrop();
+        document.getElementById('modal-divisao-itens').classList.remove('hidden');
+    }
+
+    function renderizarInterfaceDragDrop() {
+        const scrollContainer = document.getElementById('itens-disponiveis-scroll');
+        scrollContainer.innerHTML = '';
+        
+        if (itensAtuaisDragDrop.length === 0) {
+            scrollContainer.innerHTML = '<div class="text-xs text-zinc-500 italic p-2">Todos distribuídos!</div>';
+        } else {
+            itensAtuaisDragDrop.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-zinc-900 border border-zinc-700 p-3 rounded-xl cursor-grab shrink-0 w-36 shadow-md";
+                card.draggable = true;
+                card.ondragstart = (e) => e.dataTransfer.setData('text/plain', JSON.stringify(item));
+                card.innerHTML = `
+                    <div class="text-xs font-bold text-white truncate">${item.name}</div>
+                    <div class="text-xs font-black text-orange-400 mt-2">R$ ${item.price.toFixed(2).replace('.', ',')}</div>
+                `;
+                scrollContainer.appendChild(card);
+            });
+        }
+        
+        const gridPessoas = document.getElementById('grid-pessoas-itens');
+        gridPessoas.innerHTML = '';
+        
+        pessoasItensState.forEach((pessoa) => {
+            const sub = pessoa.itens.reduce((s, i) => s + i.price, 0);
+            const box = document.createElement('div');
+            
+            box.className = "bg-zinc-950 border border-zinc-800 p-4 rounded-2xl flex flex-col justify-between min-h-[160px]";
+            box.ondragover = (e) => e.preventDefault();
+            box.ondrop = (e) => {
+                e.preventDefault();
+                const rawData = e.dataTransfer.getData('text/plain');
+                if(!rawData) return;
+                const iMovido = JSON.parse(rawData);
+                itensAtuaisDragDrop = itensAtuaisDragDrop.filter(i => i.uid !== iMovido.uid);
+                pessoa.itens.push(iMovido);
+                renderizarInterfaceDragDrop();
+            };
+            
+            let html = pessoa.itens.length === 0 ? '<div class="text-xs text-zinc-600 text-center py-4 border border-dashed rounded">Arraste itens para aqui</div>' : '';
+            
+            pessoa.itens.forEach(ia => {
+                html += `
+                    <div class="bg-zinc-900 p-2 rounded flex justify-between text-[10px] mb-1">
+                        <span class="truncate w-24">${ia.name}</span>
+                        <button onclick="reverterItemParaDisponivel(${pessoa.id}, ${ia.uid})" class="text-rose-400">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                `;
+            });
+            
+            box.innerHTML = `
+                <div>
+                    <div class="flex justify-between mb-2">
+                        <span class="text-xs font-black text-orange-400">${pessoa.nome}</span>
+                    </div>
+                    <div class="space-y-1 mb-2 overflow-y-auto max-h-24 custom-scrollbar">${html}</div>
+                </div>
+                <div class="border-t border-zinc-900 pt-2 flex justify-between">
+                    <span class="text-[10px] font-bold">Total</span>
+                    <span class="text-sm font-black text-emerald-400">R$ ${sub.toFixed(2).replace('.',',')}</span>
+                </div>
+            `;
+            gridPessoas.appendChild(box);
+        });
+    }
+
+    function reverterItemParaDisponivel(pId, uid) {
+        const p = pessoasItensState.find(x => x.id === pId);
+        if(!p) return;
+        const idx = p.itens.findIndex(i => i.uid === uid);
+        if (idx !== -1) {
+            itensAtuaisDragDrop.push(p.itens.splice(idx, 1)[0]);
+            renderizarInterfaceDragDrop();
+        }
+    }
 
 
     // =========================================================================
-    // LÓGICA DO NOVO CAIXA PDV (Pagamentos Múltiplos e Parciais)
+    // NOVO CAIXA PDV (MULTI-PESSOAS / MULTI-PAGAMENTOS)
     // =========================================================================
-    function iniciarCaixaPdv(totalCobrar, modalAnterior) {
-        pdvTotalComanda = parseFloat(totalCobrar);
-        pdvPagamentosLancados = [];
-        pdvModalOrigem = modalAnterior; // Guardar modal anterior para o fechar no fim
+
+    /**
+     * Inicia o modal do Caixa PDV com a lista de clientes.
+     * @param {Array} clientesArr - Array de objetos { nome, totalDaPessoa }
+     * @param {Number} totalGeral - Subtotal global da comanda.
+     * @param {String} modalOrigem - ID do modal anterior a fechar (se houver).
+     */
+    function iniciarCaixaPdv(clientesArr, totalGeral, modalOrigem) {
+        pdvTotalMesaGeral = totalGeral;
+        pdvModalOrigem = modalOrigem;
+        document.getElementById('pdv-header-total-mesa').innerText = `R$ ${totalGeral.toFixed(2).replace('.',',')}`;
         
-        document.getElementById('pdv-total-comanda').innerText = `R$ ${pdvTotalComanda.toFixed(2).replace('.',',')}`;
+        // Mapeia e prepara a lista de clientes para o PDV
+        pdvClientes = clientesArr.map(c => ({
+            nome: c.nome,
+            totalDaPessoa: c.totalDaPessoa,
+            faltaPagar: c.totalDaPessoa,
+            pagamentosLancados: []
+        }));
         
-        atualizarResumoPdv();
+        pdvClienteAtualIdx = 0; // Começa sempre na primeira pessoa
+        renderizarPdvListaClientes();
+        selecionarClientePdv(0);
+
         document.getElementById('modal-pdv-caixa').classList.remove('hidden');
     }
 
@@ -531,53 +1268,120 @@
         document.getElementById('modal-pdv-caixa').classList.add('hidden');
     }
 
+    // Renderiza a lista lateral com todos os clientes
+    function renderizarPdvListaClientes() {
+        const listaDiv = document.getElementById('pdv-lista-pessoas');
+        listaDiv.innerHTML = '';
+        
+        pdvClientes.forEach((cli, idx) => {
+            const isAtivo = idx === pdvClienteAtualIdx;
+            const isPago = cli.faltaPagar <= 0;
+            
+            let corBorda = isAtivo ? 'border-orange-500' : 'border-zinc-800';
+            let corBg = isAtivo ? 'bg-zinc-900' : 'bg-zinc-950 hover:bg-zinc-900/50';
+            let corTexto = isAtivo ? 'text-orange-400' : 'text-white';
+            
+            let iconeStatus = isPago 
+                ? '<i class="fa-solid fa-circle-check text-emerald-500"></i>' 
+                : `<span class="text-[10px] text-rose-400 font-bold">Falta R$ ${cli.faltaPagar.toFixed(2)}</span>`;
+
+            listaDiv.innerHTML += `
+                <div onclick="selecionarClientePdv(${idx})" class="cursor-pointer border ${corBorda} ${corBg} p-3 rounded-xl transition flex flex-col space-y-1 shadow-sm">
+                    <div class="flex justify-between items-center">
+                        <span class="font-black ${corTexto} text-xs uppercase tracking-wider">${cli.nome}</span>
+                        ${iconeStatus}
+                    </div>
+                    <div class="text-[10px] text-zinc-500 font-bold">Total: R$ ${cli.totalDaPessoa.toFixed(2)}</div>
+                </div>
+            `;
+        });
+        
+        verificarLiberacaoBotaoFinalizar();
+    }
+
+    // Muda a pessoa ativa no sistema central de pagamentos
+    function selecionarClientePdv(idx) {
+        pdvClienteAtualIdx = idx;
+        const cli = pdvClientes[idx];
+        
+        document.getElementById('pdv-cliente-ativo-nome').innerText = cli.nome;
+        document.getElementById('pdv-resumo-nome').innerText = cli.nome;
+        
+        atualizarResumoPdvClienteAtual();
+        renderizarPdvListaClientes();
+    }
+
+    // Adiciona um valor pago na conta da pessoa atual
     function adicionarPgtoParcial(metodo) {
+        const cli = pdvClientes[pdvClienteAtualIdx];
+        
+        if (cli.faltaPagar <= 0) {
+            showToast(`${cli.nome} já pagou tudo! Selecione outra pessoa.`, "emerald");
+            return;
+        }
+
         const inp = document.getElementById('pdv-input-valor');
         let val = parseFloat(inp.value.replace(',','.'));
         
         if (isNaN(val) || val <= 0) {
-            showToast("Digite um valor válido a receber.", "rose");
+            showToast("Digite um valor válido.", "rose");
             inp.focus();
             return;
         }
 
-        let faltaCalculada = getFaltaPagarPdv();
-        
-        // Regra de Troco (Apenas dinheiro pode exceder o valor que falta)
-        if (val > faltaCalculada && metodo !== 'DINHEIRO') {
-            showToast("Para cartões ou PIX, o valor não pode exceder o restante da comanda.", "amber");
-            inp.value = faltaCalculada.toFixed(2);
+        // Regra do troco (Só o método Dinheiro pode receber a mais do que a falta)
+        if (val > cli.faltaPagar && metodo !== 'DINHEIRO') {
+            showToast(`O valor excede o que ${cli.nome} deve (R$ ${cli.faltaPagar.toFixed(2)}). Apenas dinheiro gera troco.`, "amber");
+            inp.value = cli.faltaPagar.toFixed(2);
             return;
         }
 
-        pdvPagamentosLancados.push({ metodo: metodo, valor: val });
-        atualizarResumoPdv();
+        cli.pagamentosLancados.push({ metodo: metodo, valor: val });
+        recalcularValoresPessoaAtual();
     }
 
-    function removerPgtoParcial(index) {
-        pdvPagamentosLancados.splice(index, 1);
-        atualizarResumoPdv();
+    // Remove um pagamento efetuado por engano
+    function removerPgtoPessoaAtual(indexPgto) {
+        const cli = pdvClientes[pdvClienteAtualIdx];
+        cli.pagamentosLancados.splice(indexPgto, 1);
+        recalcularValoresPessoaAtual();
     }
 
-    function getFaltaPagarPdv() {
-        let jaPago = pdvPagamentosLancados.reduce((acc, p) => acc + p.valor, 0);
-        return pdvTotalComanda - jaPago;
+    // Atualiza os cálculos após adicionar/remover pagamento
+    function recalcularValoresPessoaAtual() {
+        const cli = pdvClientes[pdvClienteAtualIdx];
+        
+        let jaPago = cli.pagamentosLancados.reduce((acc, p) => acc + p.valor, 0);
+        cli.faltaPagar = cli.totalDaPessoa - jaPago;
+        
+        atualizarResumoPdvClienteAtual();
+        renderizarPdvListaClientes(); // Atualiza painel lateral (mostra o icone verde se pagou tudo)
+        
+        // Auto-avançar para a próxima pessoa que está a dever (Agiliza a vida do caixa)
+        if (cli.faltaPagar <= 0) {
+            let proxIdx = pdvClientes.findIndex(c => c.faltaPagar > 0);
+            if (proxIdx !== -1) {
+                setTimeout(() => selecionarClientePdv(proxIdx), 500); // Aguarda meio segundo e salta
+                showToast(`${cli.nome} Pago! Próximo cliente...`, 'emerald');
+            }
+        }
     }
 
-    function atualizarResumoPdv() {
-        let jaPago = pdvPagamentosLancados.reduce((acc, p) => acc + p.valor, 0);
-        let falta = pdvTotalComanda - jaPago;
+    // Atualiza a vista central e os resumos de pagamento da pessoa atual
+    function atualizarResumoPdvClienteAtual() {
+        const cli = pdvClientes[pdvClienteAtualIdx];
+        
+        let jaPago = cli.pagamentosLancados.reduce((acc, p) => acc + p.valor, 0);
+        let faltaExibicao = cli.faltaPagar;
         let troco = 0;
 
-        // Se a falta for negativa, significa que há troco a devolver
-        if (falta < 0) {
-            troco = Math.abs(falta);
-            falta = 0;
+        if (faltaExibicao < 0) {
+            troco = Math.abs(faltaExibicao);
+            faltaExibicao = 0;
         }
 
-        // Atualizar Textos
-        document.getElementById('pdv-total-registado').innerText = `R$ ${jaPago.toFixed(2).replace('.',',')}`;
-        document.getElementById('pdv-falta-pagar').innerText = `R$ ${falta.toFixed(2).replace('.',',')}`;
+        document.getElementById('pdv-cliente-ativo-falta').innerText = `R$ ${faltaExibicao.toFixed(2).replace('.',',')}`;
+        document.getElementById('pdv-cliente-ativo-pago').innerText = `R$ ${jaPago.toFixed(2).replace('.',',')}`;
         
         const trocoBox = document.getElementById('pdv-troco-box');
         if (troco > 0) {
@@ -587,137 +1391,303 @@
             trocoBox.classList.add('hidden');
         }
 
-        // Atualizar input com sugestão do restante
+        // Sugere o restante no campo
         const inp = document.getElementById('pdv-input-valor');
-        inp.value = falta > 0 ? falta.toFixed(2) : '';
-        if(falta > 0) inp.focus();
+        inp.value = faltaExibicao > 0 ? faltaExibicao.toFixed(2) : '';
+        if(faltaExibicao > 0) inp.focus();
 
-        // Renderizar Lista visual
-        const listaDiv = document.getElementById('pdv-lista-pagamentos');
+        // Renderiza lista visual de pagamentos do lado direito
+        const listaDiv = document.getElementById('pdv-lista-pagamentos-pessoa');
         listaDiv.innerHTML = '';
-        if (pdvPagamentosLancados.length === 0) {
-            listaDiv.innerHTML = `<div class="text-xs text-zinc-600 text-center italic py-4">Nenhum pagamento registado ainda.</div>`;
+        
+        if (cli.pagamentosLancados.length === 0) {
+            listaDiv.innerHTML = `<div class="text-[10px] text-zinc-600 text-center uppercase tracking-widest mt-4">Nenhum valor lançado</div>`;
         } else {
-            pdvPagamentosLancados.forEach((p, idx) => {
+            cli.pagamentosLancados.forEach((p, idx) => {
                 let colorClass = p.metodo === 'PIX' ? 'text-emerald-400' : (p.metodo === 'CREDITO' ? 'text-blue-400' : (p.metodo === 'DEBITO' ? 'text-indigo-400' : 'text-amber-400'));
-                let iconClass = p.metodo === 'PIX' ? 'fa-pix' : (p.metodo === 'CREDITO' ? 'fa-credit-card' : (p.metodo === 'DEBITO' ? 'fa-money-check' : 'fa-money-bill-1-wave'));
-                
                 listaDiv.innerHTML += `
-                    <div class="flex justify-between items-center bg-zinc-950 border border-zinc-800 p-3 rounded-xl">
+                    <div class="flex justify-between items-center bg-zinc-900 border border-zinc-800 p-3 rounded-xl mb-2">
+                        <span class="font-bold text-white text-[10px] uppercase tracking-wider ${colorClass}">${p.metodo}</span>
                         <div class="flex items-center space-x-3">
-                            <i class="fa-solid ${iconClass} ${colorClass} w-6 text-center text-lg"></i>
-                            <span class="font-bold text-white text-[11px] uppercase tracking-wider">${p.metodo}</span>
-                        </div>
-                        <div class="flex items-center space-x-4">
-                            <span class="font-black text-emerald-400">R$ ${p.valor.toFixed(2).replace('.', ',')}</span>
-                            <button onclick="removerPgtoParcial(${idx})" class="text-zinc-500 hover:text-rose-500 transition"><i class="fa-solid fa-xmark"></i></button>
+                            <span class="font-black text-white text-sm">R$ ${p.valor.toFixed(2).replace('.', ',')}</span>
+                            <button onclick="removerPgtoPessoaAtual(${idx})" class="text-zinc-500 hover:text-rose-500">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
                         </div>
                     </div>
                 `;
             });
         }
+    }
 
-        // Habilitar/Desabilitar o Botão Finalizar
+    // Libera ou trava o botão grande de FINALIZAR
+    function verificarLiberacaoBotaoFinalizar() {
+        const todosPagos = pdvClientes.every(c => c.faltaPagar <= 0);
         const btnFinalizar = document.getElementById('btn-pdv-finalizar');
-        if (falta === 0 && pdvPagamentosLancados.length > 0) {
+        
+        if (todosPagos) {
             btnFinalizar.disabled = false;
             btnFinalizar.className = "w-full bg-orange-500 hover:bg-orange-400 text-black font-black py-4 rounded-xl text-sm uppercase tracking-wider transition shadow-lg shadow-orange-500/20";
-            btnFinalizar.innerHTML = `<i class="fa-solid fa-check-double mr-2"></i> Finalizar Comanda`;
+            btnFinalizar.innerHTML = `<i class="fa-solid fa-check-double mr-2"></i> Finalizar Tudo`;
         } else {
             btnFinalizar.disabled = true;
-            btnFinalizar.className = "w-full bg-zinc-800 text-zinc-500 font-black py-4 rounded-xl text-sm uppercase tracking-wider cursor-not-allowed transition";
-            btnFinalizar.innerHTML = `Falta R$ ${falta.toFixed(2).replace('.',',')}`;
+            btnFinalizar.className = "w-full bg-zinc-800 text-zinc-500 font-black py-4 rounded-xl text-sm uppercase tracking-wider transition cursor-not-allowed";
+            let qtsFaltam = pdvClientes.filter(c => c.faltaPagar > 0).length;
+            btnFinalizar.innerHTML = `Faltam ${qtsFaltam} Clientes`;
         }
     }
 
+    // ENVIO FINAL AO BACKEND
     async function finalizarComandaPdv() {
         const table = tablesState.find(t => t.id === currentEditingTableId);
         const btn = document.getElementById('btn-pdv-finalizar');
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> A processar...'; btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> A processar...';
+        btn.disabled = true;
+
+        // Achatamos todos os pagamentos de todas as pessoas num único Array para o Back-end guardar
+        let todosPagamentosJuntos = [];
+        pdvClientes.forEach(cli => {
+            cli.pagamentosLancados.forEach(p => {
+                todosPagamentosJuntos.push(p);
+            });
+        });
 
         try {
-            // Nova API de Checkout vai receber a array com todos os pagamentos
             await fetchAPI('/api/checkout', {
                 method: 'POST',
                 body: JSON.stringify({
                     comanda_id: table.comandaId,
                     mesa_id: table.id,
-                    // Enviamos o array de pagamentos detalhado
-                    pagamentos: pdvPagamentosLancados,
-                    subtotal: pdvTotalComanda,
-                    final: pdvTotalComanda,
-                    // Para fins de compatibilidade com o teu back-end antigo temporariamente
-                    forma_pagamento: pdvPagamentosLancados.length === 1 ? pdvPagamentosLancados[0].metodo : 'MULTIPLOS'
+                    pagamentos: todosPagamentosJuntos,
+                    subtotal: pdvTotalMesaGeral,
+                    final: pdvTotalMesaGeral
                 })
             });
             
-            table.items.forEach(i => itensImpressosGlobais.delete(i.id));
-            
             fecharModalPdv();
-            if (pdvModalOrigem) closeModal(pdvModalOrigem);
+            if (pdvModalOrigem && pdvModalOrigem !== 'none') closeModal(pdvModalOrigem);
             
-            showToast(`Mesa ${table.number} finalizada e fechada!`, 'emerald');
+            showToast(`Mesa ${table.number} fechada e contabilizada!`, 'emerald');
             carregarMesas();
             
-            // Atualizar os gráficos se o caixa estiver na frente
             if(!document.getElementById('view-caixa').classList.contains('hidden')) carregarCaixa();
             
         } catch (e) {
-            showToast("Erro ao processar pagamentos. Servidor falhou.", "rose");
-            btn.innerHTML = `<i class="fa-solid fa-check-double mr-2"></i> Finalizar Comanda`; btn.disabled = false;
+            showToast("Erro ao processar o fechamento.", "rose");
+            btn.innerHTML = `Finalizar Tudo`;
+            btn.disabled = false;
         }
     }
 
 
     // ==========================================
-    // ESTATÍSTICAS E IMPRESSÃO
+    // ESTATÍSTICAS COM AS MÉDIAS
     // ==========================================
     async function carregarEstatisticas() {
         try {
-            const res = await fetchAPI('/api/estatisticas'); const data = await res.json();
-            document.getElementById('stat-fat-dia').innerText = `R$ ${parseFloat(data.faturamento.dia || 0).toFixed(2).replace('.', ',')}`; document.getElementById('stat-fat-semana').innerText = `R$ ${parseFloat(data.faturamento.semana || 0).toFixed(2).replace('.', ',')}`; document.getElementById('stat-fat-mes').innerText = `R$ ${parseFloat(data.faturamento.mes || 0).toFixed(2).replace('.', ',')}`;
-            const topList = document.getElementById('stat-top-itens'); const lowList = document.getElementById('stat-low-itens'); topList.innerHTML = ''; lowList.innerHTML = '';
-            if (data.itens && data.itens.length > 0) {
-                data.itens.slice(0, 5).forEach(i => topList.innerHTML += `<div class="flex justify-between items-center text-sm bg-zinc-950 p-3 rounded-xl border border-zinc-800"><span class="font-bold text-white">${i.nome_item}</span><span class="bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded text-xs font-black">${i.total_qtd}x</span></div>`);
-                data.itens.slice(-5).reverse().forEach(i => lowList.innerHTML += `<div class="flex justify-between items-center text-sm bg-zinc-950 p-3 rounded-xl border border-zinc-800"><span class="font-bold text-white">${i.nome_item}</span><span class="bg-rose-500/20 text-rose-400 px-2 py-1 rounded text-xs font-black">${i.total_qtd}x</span></div>`);
+            const res = await fetchAPI('/api/estatisticas');
+            const data = await res.json();
+            
+            // Faturamento Bruto Acumulado
+            document.getElementById('stat-fat-dia').innerText = `R$ ${parseFloat(data.faturamento.dia || 0).toFixed(2).replace('.', ',')}`;
+            document.getElementById('stat-fat-semana').innerText = `R$ ${parseFloat(data.faturamento.semana || 0).toFixed(2).replace('.', ',')}`;
+            document.getElementById('stat-fat-mes').innerText = `R$ ${parseFloat(data.faturamento.mes || 0).toFixed(2).replace('.', ',')}`;
+            
+            // Médias Históricas (Do Backend)
+            if (data.medias) {
+                document.getElementById('stat-media-dia').innerText = `R$ ${parseFloat(data.medias.dia || 0).toFixed(2).replace('.', ',')}`;
+                document.getElementById('stat-media-semana').innerText = `R$ ${parseFloat(data.medias.semana || 0).toFixed(2).replace('.', ',')}`;
+                document.getElementById('stat-media-mes').innerText = `R$ ${parseFloat(data.medias.mes || 0).toFixed(2).replace('.', ',')}`;
             }
-        } catch (e) {}
+
+            // Tops (Itens + e - Vendidos)
+            const topList = document.getElementById('stat-top-itens');
+            const lowList = document.getElementById('stat-low-itens');
+            
+            topList.innerHTML = '';
+            lowList.innerHTML = '';
+            
+            if (data.itens && data.itens.length > 0) {
+                data.itens.slice(0, 5).forEach(i => {
+                    topList.innerHTML += `
+                        <div class="flex justify-between items-center text-sm bg-zinc-950 p-3 rounded-xl border border-zinc-800">
+                            <span class="font-bold text-white">${i.nome_item}</span>
+                            <span class="bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded text-xs font-black">${i.total_qtd}x</span>
+                        </div>
+                    `;
+                });
+
+                data.itens.slice(-5).reverse().forEach(i => {
+                    lowList.innerHTML += `
+                        <div class="flex justify-between items-center text-sm bg-zinc-950 p-3 rounded-xl border border-zinc-800">
+                            <span class="font-bold text-white">${i.nome_item}</span>
+                            <span class="bg-rose-500/20 text-rose-400 px-2 py-1 rounded text-xs font-black">${i.total_qtd}x</span>
+                        </div>
+                    `;
+                });
+            }
+        } catch (e) {
+            console.error("Erro ao carregar as estatísticas", e);
+        }
     }
+
+
+    // ==========================================
+    // HISTÓRICO
+    // ==========================================
     async function carregarHistorico(filtro) {
-        const tbody = document.getElementById('historico-table-body'); tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-zinc-500">A carregar...</td></tr>`;
+        const tbody = document.getElementById('historico-table-body');
+        tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-zinc-500">A carregar...</td></tr>`;
+        
         try {
-            const url = filtro === 'todos' ? '/api/historico' : `/api/historico?filtro=${filtro}`; const res = await fetchAPI(url); const data = await res.json(); tbody.innerHTML = '';
-            if (data.length === 0) { tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-zinc-500">Vazio.</td></tr>`; return; }
+            const url = filtro === 'todos' ? '/api/historico' : `/api/historico?filtro=${filtro}`;
+            const res = await fetchAPI(url);
+            const data = await res.json();
+            
+            tbody.innerHTML = '';
+            
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-zinc-500">Vazio.</td></tr>`;
+                return;
+            }
+            
             data.forEach((comanda) => {
-                const dataF = new Date(comanda.data_fechamento).toLocaleString('pt-BR'); const totalF = parseFloat(comanda.valor_total_final || 0).toFixed(2).replace('.', ',');
-                tbody.innerHTML += `<tr class="border-b border-zinc-800"><td class="p-4 font-black">Mesa ${comanda.mesa_numero}</td><td class="p-4 text-orange-400 text-xs">${comanda.codigo}</td><td class="p-4 text-xs">${dataF}</td><td class="p-4 font-black text-emerald-400">R$ ${totalF}</td></tr>`;
+                const dataF = new Date(comanda.data_fechamento).toLocaleString('pt-BR');
+                const totalF = parseFloat(comanda.valor_total_final || 0).toFixed(2).replace('.', ',');
+                
+                tbody.innerHTML += `
+                    <tr class="border-b border-zinc-800">
+                        <td class="p-4 font-black">Mesa ${comanda.mesa_numero}</td>
+                        <td class="p-4 text-orange-400 text-xs">${comanda.codigo}</td>
+                        <td class="p-4 text-xs">${dataF}</td>
+                        <td class="p-4 font-black text-emerald-400">R$ ${totalF}</td>
+                    </tr>
+                `;
             });
-        } catch (e) { tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-rose-500">Erro.</td></tr>`; }
+        } catch (e) {
+            tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-rose-500">Erro.</td></tr>`;
+        }
     }
+
+
+    // ==========================================
+    // IMPRESSÃO (CUPOM COZINHA)
+    // ==========================================
     function abrirModalImpressao() {
-      const table = tablesState.find(t => t.id === currentEditingTableId); if (!table || table.items.length === 0) { showToast("Vazio.", "rose"); return; }
-      document.getElementById('impressao-num-mesa').innerText = table.number; const listaDiv = document.getElementById('lista-checkboxes-imprimir'); listaDiv.innerHTML = ''; 
-      table.items.forEach((item) => { const isJaImpresso = itensImpressosGlobais.has(item.id); listaDiv.innerHTML += `<div class="flex items-center space-x-3 p-2 border-b border-zinc-800"><input type="checkbox" id="check-print-${item.id}" value="${item.id}" ${isJaImpresso ? '' : 'checked'} class="w-5 h-5"><label for="check-print-${item.id}" class="flex-1 cursor-pointer text-sm font-bold">${item.qty}x ${item.name}</label></div>`; });
-      document.getElementById('modal-impressao').classList.remove('hidden');
+        const table = tablesState.find(t => t.id === currentEditingTableId);
+        if (!table || table.items.length === 0) {
+            showToast("Nada na comanda para imprimir.", "rose");
+            return;
+        }
+
+        document.getElementById('impressao-num-mesa').innerText = table.number;
+        const listaDiv = document.getElementById('lista-checkboxes-imprimir');
+        listaDiv.innerHTML = ''; 
+        
+        table.items.forEach((item) => {
+            const isJaImpresso = itensImpressosGlobais.has(item.id);
+            listaDiv.innerHTML += `
+                <div class="flex items-center space-x-3 p-2 border-b border-zinc-800">
+                    <input type="checkbox" id="check-print-${item.id}" value="${item.id}" ${isJaImpresso ? '' : 'checked'} class="w-5 h-5">
+                    <label for="check-print-${item.id}" class="flex-1 cursor-pointer text-sm font-bold">${item.qty}x ${item.name}</label>
+                </div>
+            `;
+        });
+        
+        document.getElementById('modal-impressao').classList.remove('hidden');
     }
-    function fecharModalImpressao() { document.getElementById('modal-impressao').classList.add('hidden'); }
+
+    function fecharModalImpressao() {
+        document.getElementById('modal-impressao').classList.add('hidden');
+    }
+
     function gerarEImprimirCupom() {
-        const table = tablesState.find(t => t.id === currentEditingTableId); const areaCupom = document.getElementById('area-cupom-impresso');
-        let htmlCupom = `<div style="text-align: center; border-bottom: 2px dashed #000; padding-bottom: 10px; margin-bottom: 10px;"><h2>COZINHA</h2><h1>MESA ${table.number}</h1></div>`;
-        let count = 0; table.items.forEach((item) => { const cb = document.getElementById(`check-print-${item.id}`); if (cb && cb.checked) { htmlCupom += `<div><b>${item.qty}x ${item.name}</b>${item.notes ? `<br>OBS: ${item.notes}` : ''}</div><br>`; count++; itensImpressosGlobais.add(item.id); } });
-        if (count === 0) { showToast("Nada selecionado", "rose"); return; }
-        areaCupom.innerHTML = htmlCupom; fecharModalImpressao(); setTimeout(() => { window.print(); }, 100);
+        const table = tablesState.find(t => t.id === currentEditingTableId);
+        const areaCupom = document.getElementById('area-cupom-impresso');
+        
+        let htmlCupom = `
+            <div style="text-align: center; border-bottom: 2px dashed #000; padding-bottom: 10px; margin-bottom: 10px;">
+                <h2>COZINHA</h2>
+                <h1>MESA ${table.number}</h1>
+            </div>
+        `;
+        
+        let count = 0;
+        table.items.forEach((item) => {
+            const cb = document.getElementById(`check-print-${item.id}`);
+            if (cb && cb.checked) {
+                htmlCupom += `
+                    <div>
+                        <b>${item.qty}x ${item.name}</b>
+                        ${item.notes ? `<br>OBS: ${item.notes}` : ''}
+                    </div><br>
+                `;
+                count++;
+                itensImpressosGlobais.add(item.id);
+            }
+        });
+        
+        if (count === 0) {
+            showToast("Nada selecionado", "rose");
+            return;
+        }
+        
+        areaCupom.innerHTML = htmlCupom;
+        fecharModalImpressao();
+        
+        setTimeout(() => {
+            window.print();
+        }, 100);
     }
-    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+
+    // ==========================================
+    // UTILITÁRIOS GERAIS
+    // ==========================================
+    function closeModal(id) {
+        document.getElementById(id).classList.add('hidden');
+    }
+
     function showToast(msg, color="orange") {
-        const toast = document.getElementById('toast'); const icon = document.getElementById('toast-icon'); document.getElementById('toast-message').innerText = msg;
-        if(color === "amber") icon.className = "fa-solid fa-bell text-amber-400 text-2xl"; else if(color === "rose") icon.className = "fa-solid fa-circle-xmark text-rose-400 text-2xl"; else if(color === "emerald") icon.className = "fa-solid fa-circle-check text-emerald-400 text-2xl"; else icon.className = "fa-solid fa-info-circle text-orange-400 text-2xl";
-        toast.classList.remove('translate-y-20', 'opacity-0'); setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3500);
+        const toast = document.getElementById('toast');
+        const icon = document.getElementById('toast-icon');
+        
+        document.getElementById('toast-message').innerText = msg;
+        
+        if(color === "amber") {
+            icon.className = "fa-solid fa-bell text-amber-400 text-2xl";
+        } else if(color === "rose") {
+            icon.className = "fa-solid fa-circle-xmark text-rose-400 text-2xl";
+        } else if(color === "emerald") {
+            icon.className = "fa-solid fa-circle-check text-emerald-400 text-2xl";
+        } else {
+            icon.className = "fa-solid fa-info-circle text-orange-400 text-2xl";
+        }
+        
+        toast.classList.remove('translate-y-20', 'opacity-0');
+        
+        setTimeout(() => {
+            toast.classList.add('translate-y-20', 'opacity-0');
+        }, 3500);
     }
+
     function playWaiterChimeSound() {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (audioCtx.state === 'suspended') audioCtx.resume();
-        const now = audioCtx.currentTime; const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-        osc.connect(gain); gain.connect(audioCtx.destination); osc.frequency.setValueAtTime(880, now); gain.gain.setValueAtTime(0.3, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5); osc.start(now); osc.stop(now + 0.5);
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        osc.frequency.setValueAtTime(880, now);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+        
+        osc.start(now);
+        osc.stop(now + 0.5);
     }
   </script>
 </body>
