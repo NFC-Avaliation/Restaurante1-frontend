@@ -1335,8 +1335,13 @@
             return;
         }
 
+        // CORREÇÃO: Converte tudo para centavos inteiros (multiplicando por 100) 
+        // para evitar o bug matemático de dizimas do JavaScript
+        const valCentavos = Math.round(val * 100);
+        const faltaCentavos = Math.round(cli.faltaPagar * 100);
+
         // Regra do troco (Só o método Dinheiro pode receber a mais do que a falta)
-        if (val > cli.faltaPagar && metodo !== 'DINHEIRO') {
+        if (valCentavos > faltaCentavos && metodo !== 'DINHEIRO') {
             showToast(`O valor excede o que ${cli.nome} deve (R$ ${cli.faltaPagar.toFixed(2)}). Apenas dinheiro gera troco.`, "amber");
             inp.value = cli.faltaPagar.toFixed(2);
             return;
