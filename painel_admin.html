@@ -25,49 +25,21 @@
   </script>
 
   <style>
-    #area-cupom-impresso { 
-      display: none; 
-    }
-
+    #area-cupom-impresso { display: none; }
     @media print {
-      body * { 
-        visibility: hidden; 
-      }
-      #area-cupom-impresso, #area-cupom-impresso * { 
-        visibility: visible; 
-      }
+      body * { visibility: hidden; }
+      #area-cupom-impresso, #area-cupom-impresso * { visibility: visible; }
       #area-cupom-impresso { 
-        display: block !important; 
-        position: absolute; 
-        left: 0; 
-        top: 0; 
-        width: 80mm; 
-        margin: 0; 
-        padding: 0; 
-        font-family: 'Courier New', Courier, monospace; 
-        font-size: 14px; 
-        color: #000; 
-        background: #fff; 
+        display: block !important; position: absolute; left: 0; top: 0; width: 80mm; 
+        margin: 0; padding: 0; font-family: 'Courier New', Courier, monospace; 
+        font-size: 14px; color: #000; background: #fff; 
       }
-      body { 
-        background-color: white !important; 
-      }
+      body { background-color: white !important; }
     }
-
-    .custom-scrollbar::-webkit-scrollbar { 
-      width: 6px; 
-      height: 6px; 
-    }
-    .custom-scrollbar::-webkit-scrollbar-track { 
-      background: transparent; 
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb { 
-      background-color: #3f3f46; 
-      border-radius: 10px; 
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover { 
-      background-color: #f97316; 
-    }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #3f3f46; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #f97316; }
   </style>
 </head>
 <body class="h-full font-sans text-zinc-100 bg-zinc-950 flex flex-col selection:bg-orange-500 selection:text-white">
@@ -78,12 +50,9 @@
   <div id="login-screen" style="display: flex;" class="fixed inset-0 z-50 bg-zinc-950 items-center justify-center p-4">
     <div class="bg-zinc-900 border border-zinc-800 w-full max-w-md rounded-2xl shadow-2xl p-8 space-y-6">
       <div class="text-center space-y-2">
-        <div class="w-12 h-12 bg-orange-500/20 text-orange-400 rounded-2xl flex items-center justify-center font-bold text-lg border border-orange-500/30 mx-auto">
-          R1
-        </div>
+        <div class="w-12 h-12 bg-orange-500/20 text-orange-400 rounded-2xl flex items-center justify-center font-bold text-lg border border-orange-500/30 mx-auto">R1</div>
         <h2 class="text-xl font-bold text-white">Painel de Gestão</h2>
       </div>
-
       <div class="space-y-4">
         <div>
           <label class="block text-xs font-bold text-zinc-400 uppercase mb-1">Utilizador</label>
@@ -93,9 +62,7 @@
           <label class="block text-xs font-bold text-zinc-400 uppercase mb-1">Senha</label>
           <input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter') fazerLogin()" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition">
         </div>
-        
         <div id="login-error" class="hidden text-rose-400 text-xs font-medium text-center bg-rose-500/10 p-2 rounded-lg border border-rose-500/20"></div>
-        
         <button id="btn-login" onclick="fazerLogin()" class="w-full bg-orange-500 hover:bg-orange-400 text-black font-bold py-3 rounded-xl text-sm transition shadow-lg flex justify-center items-center">
           Entrar no Painel
         </button>
@@ -108,9 +75,7 @@
   <!-- ========================================== -->
   <nav class="bg-zinc-900 border-b border-zinc-800 px-4 py-3 flex flex-wrap items-center justify-between gap-4">
     <div class="flex items-center space-x-4">
-      <div class="w-10 h-10 bg-orange-500/20 text-orange-400 rounded-xl flex items-center justify-center font-black border border-orange-500/30">
-        R1
-      </div>
+      <div class="w-10 h-10 bg-orange-500/20 text-orange-400 rounded-xl flex items-center justify-center font-black border border-orange-500/30">R1</div>
       <h2 class="font-bold text-zinc-100 hidden md:block tracking-wide uppercase text-sm">Painel de Gestão</h2>
     </div>
 
@@ -119,6 +84,8 @@
       <button onclick="switchTab('mesas')" id="tab-btn-mesas" class="px-4 py-2 rounded-lg text-xs font-bold transition bg-orange-500 text-black flex items-center space-x-2">
         <i class="fa-solid fa-chair"></i> <span class="hidden sm:inline">Mesas</span>
       </button>
+      
+      <!-- Botão Delivery Corrigido -->
       <button onclick="switchTab('delivery')" id="tab-btn-delivery" class="px-4 py-2 rounded-lg text-xs font-bold transition text-zinc-400 hover:text-white flex items-center space-x-2">
         <i class="fa-solid fa-motorcycle"></i> <span class="hidden sm:inline">Delivery</span>
       </button>
@@ -157,7 +124,7 @@
     </div>
   </nav>
 
-<main class="flex-1 p-4 sm:p-6 overflow-y-auto">
+  <main class="flex-1 p-4 sm:p-6 overflow-y-auto">
     
     <!-- ========================================== -->
     <!-- JANELA 1: MESAS AO VIVO -->
@@ -167,7 +134,77 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- JANELA 2: CAIXA -->
+    <!-- JANELA 2: DELIVERY KANBAN (Posicionado Corretamente) -->
+    <!-- ========================================== -->
+    <div id="view-delivery" class="hidden h-full">
+      <div class="flex flex-col h-full space-y-4">
+        <div class="flex justify-between items-center bg-zinc-900 p-4 rounded-2xl border border-zinc-800 shadow-lg shrink-0">
+          <h3 class="font-bold text-white text-sm uppercase flex items-center gap-2">
+            <i class="fa-solid fa-motorcycle text-orange-500"></i> Gestão de Entregas
+          </h3>
+          <button class="bg-orange-500 hover:bg-orange-400 text-black text-xs font-black px-4 py-2 rounded-xl transition shadow-lg flex items-center gap-2">
+            <i class="fa-solid fa-plus"></i> Novo Pedido
+          </button>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1 overflow-hidden min-h-[60vh]">
+          <div class="bg-zinc-950 border border-zinc-800 rounded-2xl flex flex-col overflow-hidden shadow-inner">
+            <div class="p-3 border-b border-zinc-800 bg-rose-500/10 flex justify-between items-center shrink-0">
+              <span class="text-xs font-black text-rose-500 uppercase tracking-wider"><i class="fa-solid fa-bell animate-pulse mr-1"></i> Novos</span>
+              <span class="bg-rose-500 text-black text-[10px] px-2 py-0.5 rounded-full font-bold">2</span>
+            </div>
+            <div class="p-3 space-y-3 overflow-y-auto flex-1 custom-scrollbar">
+              <div class="bg-zinc-900 border border-zinc-700 hover:border-orange-500 p-4 rounded-xl shadow-lg cursor-pointer transition relative group">
+                <div class="flex justify-between items-start mb-2">
+                  <span class="text-[10px] font-black text-white bg-zinc-800 px-2 py-1 rounded">#1042</span>
+                  <i class="fa-brands fa-whatsapp text-emerald-400 text-lg"></i>
+                </div>
+                <h4 class="text-sm font-bold text-white">João Silva</h4>
+                <p class="text-[10px] text-zinc-400 mt-1 truncate"><i class="fa-solid fa-location-dot"></i> Rua das Flores, 123 - Centro</p>
+                <div class="mt-3 pt-3 border-t border-zinc-800 flex justify-between items-center">
+                  <span class="text-xs font-black text-orange-400">R$ 45,50</span>
+                  <button class="text-[10px] bg-zinc-800 hover:bg-emerald-500/20 hover:text-emerald-400 text-white px-3 py-1.5 rounded-lg transition uppercase font-bold border border-zinc-700">Aceitar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-zinc-950 border border-zinc-800 rounded-2xl flex flex-col overflow-hidden shadow-inner">
+            <div class="p-3 border-b border-zinc-800 bg-amber-500/10 flex justify-between items-center shrink-0">
+              <span class="text-xs font-black text-amber-500 uppercase tracking-wider"><i class="fa-solid fa-fire mr-1"></i> Em Preparo</span>
+              <span class="bg-amber-500 text-black text-[10px] px-2 py-0.5 rounded-full font-bold">1</span>
+            </div>
+            <div class="p-3 space-y-3 overflow-y-auto flex-1 custom-scrollbar">
+               <div class="bg-zinc-900 border border-zinc-700 hover:border-orange-500 p-4 rounded-xl shadow-lg cursor-pointer transition">
+                <div class="flex justify-between items-start mb-2">
+                  <span class="text-[10px] font-black text-white bg-zinc-800 px-2 py-1 rounded">#9981</span>
+                  <div class="w-5 h-5 bg-red-600 rounded flex items-center justify-center text-white text-[10px] font-bold">iF</div>
+                </div>
+                <h4 class="text-sm font-bold text-white">Maria Oliveira</h4>
+                <p class="text-[10px] text-zinc-400 mt-1"><i class="fa-solid fa-clock"></i> Prev: 19:45</p>
+                <div class="mt-3 pt-3 border-t border-zinc-800 flex justify-between items-center">
+                  <span class="text-[10px] text-emerald-400 font-bold bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20"><i class="fa-solid fa-check"></i> Pago Online</span>
+                  <button class="text-[10px] bg-amber-500 hover:bg-amber-400 text-black px-3 py-1.5 rounded-lg transition uppercase font-black">Despachar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-zinc-950 border border-zinc-800 rounded-2xl flex flex-col overflow-hidden shadow-inner">
+            <div class="p-3 border-b border-zinc-800 bg-blue-500/10 flex justify-between items-center shrink-0">
+              <span class="text-xs font-black text-blue-500 uppercase tracking-wider"><i class="fa-solid fa-route mr-1"></i> A Caminho</span>
+              <span class="bg-blue-500 text-black text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
+            </div>
+            <div class="p-3 space-y-3 overflow-y-auto flex-1 custom-scrollbar">
+               <div class="text-xs text-zinc-600 text-center py-6 italic font-medium border border-dashed border-zinc-800 rounded-xl">Nenhum pedido a caminho</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- JANELA 3: CAIXA -->
     <!-- ========================================== -->
     <div id="view-caixa" class="hidden space-y-6 max-w-6xl mx-auto">
       
@@ -207,7 +244,6 @@
             </div>
             <div id="caixa-tot-pix" class="text-2xl font-black text-white">R$ 0,00</div>
           </div>
-          
           <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl shadow-lg hover:border-blue-500/50 transition">
             <div class="flex justify-between items-start mb-4">
               <span class="text-xs text-zinc-400 uppercase font-bold tracking-wider">Crédito</span>
@@ -215,7 +251,6 @@
             </div>
             <div id="caixa-tot-credito" class="text-2xl font-black text-white">R$ 0,00</div>
           </div>
-          
           <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl shadow-lg hover:border-indigo-500/50 transition">
             <div class="flex justify-between items-start mb-4">
               <span class="text-xs text-zinc-400 uppercase font-bold tracking-wider">Débito</span>
@@ -223,7 +258,6 @@
             </div>
             <div id="caixa-tot-debito" class="text-2xl font-black text-white">R$ 0,00</div>
           </div>
-          
           <div class="bg-zinc-900 border border-zinc-800 p-5 rounded-2xl shadow-lg hover:border-amber-500/50 transition">
             <div class="flex justify-between items-start mb-4">
               <span class="text-xs text-zinc-400 uppercase font-bold tracking-wider">Dinheiro</span>
@@ -236,7 +270,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- JANELA 3: HISTÓRICO -->
+    <!-- JANELA 4: HISTÓRICO -->
     <!-- ========================================== -->
     <div id="view-historico" class="hidden space-y-4">
       <div class="flex flex-wrap justify-between bg-zinc-900 p-4 rounded-2xl border border-zinc-800 shadow-lg">
@@ -254,11 +288,10 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- JANELA 4: ESTATÍSTICAS COM MÉDIAS ADICIONADAS -->
+    <!-- JANELA 5: ESTATÍSTICAS -->
     <!-- ========================================== -->
     <div id="view-estatisticas" class="hidden space-y-6">
       
-      <!-- Linha 1: Faturamentos Totais -->
       <h3 class="text-xs font-black text-zinc-500 uppercase tracking-widest border-b border-zinc-800 pb-2">Faturamentos Realizados</h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg relative">
@@ -275,7 +308,6 @@
         </div>
       </div>
 
-      <!-- Linha 2: Médias Históricas -->
       <h3 class="text-xs font-black text-zinc-500 uppercase tracking-widest border-b border-zinc-800 pb-2 mt-6">Médias Históricas (Desempenho)</h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="bg-zinc-950 border border-zinc-800 p-5 rounded-xl shadow-inner flex justify-between items-center">
@@ -285,7 +317,6 @@
           </div>
           <i class="fa-solid fa-calendar-day text-zinc-700 text-2xl"></i>
         </div>
-        
         <div class="bg-zinc-950 border border-zinc-800 p-5 rounded-xl shadow-inner flex justify-between items-center">
           <div class="space-y-1">
             <span class="text-[10px] text-zinc-500 uppercase font-bold">Média por Semana</span>
@@ -293,7 +324,6 @@
           </div>
           <i class="fa-solid fa-calendar-week text-zinc-700 text-2xl"></i>
         </div>
-        
         <div class="bg-zinc-950 border border-zinc-800 p-5 rounded-xl shadow-inner flex justify-between items-center">
           <div class="space-y-1">
             <span class="text-[10px] text-zinc-500 uppercase font-bold">Média por Mês</span>
@@ -303,7 +333,6 @@
         </div>
       </div>
 
-      <!-- Tops -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
         <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg">
           <h4 class="text-xs font-black text-emerald-400 uppercase mb-4">Itens Mais Vendidos</h4>
@@ -316,92 +345,7 @@
       </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- JANELA 5: DELIVERY KANBAN -->
-    <!-- ========================================== -->
-    <div id="view-delivery" class="hidden h-full">
-      <div class="flex flex-col h-full space-y-4">
-        
-        <!-- Cabeçalho Delivery -->
-        <div class="flex justify-between items-center bg-zinc-900 p-4 rounded-2xl border border-zinc-800 shadow-lg shrink-0">
-          <h3 class="font-bold text-white text-sm uppercase flex items-center gap-2">
-            <i class="fa-solid fa-motorcycle text-orange-500"></i> Gestão de Entregas
-          </h3>
-          <button class="bg-orange-500 hover:bg-orange-400 text-black text-xs font-black px-4 py-2 rounded-xl transition shadow-lg flex items-center gap-2">
-            <i class="fa-solid fa-plus"></i> Novo Pedido
-          </button>
-        </div>
-        
-        <!-- Quadro Kanban (3 Colunas) -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1 overflow-hidden min-h-[60vh]">
-          
-          <!-- Coluna 1: Novos Pedidos -->
-          <div class="bg-zinc-950 border border-zinc-800 rounded-2xl flex flex-col overflow-hidden shadow-inner">
-            <div class="p-3 border-b border-zinc-800 bg-rose-500/10 flex justify-between items-center shrink-0">
-              <span class="text-xs font-black text-rose-500 uppercase tracking-wider"><i class="fa-solid fa-bell animate-pulse mr-1"></i> Novos</span>
-              <span class="bg-rose-500 text-black text-[10px] px-2 py-0.5 rounded-full font-bold">2</span>
-            </div>
-            <div class="p-3 space-y-3 overflow-y-auto flex-1 custom-scrollbar">
-              
-              <!-- Exemplo Card: WhatsApp -->
-              <div class="bg-zinc-900 border border-zinc-700 hover:border-orange-500 p-4 rounded-xl shadow-lg cursor-pointer transition relative group">
-                <div class="flex justify-between items-start mb-2">
-                  <span class="text-[10px] font-black text-white bg-zinc-800 px-2 py-1 rounded">#1042</span>
-                  <i class="fa-brands fa-whatsapp text-emerald-400 text-lg"></i>
-                </div>
-                <h4 class="text-sm font-bold text-white">João Silva</h4>
-                <p class="text-[10px] text-zinc-400 mt-1 truncate"><i class="fa-solid fa-location-dot"></i> Rua das Flores, 123 - Centro</p>
-                <div class="mt-3 pt-3 border-t border-zinc-800 flex justify-between items-center">
-                  <span class="text-xs font-black text-orange-400">R$ 45,50</span>
-                  <button class="text-[10px] bg-zinc-800 hover:bg-emerald-500/20 hover:text-emerald-400 text-white px-3 py-1.5 rounded-lg transition uppercase font-bold border border-zinc-700">Aceitar</button>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- Coluna 2: Em Preparo -->
-          <div class="bg-zinc-950 border border-zinc-800 rounded-2xl flex flex-col overflow-hidden shadow-inner">
-            <div class="p-3 border-b border-zinc-800 bg-amber-500/10 flex justify-between items-center shrink-0">
-              <span class="text-xs font-black text-amber-500 uppercase tracking-wider"><i class="fa-solid fa-fire mr-1"></i> Em Preparo</span>
-              <span class="bg-amber-500 text-black text-[10px] px-2 py-0.5 rounded-full font-bold">1</span>
-            </div>
-            <div class="p-3 space-y-3 overflow-y-auto flex-1 custom-scrollbar">
-              
-               <!-- Exemplo Card: iFood -->
-               <div class="bg-zinc-900 border border-zinc-700 hover:border-orange-500 p-4 rounded-xl shadow-lg cursor-pointer transition">
-                <div class="flex justify-between items-start mb-2">
-                  <span class="text-[10px] font-black text-white bg-zinc-800 px-2 py-1 rounded">#9981</span>
-                  <div class="w-5 h-5 bg-red-600 rounded flex items-center justify-center text-white text-[10px] font-bold">iF</div>
-                </div>
-                <h4 class="text-sm font-bold text-white">Maria Oliveira</h4>
-                <p class="text-[10px] text-zinc-400 mt-1"><i class="fa-solid fa-clock"></i> Prev: 19:45</p>
-                <div class="mt-3 pt-3 border-t border-zinc-800 flex justify-between items-center">
-                  <span class="text-[10px] text-emerald-400 font-bold bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20"><i class="fa-solid fa-check"></i> Pago Online</span>
-                  <button class="text-[10px] bg-amber-500 hover:bg-amber-400 text-black px-3 py-1.5 rounded-lg transition uppercase font-black">Despachar</button>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- Coluna 3: Saiu para Entrega -->
-          <div class="bg-zinc-950 border border-zinc-800 rounded-2xl flex flex-col overflow-hidden shadow-inner">
-            <div class="p-3 border-b border-zinc-800 bg-blue-500/10 flex justify-between items-center shrink-0">
-              <span class="text-xs font-black text-blue-500 uppercase tracking-wider"><i class="fa-solid fa-route mr-1"></i> A Caminho</span>
-              <span class="bg-blue-500 text-black text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
-            </div>
-            <div class="p-3 space-y-3 overflow-y-auto flex-1 custom-scrollbar">
-               <div class="text-xs text-zinc-600 text-center py-6 italic font-medium border border-dashed border-zinc-800 rounded-xl">Nenhum pedido a caminho</div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
   </main>
-
   <!-- ========================================== -->
   <!-- MODAL: DETALHES DA MESA -->
   <!-- ========================================== -->
@@ -409,7 +353,7 @@
     <div class="bg-zinc-900 border border-zinc-800 w-full max-w-2xl rounded-2xl shadow-2xl flex flex-col overflow-hidden max-h-[90vh]">
       <div class="bg-zinc-950 p-5 border-b border-zinc-800 flex justify-between items-center">
         <h3 class="font-black text-white text-lg tracking-wide uppercase">Mesa <span id="modal-table-num" class="text-orange-500"></span></h3>
-        <button onclick="closeModal('modal-comanda')" class="text-zinc-500">
+        <button onclick="closeModal('modal-comanda')" class="text-zinc-500 hover:text-white transition w-8 h-8 flex items-center justify-center rounded-lg bg-zinc-900 hover:bg-zinc-800">
           <i class="fa-solid fa-xmark text-lg"></i>
         </button>
       </div>
@@ -424,14 +368,14 @@
           <span id="modal-total-value" class="text-3xl font-black text-orange-400">R$ 0,00</span>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <button onclick="cancelarMesaCompleta()" class="bg-rose-500/10 text-rose-400 py-3 rounded-xl text-xs uppercase transition">
-            Cancelar
+          <button onclick="cancelarMesaCompleta()" class="bg-rose-500/10 text-rose-400 py-3 rounded-xl text-xs uppercase transition hover:bg-rose-500/20">
+            Cancelar Mesa
           </button>
-          <button onclick="abrirModalImpressao()" class="bg-zinc-800 text-white font-bold py-3 rounded-xl text-xs uppercase border border-zinc-700">
-            Imprimir
+          <button onclick="abrirModalImpressao()" class="bg-zinc-800 text-white font-bold py-3 rounded-xl text-xs uppercase border border-zinc-700 hover:bg-zinc-700">
+            <i class="fa-solid fa-print mr-2"></i>Imprimir
           </button>
-          <button onclick="abrirModalEscolhaFechamento()" class="bg-orange-500 text-black font-black py-3 rounded-xl text-xs uppercase transition shadow-lg">
-            Fechar Comanda
+          <button onclick="abrirModalEscolhaFechamento()" class="bg-orange-500 text-black font-black py-3 rounded-xl text-xs uppercase transition shadow-lg hover:bg-orange-400">
+            <i class="fa-solid fa-cash-register mr-2"></i>Cobrar Comanda
           </button>
         </div>
       </div>
@@ -439,32 +383,42 @@
   </div>
 
   <!-- ========================================== -->
-  <!-- MODAIS DE DIVISÃO DA CONTA (ESCOLHA) -->
-  <!-- ========================================== -->
-<!-- ========================================== -->
-  <!-- MODAIS DE DIVISÃO DA CONTA (ESCOLHA) -->
+  <!-- MODAL: ESCOLHA DE FECHAMENTO (NOVO DESIGN ÍCONES) -->
   <!-- ========================================== -->
   <div id="modal-escolha-fechamento" class="hidden fixed inset-0 z-[70] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-zinc-900 border border-zinc-800 w-full max-w-md rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+    <div class="bg-zinc-900 border border-zinc-800 w-full max-w-lg rounded-2xl shadow-2xl flex flex-col overflow-hidden">
       <div class="bg-zinc-950 p-5 border-b border-zinc-800 flex justify-between items-center">
-        <h3 class="font-black text-white text-base uppercase">Fechar Comanda</h3>
-        <button onclick="closeModal('modal-escolha-fechamento')" class="text-zinc-500 hover:text-white transition">
+        <h3 class="font-black text-white text-base uppercase">Como deseja cobrar?</h3>
+        <button onclick="closeModal('modal-escolha-fechamento')" class="text-zinc-500 hover:text-white transition w-8 h-8 flex items-center justify-center rounded-lg bg-zinc-900 hover:bg-zinc-800">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
-      <div class="p-6 space-y-4 bg-zinc-900">
-        <button onclick="selecionarOpcaoFechamento('valor')" class="w-full bg-zinc-950 border border-zinc-800 hover:border-orange-500 p-4 rounded-xl flex items-center justify-between transition group">
-          <div class="font-bold text-white text-sm">Dividir por Valor</div>
-          <i class="fa-solid fa-users text-zinc-500 group-hover:text-orange-500 text-lg transition"></i>
+      <div class="p-6 bg-zinc-900 grid grid-cols-3 gap-4">
+        
+        <!-- Botão Único -->
+        <button onclick="selecionarOpcaoFechamento('unico')" class="bg-zinc-950 hover:bg-orange-500/10 border border-zinc-800 hover:border-orange-500 p-6 rounded-xl flex flex-col items-center justify-center transition-all group hover:-translate-y-1">
+          <div class="w-14 h-14 rounded-full bg-zinc-900 group-hover:bg-orange-500 flex items-center justify-center mb-4 transition-colors">
+            <i class="fa-solid fa-user text-2xl text-zinc-500 group-hover:text-black transition-colors"></i>
+          </div>
+          <span class="font-black text-white text-[11px] uppercase tracking-wider text-center">1 Pessoa<br><span class="text-[9px] text-zinc-500 group-hover:text-orange-400 normal-case">Conta Única</span></span>
         </button>
-        <button onclick="selecionarOpcaoFechamento('itens')" class="w-full bg-zinc-950 border border-zinc-800 hover:border-orange-500 p-4 rounded-xl flex items-center justify-between transition group">
-          <div class="font-bold text-white text-sm">Dividir por Itens</div>
-          <i class="fa-solid fa-list-check text-zinc-500 group-hover:text-orange-500 text-lg transition"></i>
+        
+        <!-- Botão Dividir Valor -->
+        <button onclick="selecionarOpcaoFechamento('valor')" class="bg-zinc-950 hover:bg-blue-500/10 border border-zinc-800 hover:border-blue-500 p-6 rounded-xl flex flex-col items-center justify-center transition-all group hover:-translate-y-1">
+          <div class="w-14 h-14 rounded-full bg-zinc-900 group-hover:bg-blue-500 flex items-center justify-center mb-4 transition-colors">
+            <i class="fa-solid fa-calculator text-2xl text-zinc-500 group-hover:text-black transition-colors"></i>
+          </div>
+          <span class="font-black text-white text-[11px] uppercase tracking-wider text-center">Dividir<br><span class="text-[9px] text-zinc-500 group-hover:text-blue-400 normal-case">Por Valor Igual</span></span>
         </button>
-        <button onclick="selecionarOpcaoFechamento('unico')" class="w-full bg-zinc-950 border border-zinc-800 hover:border-orange-500 p-4 rounded-xl flex items-center justify-between transition group">
-          <div class="font-bold text-white text-sm">Não Dividir</div>
-          <i class="fa-solid fa-user text-zinc-500 group-hover:text-orange-500 text-lg transition"></i>
+        
+        <!-- Botão Separar Itens -->
+        <button onclick="selecionarOpcaoFechamento('itens')" class="bg-zinc-950 hover:bg-emerald-500/10 border border-zinc-800 hover:border-emerald-500 p-6 rounded-xl flex flex-col items-center justify-center transition-all group hover:-translate-y-1">
+          <div class="w-14 h-14 rounded-full bg-zinc-900 group-hover:bg-emerald-500 flex items-center justify-center mb-4 transition-colors">
+            <i class="fa-solid fa-list-check text-2xl text-zinc-500 group-hover:text-black transition-colors"></i>
+          </div>
+          <span class="font-black text-white text-[11px] uppercase tracking-wider text-center">Separar<br><span class="text-[9px] text-zinc-500 group-hover:text-emerald-400 normal-case">Por Itens</span></span>
         </button>
+
       </div>
     </div>
   </div>
@@ -474,7 +428,7 @@
     <div class="bg-zinc-900 w-full max-w-xl rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-zinc-800">
       <div class="bg-zinc-950 p-5 border-b border-zinc-800 flex justify-between">
         <h3 class="font-black text-white uppercase">Divisão por Pessoas</h3>
-        <button onclick="closeModal('modal-split-payment')" class="text-zinc-500">
+        <button onclick="closeModal('modal-split-payment')" class="text-zinc-500 hover:text-white transition w-8 h-8 flex items-center justify-center rounded-lg bg-zinc-900 hover:bg-zinc-800">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
@@ -494,7 +448,7 @@
         </div>
       </div>
       <div class="bg-zinc-950 p-5 border-t border-zinc-800 flex justify-end">
-        <button onclick="concluirPagamentoSplit()" class="bg-orange-500 text-black font-black px-6 py-3 rounded-xl text-xs uppercase">
+        <button onclick="concluirPagamentoSplit()" class="bg-orange-500 hover:bg-orange-400 text-black font-black px-6 py-3 rounded-xl text-xs uppercase shadow-lg transition">
           Avançar para Caixa
         </button>
       </div>
@@ -507,10 +461,10 @@
       <label class="block text-xs font-bold text-zinc-300 uppercase mb-4">Quantas pessoas vão dividir itens?</label>
       <input type="number" id="input-qtd-pessoas-itens" min="2" value="2" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-center text-xl font-black text-white focus:outline-none focus:border-orange-500 mb-4">
       <div class="flex gap-2">
-        <button onclick="closeModal('modal-qtd-pessoas-itens')" class="flex-1 bg-zinc-800 py-3 rounded-lg text-white font-bold text-xs uppercase">
+        <button onclick="closeModal('modal-qtd-pessoas-itens')" class="flex-1 bg-zinc-800 hover:bg-zinc-700 py-3 rounded-lg text-white font-bold text-xs uppercase transition">
           Cancelar
         </button>
-        <button onclick="prosseguirParaDragDropItens()" class="flex-1 bg-orange-500 text-black font-black py-3 rounded-lg text-xs uppercase">
+        <button onclick="prosseguirParaDragDropItens()" class="flex-1 bg-orange-500 hover:bg-orange-400 text-black font-black py-3 rounded-lg text-xs uppercase transition">
           Continuar
         </button>
       </div>
@@ -520,29 +474,28 @@
   <div id="modal-divisao-itens" class="hidden fixed inset-0 z-[80] bg-black/95 flex items-center justify-center p-4">
     <div class="bg-zinc-900 w-full max-w-4xl rounded-2xl flex flex-col max-h-[92vh] border border-zinc-800">
       <div class="p-4 border-b border-zinc-800 flex justify-between">
-        <h3 class="font-black text-white">Arraste os itens</h3>
-        <button onclick="closeModal('modal-divisao-itens')" class="text-zinc-500">
+        <h3 class="font-black text-white">Arraste os itens para cada pessoa</h3>
+        <button onclick="closeModal('modal-divisao-itens')" class="text-zinc-500 hover:text-white transition w-8 h-8 flex items-center justify-center rounded-lg bg-zinc-950 hover:bg-zinc-800">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
       <div class="p-5 flex-1 overflow-y-auto">
-        <div class="bg-zinc-950 p-4 rounded-xl border border-zinc-800 mb-4">
-          <h4 class="text-[10px] font-black text-zinc-500 uppercase mb-2">Disponíveis</h4>
+        <div class="bg-zinc-950 p-4 rounded-xl border border-zinc-800 mb-4 shadow-inner">
+          <h4 class="text-[10px] font-black text-zinc-500 uppercase mb-2"><i class="fa-solid fa-utensils mr-1"></i> Itens Disponíveis</h4>
           <div id="itens-disponiveis-scroll" class="flex space-x-3 overflow-x-auto pb-2 custom-scrollbar"></div>
         </div>
-        <div id="grid-pessoas-itens" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+        <div id="grid-pessoas-itens" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
       </div>
       <div class="p-4 border-t border-zinc-800 flex justify-end">
-        <button onclick="confirmarPagamentoFinalItens()" class="bg-orange-500 text-black font-black px-6 py-3 rounded-xl text-xs uppercase">
+        <button onclick="confirmarPagamentoFinalItens()" class="bg-orange-500 hover:bg-orange-400 text-black font-black px-6 py-3 rounded-xl text-xs uppercase shadow-lg transition">
           Avançar para Caixa
         </button>
       </div>
     </div>
   </div>
 
-
   <!-- ========================================================================= -->
-  <!-- NOVO MODAL DE CAIXA PDV (Com suporte a Multi-Pessoas e Multi-Pagamentos)  -->
+  <!-- NOVO MODAL DE CAIXA PDV -->
   <!-- ========================================================================= -->
   <div id="modal-pdv-caixa" class="hidden fixed inset-0 z-[100] bg-black/95 backdrop-blur-md flex items-center justify-center p-2 sm:p-4">
     <div class="bg-zinc-900 border border-zinc-800 w-full max-w-5xl rounded-2xl shadow-2xl flex flex-col overflow-hidden max-h-[95vh]">
@@ -565,15 +518,13 @@
 
       <div class="flex flex-col md:flex-row flex-1 overflow-hidden">
         
-        <!-- COLUNA 1: Lista de Pessoas (Seletor Lateral) -->
+        <!-- COLUNA 1: Lista de Pessoas -->
         <div class="w-full md:w-1/4 bg-zinc-950 border-b md:border-b-0 md:border-r border-zinc-800 flex flex-col">
           <div class="p-4 text-[10px] font-black text-zinc-500 uppercase tracking-widest bg-zinc-900/50">Quem está pagando?</div>
-          <div id="pdv-lista-pessoas" class="flex-1 overflow-y-auto p-2 space-y-2 custom-scrollbar">
-            <!-- Gerado via JS: Cartões das Pessoas -->
-          </div>
+          <div id="pdv-lista-pessoas" class="flex-1 overflow-y-auto p-2 space-y-2 custom-scrollbar"></div>
         </div>
 
-        <!-- COLUNA 2: Lançamento de Valores (Para a pessoa selecionada) -->
+        <!-- COLUNA 2: Lançamento de Valores -->
         <div class="w-full md:w-2/4 p-4 sm:p-6 bg-zinc-900 flex flex-col border-b md:border-b-0 md:border-r border-zinc-800">
           <div class="mb-4">
              <span class="text-xs font-bold text-zinc-400 uppercase">Lançar para:</span>
@@ -617,7 +568,7 @@
           </div>
         </div>
 
-        <!-- COLUNA 3: Resumo dos Pagamentos desta Pessoa e Finalização Geral -->
+        <!-- COLUNA 3: Resumo dos Pagamentos -->
         <div class="w-full md:w-1/4 flex flex-col bg-zinc-950">
           <div class="p-4 bg-zinc-900/50 border-b border-zinc-800 text-center flex-shrink-0">
             <span class="text-[10px] font-black text-zinc-400 uppercase tracking-widest block mb-1">Pagos por <span id="pdv-resumo-nome"></span></span>
@@ -660,7 +611,7 @@
     <div class="bg-zinc-900 w-full max-w-md rounded-2xl flex flex-col border border-zinc-800">
       <div class="p-4 border-b border-zinc-800 flex justify-between">
         <h3 class="font-bold text-white">Imprimir</h3>
-        <button onclick="fecharModalImpressao()" class="text-zinc-500">
+        <button onclick="fecharModalImpressao()" class="text-zinc-500 hover:text-white transition w-8 h-8 rounded bg-zinc-950 flex items-center justify-center">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
@@ -668,12 +619,13 @@
         <div id="lista-checkboxes-imprimir" class="space-y-2 max-h-60 overflow-y-auto custom-scrollbar"></div>
       </div>
       <div class="p-4 border-t border-zinc-800">
-        <button onclick="gerarEImprimirCupom()" class="w-full bg-orange-500 text-black font-black py-3 rounded-xl text-xs uppercase">
+        <button onclick="gerarEImprimirCupom()" class="w-full bg-orange-500 hover:bg-orange-400 text-black font-black py-3 rounded-xl text-xs uppercase shadow-lg transition">
           Confirmar Impressão
         </button>
       </div>
     </div>
   </div>
+
   <script>
     // ==========================================
     // CONFIGURAÇÕES GERAIS E VARIÁVEIS DE ESTADO
@@ -690,9 +642,8 @@
     let itensAtuaisDragDrop = [];
     let pessoasItensState = [];
     
-    // Variáveis do PDV (Caixa Multi-Pessoas / Multi-Pagamentos)
+    // Variáveis do PDV
     let pdvClientes = []; 
-    // Estrutura esperada: [{ nome: "Pessoa 1", totalDaPessoa: 50.00, faltaPagar: 50.00, pagamentosLancados: [] }, ...]
     let pdvClienteAtualIdx = 0;
     let pdvModalOrigem = null;
     let pdvTotalMesaGeral = 0;
@@ -703,26 +654,21 @@
     // ==========================================
     async function fetchAPI(endpoint, options = {}) {
         const token = localStorage.getItem('admin_token');
-        
         if (!token) {
             fazerLogout();
             throw new Error("Sessão não encontrada");
         }
-
         const headers = {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
             ...(options.headers || {})
         };
-
         const res = await fetch(`${API_URL}${endpoint}`, { ...options, headers });
-        
         if (res.status === 401 || res.status === 403) {
             showToast("Sessão expirada. Faça login novamente.", "rose");
             fazerLogout();
             throw new Error("Sessão Expirada");
         }
-        
         return res;
     }
 
@@ -790,19 +736,9 @@
     function iniciarSocket() {
         const socket = typeof io !== 'undefined' ? io(API_URL) : null;
         if (socket) {
-            socket.on('connect', () => {
-                atualizarStatusServidor(true);
-                carregarMesas();
-            });
-            
-            socket.on('disconnect', () => {
-                atualizarStatusServidor(false);
-            });
-            
-            socket.on('atualizacao_dados', () => {
-                carregarMesas();
-            });
-            
+            socket.on('connect', () => { atualizarStatusServidor(true); carregarMesas(); });
+            socket.on('disconnect', () => { atualizarStatusServidor(false); });
+            socket.on('atualizacao_dados', () => { carregarMesas(); });
             socket.on('chamada_garcom', (dados) => {
                 playWaiterChimeSound();
                 showToast(`Mesa ${dados.mesa} chamando garçom!`, 'amber');
@@ -822,32 +758,26 @@
         }
     }
 
-    // ==========================================
-    // NAVEGAÇÃO DE ABAS
-    // ==========================================
     function switchTab(tab) {
-        // 1. Esconder todas as abas e resetar os botões
         ['mesas', 'caixa', 'historico', 'estatisticas', 'delivery'].forEach(t => {
             const view = document.getElementById(`view-${t}`);
             const btn = document.getElementById(`tab-btn-${t}`);
-            
             if (view) view.classList.add('hidden');
             if (btn) btn.className = "px-4 py-2 rounded-lg text-xs font-bold transition text-zinc-400 hover:text-white flex items-center space-x-2";
         });
 
-        // 2. Mostrar apenas a aba selecionada
         const selectedView = document.getElementById(`view-${tab}`);
         const selectedBtn = document.getElementById(`tab-btn-${tab}`);
         
         if (selectedView) selectedView.classList.remove('hidden');
         if (selectedBtn) selectedBtn.className = "px-4 py-2 rounded-lg text-xs font-bold transition bg-orange-500 text-black flex items-center space-x-2 shadow-sm shadow-orange-500/20";
 
-        // 3. Chamar as funções de carregamento
         if (tab === 'mesas') carregarMesas();
         else if (tab === 'caixa') carregarCaixa();
         else if (tab === 'historico') carregarHistorico('todos');
         else if (tab === 'estatisticas') carregarEstatisticas();
     }
+
 
     // ==========================================
     // MÓDULO DE CAIXA (ABERTURA E FECHAMENTO)
@@ -866,11 +796,9 @@
             } else {
                 fechadoBanner.classList.add('hidden');
                 abertoContainer.classList.remove('hidden');
-
                 document.getElementById('caixa-data-abertura').innerText = `Aberto em: ${new Date(data.caixa.data_abertura).toLocaleString('pt-BR')}`;
                 
                 let totPix = 0, totCredito = 0, totDebito = 0, totDinheiro = 0;
-                
                 if(data.vendas) {
                     data.vendas.forEach(v => {
                         const val = parseFloat(v.total);
@@ -880,7 +808,6 @@
                         else if (v.forma_pagamento === 'DINHEIRO') totDinheiro += val;
                     });
                 }
-
                 document.getElementById('caixa-tot-pix').innerText = `R$ ${totPix.toFixed(2).replace('.',',')}`;
                 document.getElementById('caixa-tot-credito').innerText = `R$ ${totCredito.toFixed(2).replace('.',',')}`;
                 document.getElementById('caixa-tot-debito').innerText = `R$ ${totDebito.toFixed(2).replace('.',',')}`;
@@ -931,23 +858,17 @@
             const data = await res.json();
             
             tablesState = data.map(m => ({
-                id: m.mesa_id,
-                number: m.numero,
+                id: m.mesa_id, number: m.numero,
                 status: m.status === 'ocupada' ? 'busy' : 'free',
-                comandaId: m.comanda_id || null,
-                comandaNum: m.comanda_codigo || null,
+                comandaId: m.comanda_id || null, comandaNum: m.comanda_codigo || null,
                 waiterCalledAt: m.chamando_garcom ? true : false,
                 items: m.items ? m.items.map(i => ({ 
-                    id: i.id, 
-                    name: i.nome_item, 
-                    price: parseFloat(i.preco_unitario), 
-                    qty: i.quantidade, 
-                    notes: i.observacoes 
+                    id: i.id, name: i.nome_item, 
+                    price: parseFloat(i.preco_unitario), qty: i.quantidade, notes: i.observacoes 
                 })) : []
             }));
             
             tablesState.sort((a, b) => parseInt(a.number, 10) - parseInt(b.number, 10));
-            
             atualizarStatusServidor(true);
             renderTablesGrid();
             renderWaiterQueue();
@@ -965,7 +886,7 @@
             const isCalling = table.waiterCalledAt;
             const total = isBusy ? table.items.reduce((s, i) => s + (i.price * i.qty), 0) : 0;
             
-            let bgClass = isBusy ? "bg-emerald-950/20 border-emerald-500/50" : "bg-zinc-900 border-zinc-800";
+            let bgClass = isBusy ? "bg-emerald-950/20 border-emerald-500/50 hover:border-emerald-400" : "bg-zinc-900 border-zinc-800 hover:border-zinc-700";
             if (isCalling) bgClass = "bg-amber-950/40 border-amber-400 animate-pulse shadow-lg shadow-amber-900/40";
             
             const card = document.createElement('div');
@@ -987,7 +908,6 @@
                     ${isBusy ? `<span class="text-emerald-400 font-black text-lg">R$ ${total.toFixed(2).replace('.', ',')}</span>` : `<span class="text-zinc-600 font-bold">--</span>`}
                 </div>
             `;
-            
             grid.appendChild(card);
         });
     }
@@ -999,8 +919,8 @@
     function renderWaiterQueue() {
         const queueList = document.getElementById('waiter-queue-list');
         const badge = document.getElementById('waiter-queue-count');
-        
         const callingTables = tablesState.filter(t => t.waiterCalledAt);
+        
         queueList.innerHTML = '';
         badge.innerText = callingTables.length;
         badge.classList.toggle('hidden', callingTables.length === 0);
@@ -1014,7 +934,7 @@
             queueList.innerHTML += `
                 <div class="bg-amber-950/30 border border-amber-500/20 p-3 rounded-xl flex justify-between items-center">
                     <span class="text-sm font-black text-amber-400"><i class="fa-solid fa-bell mr-2"></i> Mesa ${table.number}</span>
-                    <button onclick="atenderGarcom(${table.id})" class="bg-amber-500 text-black text-xs font-black px-3 py-1.5 rounded-lg uppercase">Atender</button>
+                    <button onclick="atenderGarcom(${table.id})" class="bg-amber-500 text-black text-xs font-black px-3 py-1.5 rounded-lg uppercase transition hover:bg-amber-400">Atender</button>
                 </div>
             `;
         });
@@ -1022,23 +942,12 @@
 
     async function atenderGarcom(tableId) {
         try {
-            await fetchAPI('/api/garcom/atender', { 
-                method: 'POST', 
-                body: JSON.stringify({ mesa_id: tableId }) 
-            });
+            await fetchAPI('/api/garcom/atender', { method: 'POST', body: JSON.stringify({ mesa_id: tableId }) });
             showToast("Atendimento registado!", "emerald");
             carregarMesas();
         } catch (e) {
             console.error(e);
         }
-    }
-
-    async function atenderGarcomModal() {
-        if (!currentEditingTableId) return;
-        await atenderGarcom(currentEditingTableId);
-        const table = tablesState.find(t => t.id === currentEditingTableId);
-        if (table) table.waiterCalledAt = false;
-        openTableModal(currentEditingTableId);
     }
 
     function openTableModal(tableId) {
@@ -1084,8 +993,7 @@
         
         try {
             await fetchAPI('/api/admin/mesa/cancelar', { 
-                method: 'POST', 
-                body: JSON.stringify({ mesa_id: table.id, comanda_id: table.comandaId }) 
+                method: 'POST', body: JSON.stringify({ mesa_id: table.id, comanda_id: table.comandaId }) 
             });
             closeModal('modal-comanda');
             showToast(`Mesa ${table.number} cancelada!`);
@@ -1106,7 +1014,6 @@
             return;
         }
 
-        // Verifica primeiro se o caixa está aberto!
         fetchAPI('/api/caixa/status').then(res => res.json()).then(data => {
             if(!data.aberto) {
                 showToast("ERRO: Abra o CAIXA antes de cobrar comandas!", "rose");
@@ -1114,7 +1021,6 @@
                 closeModal('modal-comanda');
                 return;
             }
-            
             closeModal('modal-comanda');
             document.getElementById('modal-escolha-fechamento').classList.remove('hidden');
         });
@@ -1137,7 +1043,6 @@
         }
     }
 
-    // ==== Ligações para o Novo Sistema de Caixa ====
     function concluirPagamentoUnico(total) {
         let clientes = [{ nome: "Comanda Inteira", totalDaPessoa: total }];
         iniciarCaixaPdv(clientes, total, 'none');
@@ -1175,7 +1080,6 @@
         iniciarCaixaPdv(clientes, totalGeral, 'modal-divisao-itens');
     }
 
-    // ==== Matemática do Split ====
     function recalcularSplit() {
         const qtd = Math.max(1, parseInt(document.getElementById('split-qtd-pessoas').value) || 1);
         const container = document.getElementById('split-pessoas-list');
@@ -1229,7 +1133,6 @@
         }
     }
 
-    // ==== Lógica Drag & Drop (Itens) ====
     function prosseguirParaDragDropItens() {
         const qtd = parseInt(document.getElementById('input-qtd-pessoas-itens').value) || 2;
         const table = tablesState.find(t => t.id === currentEditingTableId);
@@ -1263,7 +1166,7 @@
         } else {
             itensAtuaisDragDrop.forEach(item => {
                 const card = document.createElement('div');
-                card.className = "bg-zinc-900 border border-zinc-700 p-3 rounded-xl cursor-grab shrink-0 w-36 shadow-md";
+                card.className = "bg-zinc-900 border border-zinc-700 hover:border-orange-500 transition p-3 rounded-xl cursor-grab shrink-0 w-36 shadow-md";
                 card.draggable = true;
                 card.ondragstart = (e) => e.dataTransfer.setData('text/plain', JSON.stringify(item));
                 card.innerHTML = `
@@ -1293,13 +1196,13 @@
                 renderizarInterfaceDragDrop();
             };
             
-            let html = pessoa.itens.length === 0 ? '<div class="text-xs text-zinc-600 text-center py-4 border border-dashed rounded">Arraste itens para aqui</div>' : '';
+            let html = pessoa.itens.length === 0 ? '<div class="text-xs text-zinc-600 text-center py-4 border border-dashed border-zinc-800 rounded-xl">Arraste itens para aqui</div>' : '';
             
             pessoa.itens.forEach(ia => {
                 html += `
-                    <div class="bg-zinc-900 p-2 rounded flex justify-between text-[10px] mb-1">
-                        <span class="truncate w-24">${ia.name}</span>
-                        <button onclick="reverterItemParaDisponivel(${pessoa.id}, ${ia.uid})" class="text-rose-400">
+                    <div class="bg-zinc-900 p-2 rounded-lg flex justify-between items-center text-[10px] mb-1.5 border border-zinc-800">
+                        <span class="truncate w-24 text-zinc-300 font-bold">${ia.name}</span>
+                        <button onclick="reverterItemParaDisponivel(${pessoa.id}, ${ia.uid})" class="text-rose-400 hover:text-rose-500 w-5 h-5 flex items-center justify-center bg-zinc-950 rounded">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                     </div>
@@ -1308,13 +1211,13 @@
             
             box.innerHTML = `
                 <div>
-                    <div class="flex justify-between mb-2">
-                        <span class="text-xs font-black text-orange-400">${pessoa.nome}</span>
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-xs font-black text-orange-400 uppercase tracking-widest">${pessoa.nome}</span>
                     </div>
-                    <div class="space-y-1 mb-2 overflow-y-auto max-h-24 custom-scrollbar">${html}</div>
+                    <div class="space-y-1 mb-2 overflow-y-auto max-h-24 custom-scrollbar pr-1">${html}</div>
                 </div>
-                <div class="border-t border-zinc-900 pt-2 flex justify-between">
-                    <span class="text-[10px] font-bold">Total</span>
+                <div class="border-t border-zinc-900 pt-3 flex justify-between items-end">
+                    <span class="text-[10px] font-bold text-zinc-500 uppercase">Total</span>
                     <span class="text-sm font-black text-emerald-400">R$ ${sub.toFixed(2).replace('.',',')}</span>
                 </div>
             `;
@@ -1334,21 +1237,13 @@
 
 
     // =========================================================================
-    // NOVO CAIXA PDV (MULTI-PESSOAS / MULTI-PAGAMENTOS)
+    // NOVO CAIXA PDV (MULTI-PESSOAS / MATEMÁTICA BLINDADA DE CENTAVOS)
     // =========================================================================
-
-    /**
-     * Inicia o modal do Caixa PDV com a lista de clientes.
-     * @param {Array} clientesArr - Array de objetos { nome, totalDaPessoa }
-     * @param {Number} totalGeral - Subtotal global da comanda.
-     * @param {String} modalOrigem - ID do modal anterior a fechar (se houver).
-     */
     function iniciarCaixaPdv(clientesArr, totalGeral, modalOrigem) {
         pdvTotalMesaGeral = totalGeral;
         pdvModalOrigem = modalOrigem;
         document.getElementById('pdv-header-total-mesa').innerText = `R$ ${totalGeral.toFixed(2).replace('.',',')}`;
         
-        // Mapeia e prepara a lista de clientes para o PDV
         pdvClientes = clientesArr.map(c => ({
             nome: c.nome,
             totalDaPessoa: c.totalDaPessoa,
@@ -1356,7 +1251,7 @@
             pagamentosLancados: []
         }));
         
-        pdvClienteAtualIdx = 0; // Começa sempre na primeira pessoa
+        pdvClienteAtualIdx = 0; 
         renderizarPdvListaClientes();
         selecionarClientePdv(0);
 
@@ -1367,7 +1262,6 @@
         document.getElementById('modal-pdv-caixa').classList.add('hidden');
     }
 
-    // Renderiza a lista lateral com todos os clientes
     function renderizarPdvListaClientes() {
         const listaDiv = document.getElementById('pdv-lista-pessoas');
         listaDiv.innerHTML = '';
@@ -1398,7 +1292,6 @@
         verificarLiberacaoBotaoFinalizar();
     }
 
-    // Muda a pessoa ativa no sistema central de pagamentos
     function selecionarClientePdv(idx) {
         pdvClienteAtualIdx = idx;
         const cli = pdvClientes[idx];
@@ -1410,7 +1303,6 @@
         renderizarPdvListaClientes();
     }
 
-    // Adiciona um valor pago na conta da pessoa atual
     function adicionarPgtoParcial(metodo) {
         const cli = pdvClientes[pdvClienteAtualIdx];
         
@@ -1428,14 +1320,12 @@
             return;
         }
 
-        // CORREÇÃO: Converte tudo para centavos inteiros (multiplicando por 100) 
-        // para evitar o bug matemático de dizimas do JavaScript
+        // --- MATEMÁTICA BLINDADA DE CENTAVOS (EVITA BUGS DE TROCO) ---
         const valCentavos = Math.round(val * 100);
         const faltaCentavos = Math.round(cli.faltaPagar * 100);
 
-        // Regra do troco (Só o método Dinheiro pode receber a mais do que a falta)
         if (valCentavos > faltaCentavos && metodo !== 'DINHEIRO') {
-            showToast(`O valor excede o que ${cli.nome} deve (R$ ${cli.faltaPagar.toFixed(2)}). Apenas dinheiro gera troco.`, "amber");
+            showToast(`Valor excede a dívida (R$ ${cli.faltaPagar.toFixed(2)}). Só dinheiro gera troco.`, "amber");
             inp.value = cli.faltaPagar.toFixed(2);
             return;
         }
@@ -1444,45 +1334,51 @@
         recalcularValoresPessoaAtual();
     }
 
-    // Remove um pagamento efetuado por engano
     function removerPgtoPessoaAtual(indexPgto) {
         const cli = pdvClientes[pdvClienteAtualIdx];
         cli.pagamentosLancados.splice(indexPgto, 1);
         recalcularValoresPessoaAtual();
     }
 
-    // Atualiza os cálculos após adicionar/remover pagamento
     function recalcularValoresPessoaAtual() {
         const cli = pdvClientes[pdvClienteAtualIdx];
         
-        let jaPago = cli.pagamentosLancados.reduce((acc, p) => acc + p.valor, 0);
-        cli.faltaPagar = cli.totalDaPessoa - jaPago;
+        // --- MATEMÁTICA BLINDADA DE CENTAVOS ---
+        let totalCentavos = Math.round(cli.totalDaPessoa * 100);
+        let jaPagoCentavos = cli.pagamentosLancados.reduce((acc, p) => acc + Math.round(p.valor * 100), 0);
+        let faltaCentavos = totalCentavos - jaPagoCentavos;
+        
+        cli.faltaPagar = faltaCentavos / 100;
         
         atualizarResumoPdvClienteAtual();
-        renderizarPdvListaClientes(); // Atualiza painel lateral (mostra o icone verde se pagou tudo)
+        renderizarPdvListaClientes(); 
         
-        // Auto-avançar para a próxima pessoa que está a dever (Agiliza a vida do caixa)
         if (cli.faltaPagar <= 0) {
             let proxIdx = pdvClientes.findIndex(c => c.faltaPagar > 0);
             if (proxIdx !== -1) {
-                setTimeout(() => selecionarClientePdv(proxIdx), 500); // Aguarda meio segundo e salta
-                showToast(`${cli.nome} Pago! Próximo cliente...`, 'emerald');
+                setTimeout(() => selecionarClientePdv(proxIdx), 400); 
+                showToast(`${cli.nome} Pago! Próximo...`, 'emerald');
             }
         }
     }
 
-    // Atualiza a vista central e os resumos de pagamento da pessoa atual
     function atualizarResumoPdvClienteAtual() {
         const cli = pdvClientes[pdvClienteAtualIdx];
         
-        let jaPago = cli.pagamentosLancados.reduce((acc, p) => acc + p.valor, 0);
-        let faltaExibicao = cli.faltaPagar;
-        let troco = 0;
+        // --- MATEMÁTICA BLINDADA DE CENTAVOS PARA EXIBIÇÃO ---
+        let totalCentavos = Math.round(cli.totalDaPessoa * 100);
+        let jaPagoCentavos = cli.pagamentosLancados.reduce((acc, p) => acc + Math.round(p.valor * 100), 0);
+        let faltaExibicaoCentavos = totalCentavos - jaPagoCentavos;
+        let trocoCentavos = 0;
 
-        if (faltaExibicao < 0) {
-            troco = Math.abs(faltaExibicao);
-            faltaExibicao = 0;
+        if (faltaExibicaoCentavos < 0) {
+            trocoCentavos = Math.abs(faltaExibicaoCentavos);
+            faltaExibicaoCentavos = 0;
         }
+
+        let faltaExibicao = faltaExibicaoCentavos / 100;
+        let jaPago = jaPagoCentavos / 100;
+        let troco = trocoCentavos / 100;
 
         document.getElementById('pdv-cliente-ativo-falta').innerText = `R$ ${faltaExibicao.toFixed(2).replace('.',',')}`;
         document.getElementById('pdv-cliente-ativo-pago').innerText = `R$ ${jaPago.toFixed(2).replace('.',',')}`;
@@ -1495,12 +1391,10 @@
             trocoBox.classList.add('hidden');
         }
 
-        // Sugere o restante no campo
         const inp = document.getElementById('pdv-input-valor');
         inp.value = faltaExibicao > 0 ? faltaExibicao.toFixed(2) : '';
         if(faltaExibicao > 0) inp.focus();
 
-        // Renderiza lista visual de pagamentos do lado direito
         const listaDiv = document.getElementById('pdv-lista-pagamentos-pessoa');
         listaDiv.innerHTML = '';
         
@@ -1514,7 +1408,7 @@
                         <span class="font-bold text-white text-[10px] uppercase tracking-wider ${colorClass}">${p.metodo}</span>
                         <div class="flex items-center space-x-3">
                             <span class="font-black text-white text-sm">R$ ${p.valor.toFixed(2).replace('.', ',')}</span>
-                            <button onclick="removerPgtoPessoaAtual(${idx})" class="text-zinc-500 hover:text-rose-500">
+                            <button onclick="removerPgtoPessoaAtual(${idx})" class="text-zinc-500 hover:text-rose-500 transition bg-zinc-950 w-6 h-6 flex items-center justify-center rounded">
                                 <i class="fa-solid fa-xmark"></i>
                             </button>
                         </div>
@@ -1524,7 +1418,6 @@
         }
     }
 
-    // Libera ou trava o botão grande de FINALIZAR
     function verificarLiberacaoBotaoFinalizar() {
         const todosPagos = pdvClientes.every(c => c.faltaPagar <= 0);
         const btnFinalizar = document.getElementById('btn-pdv-finalizar');
@@ -1541,19 +1434,15 @@
         }
     }
 
-    // ENVIO FINAL AO BACKEND
     async function finalizarComandaPdv() {
         const table = tablesState.find(t => t.id === currentEditingTableId);
         const btn = document.getElementById('btn-pdv-finalizar');
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> A processar...';
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> A processar...';
         btn.disabled = true;
 
-        // Achatamos todos os pagamentos de todas as pessoas num único Array para o Back-end guardar
         let todosPagamentosJuntos = [];
         pdvClientes.forEach(cli => {
-            cli.pagamentosLancados.forEach(p => {
-                todosPagamentosJuntos.push(p);
-            });
+            cli.pagamentosLancados.forEach(p => { todosPagamentosJuntos.push(p); });
         });
 
         try {
@@ -1571,7 +1460,7 @@
             fecharModalPdv();
             if (pdvModalOrigem && pdvModalOrigem !== 'none') closeModal(pdvModalOrigem);
             
-            showToast(`Mesa ${table.number} fechada e contabilizada!`, 'emerald');
+            showToast(`Mesa ${table.number} fechada com sucesso!`, 'emerald');
             carregarMesas();
             
             if(!document.getElementById('view-caixa').classList.contains('hidden')) carregarCaixa();
@@ -1585,29 +1474,25 @@
 
 
     // ==========================================
-    // ESTATÍSTICAS COM AS MÉDIAS
+    // ESTATÍSTICAS
     // ==========================================
     async function carregarEstatisticas() {
         try {
             const res = await fetchAPI('/api/estatisticas');
             const data = await res.json();
             
-            // Faturamento Bruto Acumulado
             document.getElementById('stat-fat-dia').innerText = `R$ ${parseFloat(data.faturamento.dia || 0).toFixed(2).replace('.', ',')}`;
             document.getElementById('stat-fat-semana').innerText = `R$ ${parseFloat(data.faturamento.semana || 0).toFixed(2).replace('.', ',')}`;
             document.getElementById('stat-fat-mes').innerText = `R$ ${parseFloat(data.faturamento.mes || 0).toFixed(2).replace('.', ',')}`;
             
-            // Médias Históricas (Do Backend)
             if (data.medias) {
                 document.getElementById('stat-media-dia').innerText = `R$ ${parseFloat(data.medias.dia || 0).toFixed(2).replace('.', ',')}`;
                 document.getElementById('stat-media-semana').innerText = `R$ ${parseFloat(data.medias.semana || 0).toFixed(2).replace('.', ',')}`;
                 document.getElementById('stat-media-mes').innerText = `R$ ${parseFloat(data.medias.mes || 0).toFixed(2).replace('.', ',')}`;
             }
 
-            // Tops (Itens + e - Vendidos)
             const topList = document.getElementById('stat-top-itens');
             const lowList = document.getElementById('stat-low-itens');
-            
             topList.innerHTML = '';
             lowList.innerHTML = '';
             
@@ -1620,7 +1505,6 @@
                         </div>
                     `;
                 });
-
                 data.itens.slice(-5).reverse().forEach(i => {
                     lowList.innerHTML += `
                         <div class="flex justify-between items-center text-sm bg-zinc-950 p-3 rounded-xl border border-zinc-800">
@@ -1641,7 +1525,7 @@
     // ==========================================
     async function carregarHistorico(filtro) {
         const tbody = document.getElementById('historico-table-body');
-        tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-zinc-500">A carregar...</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-zinc-500"><i class="fa-solid fa-spinner fa-spin mr-2"></i>A carregar...</td></tr>`;
         
         try {
             const url = filtro === 'todos' ? '/api/historico' : `/api/historico?filtro=${filtro}`;
@@ -1651,7 +1535,7 @@
             tbody.innerHTML = '';
             
             if (data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-zinc-500">Vazio.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-zinc-500">Nenhum registo encontrado.</td></tr>`;
                 return;
             }
             
@@ -1660,16 +1544,16 @@
                 const totalF = parseFloat(comanda.valor_total_final || 0).toFixed(2).replace('.', ',');
                 
                 tbody.innerHTML += `
-                    <tr class="border-b border-zinc-800">
+                    <tr class="border-b border-zinc-800 hover:bg-zinc-800/30 transition">
                         <td class="p-4 font-black">Mesa ${comanda.mesa_numero}</td>
-                        <td class="p-4 text-orange-400 text-xs">${comanda.codigo}</td>
-                        <td class="p-4 text-xs">${dataF}</td>
+                        <td class="p-4 text-orange-400 text-xs font-mono">${comanda.codigo}</td>
+                        <td class="p-4 text-xs text-zinc-400">${dataF}</td>
                         <td class="p-4 font-black text-emerald-400">R$ ${totalF}</td>
                     </tr>
                 `;
             });
         } catch (e) {
-            tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-rose-500">Erro.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-rose-500">Erro de comunicação.</td></tr>`;
         }
     }
 
@@ -1684,16 +1568,15 @@
             return;
         }
 
-        document.getElementById('impressao-num-mesa').innerText = table.number;
         const listaDiv = document.getElementById('lista-checkboxes-imprimir');
         listaDiv.innerHTML = ''; 
         
         table.items.forEach((item) => {
             const isJaImpresso = itensImpressosGlobais.has(item.id);
             listaDiv.innerHTML += `
-                <div class="flex items-center space-x-3 p-2 border-b border-zinc-800">
-                    <input type="checkbox" id="check-print-${item.id}" value="${item.id}" ${isJaImpresso ? '' : 'checked'} class="w-5 h-5">
-                    <label for="check-print-${item.id}" class="flex-1 cursor-pointer text-sm font-bold">${item.qty}x ${item.name}</label>
+                <div class="flex items-center space-x-3 p-3 bg-zinc-950 border border-zinc-800 rounded-lg mb-2">
+                    <input type="checkbox" id="check-print-${item.id}" value="${item.id}" ${isJaImpresso ? '' : 'checked'} class="w-5 h-5 accent-orange-500">
+                    <label for="check-print-${item.id}" class="flex-1 cursor-pointer text-sm font-bold text-white">${item.qty}x ${item.name}</label>
                 </div>
             `;
         });
@@ -1732,7 +1615,7 @@
         });
         
         if (count === 0) {
-            showToast("Nada selecionado", "rose");
+            showToast("Nenhum item selecionado", "rose");
             return;
         }
         
@@ -1759,7 +1642,7 @@
         document.getElementById('toast-message').innerText = msg;
         
         if(color === "amber") {
-            icon.className = "fa-solid fa-bell text-amber-400 text-2xl";
+            icon.className = "fa-solid fa-bell text-amber-400 text-2xl animate-bounce";
         } else if(color === "rose") {
             icon.className = "fa-solid fa-circle-xmark text-rose-400 text-2xl";
         } else if(color === "emerald") {
