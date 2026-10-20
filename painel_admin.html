@@ -352,23 +352,29 @@
   <!-- ========================================== -->
   <!-- MODAIS DE DIVISÃO DA CONTA (ESCOLHA) -->
   <!-- ========================================== -->
+<!-- ========================================== -->
+  <!-- MODAIS DE DIVISÃO DA CONTA (ESCOLHA) -->
+  <!-- ========================================== -->
   <div id="modal-escolha-fechamento" class="hidden fixed inset-0 z-[70] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
     <div class="bg-zinc-900 border border-zinc-800 w-full max-w-md rounded-2xl shadow-2xl flex flex-col overflow-hidden">
       <div class="bg-zinc-950 p-5 border-b border-zinc-800 flex justify-between items-center">
         <h3 class="font-black text-white text-base uppercase">Fechar Comanda</h3>
-        <button onclick="closeModal('modal-escolha-fechamento')" class="text-zinc-500 hover:text-white">
+        <button onclick="closeModal('modal-escolha-fechamento')" class="text-zinc-500 hover:text-white transition">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
       <div class="p-6 space-y-4 bg-zinc-900">
-        <button onclick="selecionarOpcaoFechamento('valor')" class="w-full bg-zinc-950 border border-zinc-800 hover:border-orange-500 p-4 rounded-xl text-left flex justify-between transition">
-          <div class="font-bold text-white text-sm">Dividir por valor (Pessoas)</div>
+        <button onclick="selecionarOpcaoFechamento('valor')" class="w-full bg-zinc-950 border border-zinc-800 hover:border-orange-500 p-4 rounded-xl flex items-center justify-between transition group">
+          <div class="font-bold text-white text-sm">Dividir por Valor</div>
+          <i class="fa-solid fa-users text-zinc-500 group-hover:text-orange-500 text-lg transition"></i>
         </button>
-        <button onclick="selecionarOpcaoFechamento('itens')" class="w-full bg-zinc-950 border border-zinc-800 hover:border-orange-500 p-4 rounded-xl text-left flex justify-between transition">
-          <div class="font-bold text-white text-sm">Dividir por itens (Arraste)</div>
+        <button onclick="selecionarOpcaoFechamento('itens')" class="w-full bg-zinc-950 border border-zinc-800 hover:border-orange-500 p-4 rounded-xl flex items-center justify-between transition group">
+          <div class="font-bold text-white text-sm">Dividir por Itens</div>
+          <i class="fa-solid fa-list-check text-zinc-500 group-hover:text-orange-500 text-lg transition"></i>
         </button>
-        <button onclick="selecionarOpcaoFechamento('unico')" class="w-full bg-zinc-950 border border-zinc-800 hover:border-orange-500 p-4 rounded-xl text-left flex justify-between transition">
-          <div class="font-bold text-white text-sm">Não dividir (1 Pagador)</div>
+        <button onclick="selecionarOpcaoFechamento('unico')" class="w-full bg-zinc-950 border border-zinc-800 hover:border-orange-500 p-4 rounded-xl flex items-center justify-between transition group">
+          <div class="font-bold text-white text-sm">Não Dividir</div>
+          <i class="fa-solid fa-user text-zinc-500 group-hover:text-orange-500 text-lg transition"></i>
         </button>
       </div>
     </div>
