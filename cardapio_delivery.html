@@ -577,44 +577,61 @@
             }, 1500); // Simula 1.5s de processamento
         }
 
-        async function finalizarPedidoEEnviarAoBackend(metodoPagamento) {
-            // Recolhe os dados do formulário
+async function finalizarPedidoEEnviarAoBackend(metodoPagamento) {
+            // 1. Recolhe os dados do formulário de entrega
             const deliveryInfo = {
                 nome: document.getElementById('del-nome').value.trim(),
                 telefone: document.getElementById('del-telefone').value.trim(),
-                endereco: `${document.getElementById('del-rua').value}, ${document.getElementById('del-numero').value} - ${document.getElementById('del-bairro').value}. ${document.getElementById('del-complemento').value}`,
-                pago_online: true,
-                metodo_pagamento: metodoPagamento
+                rua: document.getElementById('del-rua').value.trim(),
+                numero: document.getElementById('del-numero').value.trim(),
+                bairro: document.getElementById('del-bairro').value.trim(),
+                complemento: document.getElementById('del-complemento').value.trim(),
+                metodo_pagamento: metodoPagamento,
+                pago_online: true
             };
 
+            showToast("A enviar pedido...", "A registar o seu pedido na cozinha.", "fa-spinner fa-spin");
+
             try {
-                // Endpoint preparado para o Backend do Kanban Delivery
-                // await enviarParaServidor('/api/delivery/novo', { cart: cart, deliveryInfo: deliveryInfo, total: valorTotalGlobal });
-                
+                // 2. Envio REAL para o seu Backend no Render
+                const response = await fetch(`${API_URL}/api/delivery/novo`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        cliente: deliveryInfo,
+                        itens: cart,
+                        valor_total: valorTotalGlobal,
+                        origem: 'WHATSAPP_DELIVERY'
+                    })
+                });
+
+                if (!response.ok) throw new Error("Erro ao salvar pedido no servidor");
+
+                // 3. Limpa o carrinho e mostra a tela de sucesso
                 cart = [];
                 updateCartBadge();
                 closeModal('modal-payment');
                 
-                // Mensagem de sucesso (Pode criar uma tela fixa verde depois, se preferir)
                 document.getElementById('screen-menu').innerHTML = `
-                    <div class="h-[80vh] flex flex-col items-center justify-center text-center p-6 space-y-4">
-                        <div class="w-20 h-20 bg-emerald-500/20 text-emerald-500 rounded-full flex items-center justify-center text-4xl mb-2">
+                    <div class="h-[80vh] flex flex-col items-center justify-center text-center p-6 space-y-4 animate-fade-in">
+                        <div class="w-20 h-20 bg-emerald-500/20 text-emerald-500 rounded-full flex items-center justify-center text-4xl mb-2 border border-emerald-500/30">
                             <i class="fa-solid fa-check"></i>
                         </div>
-                        <h2 class="text-2xl font-black text-white">Pedido Confirmado!</h2>
-                        <p class="text-zinc-400 text-sm">O seu pagamento foi aprovado e o pedido já está na cozinha.</p>
-                        <div class="bg-zinc-900 p-4 rounded-xl border border-zinc-800 w-full mt-4">
-                            <p class="text-xs text-zinc-500 uppercase font-bold mb-1">Acompanhe pelo WhatsApp</p>
-                            <p class="text-orange-500 font-black">${deliveryInfo.telefone}</p>
+                        <h2 class="text-2xl font-black text-white">Pedido Realizado!</h2>
+                        <p class="text-zinc-400 text-sm">O seu pagamento foi aprovado e o pedido já seguiu para a nossa cozinha.</p>
+                        <div class="bg-zinc-900 p-4 rounded-2xl border border-zinc-800 w-full mt-4 text-left space-y-1">
+                            <p class="text-[10px] text-zinc-500 uppercase font-black">Cliente</p>
+                            <p class="text-white text-xs font-bold">${deliveryInfo.nome}</p>
+                            <p class="text-[10px] text-zinc-500 uppercase font-black pt-2">Endereço de Entrega</p>
+                            <p class="text-zinc-300 text-xs">${deliveryInfo.rua}, ${deliveryInfo.numero} - ${deliveryInfo.bairro}</p>
                         </div>
                     </div>
                 `;
             } catch (error) {
-                console.error("Erro ao enviar pedido de delivery", error);
-                showToast("Erro", "O pagamento foi feito, mas houve erro de comunicação com o restaurante.", "fa-triangle-exclamation");
+                console.error("Erro ao enviar pedido de delivery:", error);
+                showToast("Erro de Envio", "Não foi possível comunicar com o restaurante. Tente novamente.", "fa-triangle-exclamation");
             }
         }
-
 
         // ==========================================
         // UTILITÁRIOS
