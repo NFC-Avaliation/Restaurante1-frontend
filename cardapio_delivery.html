@@ -4,23 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Delivery | Restaurante</title>
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
+
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    colors: { orange: { 500: '#f97316', 600: '#ea580c', 700: '#c2410c' } },
-                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                    colors: {
+                        orange: {
+                            500: '#f97316',
+                            600: '#ea580c',
+                            700: '#c2410c'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
                 }
             }
-        }
+        };
     </script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
@@ -32,24 +43,59 @@
             user-select: none;
         }
 
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .modal-backdrop { background-color: rgba(0, 0, 0, 0.88); backdrop-filter: blur(10px); }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.88);
+            backdrop-filter: blur(10px);
+        }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        @keyframes slideUp {
-            from { transform: translateY(100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                opacity: 0;
+                transform: scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
-        .animate-fade-in { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .animate-slide-up { animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
 
         .active-category-btn {
-            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            background: linear-gradient(
+                135deg,
+                #f97316 0%,
+                #ea580c 100%
+            );
+
             color: #000000 !important;
             font-weight: 800 !important;
             box-shadow: 0 4px 14px rgba(249, 115, 22, 0.4);
@@ -57,47 +103,40 @@
         }
     </style>
 </head>
+
 <body class="min-h-screen relative pb-10 bg-black text-zinc-100">
 
-    <!-- ECRÃ 1: LANDING / BOAS-VINDAS (DELIVERY) -->
-    <section id="screen-landing" class="max-w-md mx-auto min-h-[90vh] flex flex-col justify-between p-6 animate-fade-in">
-        <div class="flex flex-col items-center text-center pt-6">
-            <span class="text-orange-500 font-bold text-xs uppercase tracking-widest mb-3 flex items-center space-x-1.5">
-                <i class="fa-solid fa-motorcycle"></i>
-                <span>Delivery Rápido</span>
-            </span>
+    <!-- ========================================== -->
+    <!-- CARDÁPIO: ABERTURA DIRETA -->
+    <!-- ========================================== -->
+    <section id="screen-menu" class="max-w-md mx-auto animate-fade-in">
 
-            <div class="w-28 h-28 rounded-full bg-gradient-to-tr from-orange-500 via-orange-600 to-amber-500 p-1 shadow-2xl shadow-orange-500/20 mb-4">
+        <!-- BOAS-VINDAS E LOGO -->
+        <div class="flex flex-col items-center text-center px-4 pt-6 pb-5">
+            <h1 class="text-xl font-black text-white tracking-tight mb-4">
+                Seja bem-vindo!
+            </h1>
+
+            <!-- Logo atual do restaurante -->
+            <div
+                role="img"
+                aria-label="Logo Gourmet"
+                class="w-24 h-24 rounded-full bg-gradient-to-tr from-orange-500 via-orange-600 to-amber-500 p-1 shadow-xl shadow-orange-500/20"
+            >
                 <div class="w-full h-full bg-zinc-950 rounded-full flex flex-col items-center justify-center border-2 border-black">
-                    <i class="fa-solid fa-burger text-orange-500 text-4xl mb-1"></i>
-                    <span class="text-[9px] font-black tracking-widest text-orange-400 uppercase">Gourmet</span>
+                    <i
+                        aria-hidden="true"
+                        class="fa-solid fa-burger text-orange-500 text-3xl mb-1"
+                    ></i>
+
+                    <span class="text-[9px] font-black tracking-widest text-orange-400 uppercase">
+                        Gourmet
+                    </span>
                 </div>
             </div>
-
-            <h1 class="text-2xl font-black text-white tracking-tight">GOURMET BURGER HOUSE</h1>
-            <p class="text-xs text-zinc-400 mt-1 font-medium">Hambúrgueres Artesanais & Cervejas Especiais</p>
         </div>
 
-        <div class="w-full my-auto py-8 space-y-4">
-            <button onclick="navigateTo('screen-menu')" class="w-full py-4 px-6 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 active:scale-98 text-black rounded-2xl font-black text-base uppercase tracking-wider shadow-xl shadow-orange-500/20 transition flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <i class="fa-solid fa-book-open text-xl"></i>
-                    <span>Ver Cardápio e Pedir</span>
-                </div>
-                <i class="fa-solid fa-chevron-right text-sm"></i>
-            </button>
-        </div>
-
-        <div class="text-center text-zinc-400 text-xs py-4 border-t border-zinc-900">
-            <p class="font-black text-xs text-zinc-500 tracking-widest uppercase flex items-center justify-center space-x-2">
-                <i class="fa-brands fa-whatsapp text-emerald-500"></i>
-                <span>Atendimento Online</span>
-            </p>
-        </div>
-    </section>
-
-    <!-- ECRÃ 2: CARDÁPIO (Idêntico ao da Mesa) -->
-    <section id="screen-menu" class="max-w-md mx-auto hidden animate-fade-in">
+        <!-- BARRA DO CARDÁPIO -->
         <header class="sticky top-0 z-40 bg-zinc-950/90 backdrop-blur-md border-b border-zinc-800 px-4 py-3 shadow-xl">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-2 text-orange-500 font-bold text-xs uppercase tracking-wider bg-orange-500/10 px-3 py-2 rounded-xl border border-orange-500/20">
@@ -106,117 +145,249 @@
                 </div>
 
                 <div class="text-center">
-                    <h2 class="font-black text-sm text-white uppercase tracking-widest">Cardápio</h2>
+                    <h2 class="font-black text-sm text-white uppercase tracking-widest">
+                        Cardápio
+                    </h2>
                 </div>
 
-                <button onclick="openCartModal()" class="relative bg-zinc-900 text-orange-500 p-2.5 rounded-xl border border-zinc-800 active:scale-95 transition">
+                <button
+                    onclick="openCartModal()"
+                    class="relative bg-zinc-900 text-orange-500 p-2.5 rounded-xl border border-zinc-800 active:scale-95 transition"
+                >
                     <i class="fa-solid fa-basket-shopping text-base"></i>
-                    <span id="cart-badge" class="absolute -top-1.5 -right-1.5 bg-orange-600 text-black text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-black hidden">0</span>
+
+                    <span
+                        id="cart-badge"
+                        class="absolute -top-1.5 -right-1.5 bg-orange-600 text-black text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-black hidden"
+                    >0</span>
                 </button>
             </div>
         </header>
 
+        <!-- CATEGORIAS -->
         <nav class="mt-4 px-4">
-            <div id="categories-container" class="flex space-x-2 overflow-x-auto no-scrollbar py-1 scroll-smooth"></div>
+            <div
+                id="categories-container"
+                class="flex space-x-2 overflow-x-auto no-scrollbar py-1 scroll-smooth"
+            ></div>
         </nav>
 
+        <!-- PRODUTOS -->
         <main class="px-4 mt-5">
             <div class="flex items-center justify-between mb-3">
-                <h3 id="current-category-title" class="text-xs font-bold text-zinc-300 uppercase tracking-wide flex items-center">
-                    <i class="fa-solid fa-fire text-orange-500 mr-2"></i> Todos os Pratos
+                <h3
+                    id="current-category-title"
+                    class="text-xs font-bold text-zinc-300 uppercase tracking-wide flex items-center"
+                >
+                    <i class="fa-solid fa-fire text-orange-500 mr-2"></i>
+                    Todos os Pratos
                 </h3>
             </div>
-            <div id="dishes-grid" class="grid grid-cols-2 gap-3.5 pb-20"></div>
+
+            <div
+                id="dishes-grid"
+                class="grid grid-cols-2 gap-3.5 pb-20"
+            ></div>
         </main>
     </section>
 
-    <!-- MODAL 1: DETALHE DO PRATO -->
-    <div id="modal-dish-detail" class="fixed inset-0 z-50 modal-backdrop hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <!-- ========================================== -->
+    <!-- MODAL: DETALHES DO PRATO -->
+    <!-- ========================================== -->
+    <div
+        id="modal-dish-detail"
+        class="fixed inset-0 z-50 modal-backdrop hidden flex items-end sm:items-center justify-center p-0 sm:p-4"
+    >
         <div class="bg-zinc-900 border-t sm:border border-zinc-800 rounded-t-3xl sm:rounded-2xl w-full max-w-md max-h-[92vh] flex flex-col overflow-hidden animate-slide-up shadow-2xl">
-            <button onclick="closeModal('modal-dish-detail')" class="absolute top-3 right-3 z-10 w-9 h-9 bg-black/80 text-white rounded-full flex items-center justify-center border border-zinc-700/60 active:scale-90 transition">
+            <button
+                onclick="closeModal('modal-dish-detail')"
+                class="absolute top-3 right-3 z-10 w-9 h-9 bg-black/80 text-white rounded-full flex items-center justify-center border border-zinc-700/60 active:scale-90 transition"
+            >
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
+
             <div class="relative bg-black w-full h-56 flex items-center justify-center overflow-hidden">
-                <img id="modal-dish-img" src="" loading="lazy" class="w-full h-full object-cover">
+                <img
+                    id="modal-dish-img"
+                    src=""
+                    loading="lazy"
+                    class="w-full h-full object-cover"
+                >
             </div>
+
             <div class="p-5 flex-1 overflow-y-auto">
                 <div class="flex items-start justify-between">
                     <div>
-                        <h3 id="modal-dish-title" class="text-lg font-bold text-white leading-tight">Nome do Prato</h3>
-                        <span id="modal-dish-category" class="text-[11px] font-semibold text-orange-500 uppercase">Categoria</span>
+                        <h3
+                            id="modal-dish-title"
+                            class="text-lg font-bold text-white leading-tight"
+                        >
+                            Nome do Prato
+                        </h3>
+
+                        <span
+                            id="modal-dish-category"
+                            class="text-[11px] font-semibold text-orange-500 uppercase"
+                        >
+                            Categoria
+                        </span>
                     </div>
-                    <div id="modal-dish-price" class="text-base font-black text-orange-500 bg-orange-500/10 px-3 py-1 rounded-xl border border-orange-500/20">R$ 0,00</div>
+
+                    <div
+                        id="modal-dish-price"
+                        class="text-base font-black text-orange-500 bg-orange-500/10 px-3 py-1 rounded-xl border border-orange-500/20"
+                    >
+                        R$ 0,00
+                    </div>
                 </div>
-                <p id="modal-dish-description" class="text-xs text-zinc-300 mt-3 leading-relaxed"></p>
+
+                <p
+                    id="modal-dish-description"
+                    class="text-xs text-zinc-300 mt-3 leading-relaxed"
+                ></p>
+
                 <div class="mt-6">
-                    <button onclick="openCustomizeFromDetail()" class="w-full py-3 px-2 bg-gradient-to-r from-orange-500 to-orange-600 text-black active:scale-95 rounded-xl font-black text-xs shadow-lg shadow-orange-500/20 transition flex items-center justify-center uppercase tracking-wide">
-                        <i class="fa-solid fa-plus mr-1.5"></i> Adicionar ao Pedido
+                    <button
+                        onclick="openCustomizeFromDetail()"
+                        class="w-full py-3 px-2 bg-gradient-to-r from-orange-500 to-orange-600 text-black active:scale-95 rounded-xl font-black text-xs shadow-lg shadow-orange-500/20 transition flex items-center justify-center uppercase tracking-wide"
+                    >
+                        <i class="fa-solid fa-plus mr-1.5"></i>
+                        Adicionar ao Pedido
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL 2: CUSTOMIZAR PRATO -->
-    <div id="modal-customize" class="fixed inset-0 z-50 modal-backdrop hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <!-- ========================================== -->
+    <!-- MODAL: PERSONALIZAR PRATO -->
+    <!-- ========================================== -->
+    <div
+        id="modal-customize"
+        class="fixed inset-0 z-50 modal-backdrop hidden flex items-end sm:items-center justify-center p-0 sm:p-4"
+    >
         <div class="bg-zinc-900 border-t sm:border border-zinc-800 rounded-t-3xl sm:rounded-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden animate-slide-up shadow-2xl">
             <div class="p-4 border-b border-zinc-800 flex items-center justify-between bg-zinc-950">
-                <h4 id="customize-dish-title" class="font-bold text-sm text-white leading-tight">Personalizar Pedido</h4>
-                <button onclick="closeModal('modal-customize')" class="text-zinc-400 hover:text-white w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center">
+                <h4
+                    id="customize-dish-title"
+                    class="font-bold text-sm text-white leading-tight"
+                >
+                    Personalizar Pedido
+                </h4>
+
+                <button
+                    onclick="closeModal('modal-customize')"
+                    class="text-zinc-400 hover:text-white w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center"
+                >
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
+
             <div class="p-4 overflow-y-auto flex-1 space-y-4">
                 <div>
-                    <h5 class="text-xs font-bold text-zinc-300 uppercase tracking-wider mb-1.5">Observações Adicionais</h5>
-                    <textarea id="custom-notes" rows="2" placeholder="Ex: Ponto da carne bem passado, sem salada..." class="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-2.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-orange-500 transition"></textarea>
+                    <h5 class="text-xs font-bold text-zinc-300 uppercase tracking-wider mb-1.5">
+                        Observações Adicionais
+                    </h5>
+
+                    <textarea
+                        id="custom-notes"
+                        rows="2"
+                        placeholder="Ex: Ponto da carne bem passado, sem salada..."
+                        class="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-2.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-orange-500 transition"
+                    ></textarea>
                 </div>
+
                 <div class="flex items-center justify-between bg-zinc-800 p-3 rounded-xl border border-zinc-700">
-                    <span class="text-xs font-bold text-zinc-200">Quantidade:</span>
+                    <span class="text-xs font-bold text-zinc-200">
+                        Quantidade:
+                    </span>
+
                     <div class="flex items-center space-x-3">
-                        <button onclick="updateCustomizeQty(-1)" class="w-8 h-8 rounded-lg bg-zinc-700 text-white font-bold flex items-center justify-center active:scale-90 transition">-</button>
-                        <span id="customize-qty" class="text-sm font-black text-orange-500 min-w-[20px] text-center">1</span>
-                        <button onclick="updateCustomizeQty(1)" class="w-8 h-8 rounded-lg bg-zinc-700 text-white font-bold flex items-center justify-center active:scale-90 transition">+</button>
+                        <button
+                            onclick="updateCustomizeQty(-1)"
+                            class="w-8 h-8 rounded-lg bg-zinc-700 text-white font-bold flex items-center justify-center active:scale-90 transition"
+                        >-</button>
+
+                        <span
+                            id="customize-qty"
+                            class="text-sm font-black text-orange-500 min-w-[20px] text-center"
+                        >1</span>
+
+                        <button
+                            onclick="updateCustomizeQty(1)"
+                            class="w-8 h-8 rounded-lg bg-zinc-700 text-white font-bold flex items-center justify-center active:scale-90 transition"
+                        >+</button>
                     </div>
                 </div>
             </div>
+
             <div class="p-4 border-t border-zinc-800 bg-zinc-950 flex items-center space-x-3">
-                <button onclick="confirmAddToCart()" class="w-full py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-black font-black text-xs rounded-xl shadow-lg shadow-orange-500/20 active:scale-95 transition flex items-center justify-center space-x-2 uppercase">
+                <button
+                    onclick="confirmAddToCart()"
+                    class="w-full py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-black font-black text-xs rounded-xl shadow-lg shadow-orange-500/20 active:scale-95 transition flex items-center justify-center space-x-2 uppercase"
+                >
                     <span>Adicionar</span>
-                    <span id="customize-total-price" class="bg-black/30 px-2 py-0.5 rounded text-[10px] font-extrabold text-orange-300">R$ 0,00</span>
+
+                    <span
+                        id="customize-total-price"
+                        class="bg-black/30 px-2 py-0.5 rounded text-[10px] font-extrabold text-orange-300"
+                    >
+                        R$ 0,00
+                    </span>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- ========================================================= -->
-    <!-- FLUXO DE CHECKOUT DELIVERY (CARRINHO -> ENTREGA -> PAGO)  -->
-    <!-- ========================================================= -->
-
+    <!-- ========================================== -->
     <!-- PASSO 1: CARRINHO -->
-    <div id="modal-cart" class="fixed inset-0 z-[60] modal-backdrop hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <!-- ========================================== -->
+    <div
+        id="modal-cart"
+        class="fixed inset-0 z-[60] modal-backdrop hidden flex items-end sm:items-center justify-center p-0 sm:p-4"
+    >
         <div class="bg-zinc-900 border-t sm:border border-zinc-800 rounded-t-3xl sm:rounded-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden animate-slide-up shadow-2xl">
             <div class="p-4 border-b border-zinc-800 flex items-center justify-between bg-zinc-950">
                 <div class="flex items-center space-x-2">
                     <div class="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center text-orange-500">
                         <i class="fa-solid fa-basket-shopping text-sm"></i>
                     </div>
-                    <h4 class="font-bold text-sm text-white uppercase tracking-wider">Seu Carrinho</h4>
+
+                    <h4 class="font-bold text-sm text-white uppercase tracking-wider">
+                        Seu Carrinho
+                    </h4>
                 </div>
-                <button onclick="closeModal('modal-cart')" class="text-zinc-400 hover:text-white w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center">
+
+                <button
+                    onclick="closeModal('modal-cart')"
+                    class="text-zinc-400 hover:text-white w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center"
+                >
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <div id="cart-items-container" class="p-4 overflow-y-auto flex-1 space-y-3"></div>
+            <div
+                id="cart-items-container"
+                class="p-4 overflow-y-auto flex-1 space-y-3"
+            ></div>
 
             <div class="p-4 border-t border-zinc-800 bg-zinc-950 space-y-3">
                 <div class="flex justify-between text-sm font-black text-white pt-2">
                     <span>Subtotal:</span>
-                    <span id="cart-total" class="text-orange-500 text-base">R$ 0,00</span>
+
+                    <span
+                        id="cart-total"
+                        class="text-orange-500 text-base"
+                    >
+                        R$ 0,00
+                    </span>
                 </div>
-                <!-- Botão alterado para ir para os dados de entrega em vez de ir logo para a cozinha -->
-                <button id="btn-proceed-delivery" onclick="openDeliveryForm()" class="w-full py-3.5 bg-gradient-to-r from-orange-500 to-orange-600 active:scale-95 text-black font-black text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-orange-500/20 transition flex items-center justify-center space-x-2">
+
+                <button
+                    id="btn-proceed-delivery"
+                    onclick="openDeliveryForm()"
+                    class="w-full py-3.5 bg-gradient-to-r from-orange-500 to-orange-600 active:scale-95 text-black font-black text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-orange-500/20 transition flex items-center justify-center space-x-2"
+                >
                     <span>Avançar para Entrega</span>
                     <i class="fa-solid fa-arrow-right"></i>
                 </button>
@@ -224,59 +395,129 @@
         </div>
     </div>
 
+    <!-- ========================================== -->
     <!-- PASSO 2: DADOS DE ENTREGA -->
-    <div id="modal-delivery-form" class="fixed inset-0 z-[70] modal-backdrop hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <!-- ========================================== -->
+    <div
+        id="modal-delivery-form"
+        class="fixed inset-0 z-[70] modal-backdrop hidden flex items-end sm:items-center justify-center p-0 sm:p-4"
+    >
         <div class="bg-zinc-900 border-t sm:border border-zinc-800 rounded-t-3xl sm:rounded-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden animate-slide-up shadow-2xl">
             <div class="p-4 border-b border-zinc-800 flex items-center justify-between bg-zinc-950">
                 <div class="flex items-center space-x-2">
-                    <button onclick="voltarParaCarrinho()" class="w-8 h-8 rounded-full bg-zinc-800 text-zinc-400 flex items-center justify-center">
+                    <button
+                        onclick="voltarParaCarrinho()"
+                        class="w-8 h-8 rounded-full bg-zinc-800 text-zinc-400 flex items-center justify-center"
+                    >
                         <i class="fa-solid fa-arrow-left"></i>
                     </button>
-                    <h4 class="font-bold text-sm text-white uppercase tracking-wider">Dados de Entrega</h4>
+
+                    <h4 class="font-bold text-sm text-white uppercase tracking-wider">
+                        Dados de Entrega
+                    </h4>
                 </div>
-                <button onclick="closeModal('modal-delivery-form')" class="text-zinc-400 hover:text-white w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center">
+
+                <button
+                    onclick="closeModal('modal-delivery-form')"
+                    class="text-zinc-400 hover:text-white w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center"
+                >
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
             <div class="p-5 overflow-y-auto flex-1 space-y-4">
                 <div>
-                    <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1.5">Nome Completo</label>
-                    <input type="text" id="del-nome" placeholder="Ex: João Silva" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition">
+                    <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1.5">
+                        Nome Completo
+                    </label>
+
+                    <input
+                        type="text"
+                        id="del-nome"
+                        placeholder="Ex: João Silva"
+                        class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition"
+                    >
                 </div>
+
                 <div>
-                    <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1.5">WhatsApp</label>
-                    <input type="tel" id="del-telefone" placeholder="(DD) 90000-0000" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition">
+                    <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1.5">
+                        WhatsApp
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="del-telefone"
+                        placeholder="(DD) 90000-0000"
+                        class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition"
+                    >
                 </div>
-                
+
                 <div class="border-t border-zinc-800 pt-4 mt-2">
-                    <label class="block text-[10px] font-bold text-orange-500 uppercase mb-3">Endereço de Entrega</label>
-                    
+                    <label class="block text-[10px] font-bold text-orange-500 uppercase mb-3">
+                        Endereço de Entrega
+                    </label>
+
                     <div class="grid grid-cols-3 gap-3 mb-3">
                         <div class="col-span-2">
-                            <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1.5">Rua / Avenida</label>
-                            <input type="text" id="del-rua" placeholder="Ex: Rua das Flores" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition">
+                            <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1.5">
+                                Rua / Avenida
+                            </label>
+
+                            <input
+                                type="text"
+                                id="del-rua"
+                                placeholder="Ex: Rua das Flores"
+                                class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition"
+                            >
                         </div>
+
                         <div class="col-span-1">
-                            <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1.5">Número</label>
-                            <input type="text" id="del-numero" placeholder="Ex: 123" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition">
+                            <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1.5">
+                                Número
+                            </label>
+
+                            <input
+                                type="text"
+                                id="del-numero"
+                                placeholder="Ex: 123"
+                                class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition"
+                            >
                         </div>
                     </div>
-                    
+
                     <div class="mb-3">
-                        <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1.5">Bairro</label>
-                        <input type="text" id="del-bairro" placeholder="Ex: Centro" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition">
+                        <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1.5">
+                            Bairro
+                        </label>
+
+                        <input
+                            type="text"
+                            id="del-bairro"
+                            placeholder="Ex: Centro"
+                            class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition"
+                        >
                     </div>
 
                     <div>
-                        <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1.5">Complemento / Ponto de Referência</label>
-                        <input type="text" id="del-complemento" placeholder="Ex: Apt 42 / Ao lado do mercado" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition">
+                        <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1.5">
+                            Complemento / Ponto de Referência
+                        </label>
+
+                        <input
+                            type="text"
+                            id="del-complemento"
+                            placeholder="Ex: Apt 42 / Ao lado do mercado"
+                            class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition"
+                        >
                     </div>
                 </div>
             </div>
 
             <div class="p-4 border-t border-zinc-800 bg-zinc-950">
-                <button onclick="openPaymentScreen()" class="w-full py-3.5 bg-orange-500 active:scale-95 text-black font-black text-xs uppercase tracking-wider rounded-xl shadow-lg transition flex items-center justify-center space-x-2">
+                <button
+                    onclick="openPaymentScreen()"
+                    class="w-full py-3.5 bg-orange-500 active:scale-95 text-black font-black text-xs uppercase tracking-wider rounded-xl shadow-lg transition flex items-center justify-center space-x-2"
+                >
                     <span>Ir para Pagamento</span>
                     <i class="fa-solid fa-credit-card"></i>
                 </button>
@@ -284,187 +525,425 @@
         </div>
     </div>
 
-    <!-- PASSO 3: PAGAMENTO (Preparo Mercado Pago) -->
-    <div id="modal-payment" class="fixed inset-0 z-[80] modal-backdrop hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <!-- ========================================== -->
+    <!-- PASSO 3: PAGAMENTO -->
+    <!-- Integração Mercado Pago ainda simulada -->
+    <!-- ========================================== -->
+    <div
+        id="modal-payment"
+        class="fixed inset-0 z-[80] modal-backdrop hidden flex items-end sm:items-center justify-center p-0 sm:p-4"
+    >
         <div class="bg-zinc-900 border-t sm:border border-zinc-800 rounded-t-3xl sm:rounded-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden animate-slide-up shadow-2xl">
             <div class="p-4 border-b border-zinc-800 flex items-center justify-between bg-zinc-950">
                 <div class="flex items-center space-x-2">
-                    <button onclick="voltarParaEntrega()" class="w-8 h-8 rounded-full bg-zinc-800 text-zinc-400 flex items-center justify-center">
+                    <button
+                        onclick="voltarParaEntrega()"
+                        class="w-8 h-8 rounded-full bg-zinc-800 text-zinc-400 flex items-center justify-center"
+                    >
                         <i class="fa-solid fa-arrow-left"></i>
                     </button>
-                    <h4 class="font-bold text-sm text-white uppercase tracking-wider">Pagamento</h4>
+
+                    <h4 class="font-bold text-sm text-white uppercase tracking-wider">
+                        Pagamento
+                    </h4>
                 </div>
-                <button onclick="closeModal('modal-payment')" class="text-zinc-400 hover:text-white w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center">
+
+                <button
+                    onclick="closeModal('modal-payment')"
+                    class="text-zinc-400 hover:text-white w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center"
+                >
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
             <div class="p-5 flex-1 overflow-y-auto space-y-4 bg-zinc-900">
-                
                 <div class="bg-zinc-950 p-4 rounded-xl border border-zinc-800 text-center mb-6 shadow-inner">
-                    <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Total a Pagar</span>
-                    <div id="payment-total-display" class="text-3xl font-black text-emerald-400 mt-1">R$ 0,00</div>
+                    <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
+                        Total a Pagar
+                    </span>
+
+                    <div
+                        id="payment-total-display"
+                        class="text-3xl font-black text-emerald-400 mt-1"
+                    >
+                        R$ 0,00
+                    </div>
                 </div>
 
-                <h5 class="text-[10px] font-bold text-orange-500 uppercase tracking-wider mb-2 text-center">Escolha como pagar online</h5>
-                
-                <!-- Botões simulando a chamada da API do Mercado Pago -->
+                <h5 class="text-[10px] font-bold text-orange-500 uppercase tracking-wider mb-2 text-center">
+                    Escolha como pagar online
+                </h5>
+
                 <div class="space-y-3">
-                    <button onclick="processarPagamento('PIX')" class="w-full bg-zinc-800 hover:bg-emerald-900/30 border border-zinc-700 hover:border-emerald-500 p-4 rounded-xl flex items-center justify-between transition group">
+                    <button
+                        onclick="processarPagamento('PIX')"
+                        class="w-full bg-zinc-800 hover:bg-emerald-900/30 border border-zinc-700 hover:border-emerald-500 p-4 rounded-xl flex items-center justify-between transition group"
+                    >
                         <div class="flex items-center space-x-3">
                             <i class="fa-brands fa-pix text-emerald-400 text-xl group-hover:scale-110 transition"></i>
-                            <span class="font-bold text-white text-sm">Pagar com PIX</span>
+
+                            <span class="font-bold text-white text-sm">
+                                Pagar com PIX
+                            </span>
                         </div>
+
                         <i class="fa-solid fa-chevron-right text-zinc-600 group-hover:text-emerald-400 text-xs"></i>
                     </button>
 
-                    <button onclick="processarPagamento('CREDITO')" class="w-full bg-zinc-800 hover:bg-blue-900/30 border border-zinc-700 hover:border-blue-500 p-4 rounded-xl flex items-center justify-between transition group">
+                    <button
+                        onclick="processarPagamento('CREDITO')"
+                        class="w-full bg-zinc-800 hover:bg-blue-900/30 border border-zinc-700 hover:border-blue-500 p-4 rounded-xl flex items-center justify-between transition group"
+                    >
                         <div class="flex items-center space-x-3">
                             <i class="fa-solid fa-credit-card text-blue-400 text-xl group-hover:scale-110 transition"></i>
-                            <span class="font-bold text-white text-sm">Cartão de Crédito</span>
+
+                            <span class="font-bold text-white text-sm">
+                                Cartão de Crédito
+                            </span>
                         </div>
+
                         <i class="fa-solid fa-chevron-right text-zinc-600 group-hover:text-blue-400 text-xs"></i>
                     </button>
                 </div>
 
                 <div class="pt-6 text-center">
                     <span class="text-[10px] text-zinc-500 font-medium flex justify-center items-center gap-2">
-                        <i class="fa-solid fa-lock"></i> Pagamento Seguro via Mercado Pago
+                        <i class="fa-solid fa-lock"></i>
+                        Pagamento Seguro via Mercado Pago
                     </span>
                 </div>
             </div>
         </div>
     </div>
 
-
-    <!-- NOTIFICAÇÃO TOAST -->
-    <div id="toast-notification" class="fixed top-4 left-1/2 -translate-x-1/2 z-[110] w-11/12 max-w-md bg-zinc-900 border border-orange-500/50 backdrop-blur-md rounded-2xl p-3.5 shadow-2xl flex items-center space-x-3 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-full">
-        <div id="toast-icon-bg" class="w-9 h-9 rounded-xl bg-orange-500/20 text-orange-500 flex items-center justify-center shrink-0">
+    <!-- ========================================== -->
+    <!-- NOTIFICAÇÕES -->
+    <!-- ========================================== -->
+    <div
+        id="toast-notification"
+        class="fixed top-4 left-1/2 -translate-x-1/2 z-[110] w-11/12 max-w-md bg-zinc-900 border border-orange-500/50 backdrop-blur-md rounded-2xl p-3.5 shadow-2xl flex items-center space-x-3 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-full"
+    >
+        <div
+            id="toast-icon-bg"
+            class="w-9 h-9 rounded-xl bg-orange-500/20 text-orange-500 flex items-center justify-center shrink-0"
+        >
             <i id="toast-icon" class="fa-solid fa-bell text-base"></i>
         </div>
+
         <div class="flex-1">
-            <h5 id="toast-title" class="text-xs font-bold text-white uppercase">Notificação</h5>
-            <p id="toast-message" class="text-[11px] text-zinc-300">Mensagem do sistema.</p>
+            <h5
+                id="toast-title"
+                class="text-xs font-bold text-white uppercase"
+            >
+                Notificação
+            </h5>
+
+            <p
+                id="toast-message"
+                class="text-[11px] text-zinc-300"
+            >
+                Mensagem do sistema.
+            </p>
         </div>
     </div>
 
     <script>
         // ==========================================
-        // DADOS E CONFIGURAÇÕES BASE (COPIADOS DA MESA PARA MANTER O PADRÃO)
+        // CONFIGURAÇÕES
         // ==========================================
         const API_URL = 'https://restaurante1-backend.onrender.com';
-        
+
         window.addEventListener('DOMContentLoaded', () => {
             renderCategories();
             renderDishes();
         });
 
-        // NOTA: Estes arrays são IDÊNTICOS aos do painel de mesa.
+        // ==========================================
+        // PRODUTOS DO CARDÁPIO
+        // ==========================================
         const MENU_DATA = [
-            { id: 'h1', name: 'Smash Bacon Supreme', category: 'hamburgueres', price: 34.90, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80', description: 'Dois smashes artesanais 90g, cheddar, bacon crocante e maionese da casa.' },
-            { id: 'h2', name: 'Double Cheddar Melt', category: 'hamburgueres', price: 38.90, image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80', description: 'Blend especial 180g, muito creme cheddar melt e cebola caramelizada.' },
-            { id: 'h3', name: 'Crispy Chicken Burger', category: 'hamburgueres', price: 32.90, image: 'https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&w=600&q=80', description: 'Sobrecoxa empanada crocante, alface americana, molho tártaro artesanal.' },
-            { id: 'h4', name: 'Burger Vegetariano de Grão', category: 'hamburgueres', price: 29.90, image: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80', description: 'Hambúrguer de grão-de-bico com quinoa, queijo prato, tomate e rúcula.' },
-            
-            { id: 'p1', name: 'Batata Rústica Trufada', category: 'petiscos', price: 28.90, image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80', description: 'Batatas com azeite de trufas, flor de sal e parmesão ralado.' },
-            { id: 'p2', name: 'Onion Rings Crocantes', category: 'petiscos', price: 24.90, image: 'https://images.unsplash.com/photo-1639024471283-03518883512d?auto=format&fit=crop&w=600&q=80', description: 'Anéis de cebola empanados super crocantes acompanhados de molho barbecue.' },
-            { id: 'p3', name: 'Dadinhos de Tapioca', category: 'petiscos', price: 31.90, image: 'https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&w=600&q=80', description: 'Dadinhos de tapioca com queijo coalho servidos com geleia de pimenta.' },
-
-            { id: 'b1', name: 'Refrigerante Lata', category: 'bebidas', price: 7.00, image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80', description: 'Lata 350ml gelada (Coca-Cola, Guaraná, Sprite).' },
-            { id: 'b2', name: 'Suco Natural de Laranja', category: 'bebidas', price: 9.50, image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=600&q=80', description: 'Feito na hora com frutas frescas 400ml.' },
-            { id: 'b3', name: 'Cerveja Artesanal IPA 500ml', category: 'bebidas', price: 19.90, image: 'https://images.unsplash.com/photo-1608270105387-98565538e12d?auto=format&fit=crop&w=600&q=80', description: 'Cerveja artesanal encorpada com notas cítricas.' },
-            { id: 'b4', name: 'Água Mineral com Gás', category: 'bebidas', price: 5.00, image: 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?auto=format&fit=crop&w=600&q=80', description: 'Garrafa 500ml.' },
-
-            { id: 's1', name: 'Petit Gâteau com Sorvete', category: 'sobremesas', price: 22.00, image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80', description: 'Bolinho de chocolate quente com recheio cremoso e sorvete de baunilha.' },
-            { id: 's2', name: 'Brownie de Chocolate Belga', category: 'sobremesas', price: 18.50, image: 'https://images.unsplash.com/photo-1514517521153-1be72277b32f?auto=format&fit=crop&w=600&q=80', description: 'Brownie denso com nozes e calda de chocolate belga.' }
+            {
+                id: 'h1',
+                name: 'Smash Bacon Supreme',
+                category: 'hamburgueres',
+                price: 34.90,
+                image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80',
+                description: 'Dois smashes artesanais 90g, cheddar, bacon crocante e maionese da casa.'
+            },
+            {
+                id: 'h2',
+                name: 'Double Cheddar Melt',
+                category: 'hamburgueres',
+                price: 38.90,
+                image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80',
+                description: 'Blend especial 180g, muito creme cheddar melt e cebola caramelizada.'
+            },
+            {
+                id: 'h3',
+                name: 'Crispy Chicken Burger',
+                category: 'hamburgueres',
+                price: 32.90,
+                image: 'https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&w=600&q=80',
+                description: 'Sobrecoxa empanada crocante, alface americana, molho tártaro artesanal.'
+            },
+            {
+                id: 'h4',
+                name: 'Burger Vegetariano de Grão',
+                category: 'hamburgueres',
+                price: 29.90,
+                image: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80',
+                description: 'Hambúrguer de grão-de-bico com quinoa, queijo prato, tomate e rúcula.'
+            },
+            {
+                id: 'p1',
+                name: 'Batata Rústica Trufada',
+                category: 'petiscos',
+                price: 28.90,
+                image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80',
+                description: 'Batatas com azeite de trufas, flor de sal e parmesão ralado.'
+            },
+            {
+                id: 'p2',
+                name: 'Onion Rings Crocantes',
+                category: 'petiscos',
+                price: 24.90,
+                image: 'https://images.unsplash.com/photo-1639024471283-03518883512d?auto=format&fit=crop&w=600&q=80',
+                description: 'Anéis de cebola empanados super crocantes acompanhados de molho barbecue.'
+            },
+            {
+                id: 'p3',
+                name: 'Dadinhos de Tapioca',
+                category: 'petiscos',
+                price: 31.90,
+                image: 'https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&w=600&q=80',
+                description: 'Dadinhos de tapioca com queijo coalho servidos com geleia de pimenta.'
+            },
+            {
+                id: 'b1',
+                name: 'Refrigerante Lata',
+                category: 'bebidas',
+                price: 7.00,
+                image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80',
+                description: 'Lata 350ml gelada (Coca-Cola, Guaraná, Sprite).'
+            },
+            {
+                id: 'b2',
+                name: 'Suco Natural de Laranja',
+                category: 'bebidas',
+                price: 9.50,
+                image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=600&q=80',
+                description: 'Feito na hora com frutas frescas 400ml.'
+            },
+            {
+                id: 'b3',
+                name: 'Cerveja Artesanal IPA 500ml',
+                category: 'bebidas',
+                price: 19.90,
+                image: 'https://images.unsplash.com/photo-1608270105387-98565538e12d?auto=format&fit=crop&w=600&q=80',
+                description: 'Cerveja artesanal encorpada com notas cítricas.'
+            },
+            {
+                id: 'b4',
+                name: 'Água Mineral com Gás',
+                category: 'bebidas',
+                price: 5.00,
+                image: 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?auto=format&fit=crop&w=600&q=80',
+                description: 'Garrafa 500ml.'
+            },
+            {
+                id: 's1',
+                name: 'Petit Gâteau com Sorvete',
+                category: 'sobremesas',
+                price: 22.00,
+                image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80',
+                description: 'Bolinho de chocolate quente com recheio cremoso e sorvete de baunilha.'
+            },
+            {
+                id: 's2',
+                name: 'Brownie de Chocolate Belga',
+                category: 'sobremesas',
+                price: 18.50,
+                image: 'https://images.unsplash.com/photo-1514517521153-1be72277b32f?auto=format&fit=crop&w=600&q=80',
+                description: 'Brownie denso com nozes e calda de chocolate belga.'
+            }
         ];
 
         const CATEGORIES = [
-            { id: 'hamburgueres', name: 'Hambúrgueres', icon: 'fa-burger' },
-            { id: 'petiscos', name: 'Petiscos', icon: 'fa-utensils' },
-            { id: 'bebidas', name: 'Bebidas', icon: 'fa-glass-water' },
-            { id: 'sobremesas', name: 'Sobremesas', icon: 'fa-ice-cream' }
+            {
+                id: 'hamburgueres',
+                name: 'Hambúrgueres',
+                icon: 'fa-burger'
+            },
+            {
+                id: 'petiscos',
+                name: 'Petiscos',
+                icon: 'fa-utensils'
+            },
+            {
+                id: 'bebidas',
+                name: 'Bebidas',
+                icon: 'fa-glass-water'
+            },
+            {
+                id: 'sobremesas',
+                name: 'Sobremesas',
+                icon: 'fa-ice-cream'
+            }
         ];
 
+        // ==========================================
+        // ESTADO
+        // ==========================================
         let activeCategory = null;
         let cart = [];
         let currentDish = null;
         let customizeQty = 1;
-        let valorTotalGlobal = 0; // Guarda o total para usar no final
+        let valorTotalGlobal = 0;
 
         // ==========================================
-        // RENDERIZAÇÃO DO MENU (Igual à Mesa)
+        // CATEGORIAS E PRODUTOS
         // ==========================================
-        function navigateTo(screenId) {
-            document.getElementById('screen-landing').classList.add('hidden');
-            document.getElementById('screen-menu').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
         function renderCategories() {
-            const container = document.getElementById('categories-container');
+            const container = document.getElementById(
+                'categories-container'
+            );
+
             container.innerHTML = '';
+
             CATEGORIES.forEach(cat => {
                 const isActive = activeCategory === cat.id;
                 const btn = document.createElement('button');
-                btn.className = `px-3.5 py-2 rounded-xl text-xs font-bold border transition-all shrink-0 flex items-center space-x-1.5 ${isActive ? 'active-category-btn' : 'bg-zinc-900 text-zinc-300 border-zinc-800'}`;
-                btn.onclick = () => { activeCategory = activeCategory === cat.id ? null : cat.id; renderCategories(); renderDishes(); };
-                btn.innerHTML = `<i class="fa-solid ${cat.icon} text-sm"></i> <span>${cat.name}</span>`;
+
+                btn.className = `
+                    px-3.5 py-2 rounded-xl text-xs font-bold border
+                    transition-all shrink-0 flex items-center space-x-1.5
+                    ${
+                        isActive
+                            ? 'active-category-btn'
+                            : 'bg-zinc-900 text-zinc-300 border-zinc-800'
+                    }
+                `;
+
+                btn.onclick = () => {
+                    activeCategory = activeCategory === cat.id
+                        ? null
+                        : cat.id;
+
+                    renderCategories();
+                    renderDishes();
+                };
+
+                btn.innerHTML = `
+                    <i class="fa-solid ${cat.icon} text-sm"></i>
+                    <span>${cat.name}</span>
+                `;
+
                 container.appendChild(btn);
             });
         }
 
         function renderDishes() {
             const grid = document.getElementById('dishes-grid');
+
             grid.innerHTML = '';
-            const filteredDishes = activeCategory ? MENU_DATA.filter(d => d.category === activeCategory) : MENU_DATA;
+
+            const filteredDishes = activeCategory
+                ? MENU_DATA.filter(d => d.category === activeCategory)
+                : MENU_DATA;
 
             filteredDishes.forEach(dish => {
                 const card = document.createElement('div');
-                card.className = "bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden shadow-lg active:scale-95 transition-all cursor-pointer flex flex-col";
-                card.onclick = () => openDishDetailModal(dish.id);
+
+                card.className = 'bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden shadow-lg active:scale-95 transition-all cursor-pointer flex flex-col';
+
+                card.onclick = () => {
+                    openDishDetailModal(dish.id);
+                };
+
                 card.innerHTML = `
                     <div class="w-full aspect-square relative bg-black overflow-hidden">
-                        <img src="${dish.image}" loading="lazy" class="w-full h-full object-cover">
+                        <img
+                            src="${dish.image}"
+                            loading="lazy"
+                            class="w-full h-full object-cover"
+                        >
                     </div>
+
                     <div class="p-3 bg-zinc-900 flex-1 flex flex-col justify-between">
-                        <div class="text-orange-500 font-black text-sm mb-0.5">R$ ${dish.price.toFixed(2).replace('.', ',')}</div>
-                        <h4 class="text-xs font-bold text-white line-clamp-2">${dish.name}</h4>
+                        <div class="text-orange-500 font-black text-sm mb-0.5">
+                            R$ ${dish.price.toFixed(2).replace('.', ',')}
+                        </div>
+
+                        <h4 class="text-xs font-bold text-white line-clamp-2">
+                            ${dish.name}
+                        </h4>
                     </div>
                 `;
+
                 grid.appendChild(card);
             });
         }
 
         // ==========================================
-        // SELEÇÃO E CARRINHO
+        // DETALHES DO PRATO
         // ==========================================
         function openDishDetailModal(dishId) {
             currentDish = MENU_DATA.find(d => d.id === dishId);
-            document.getElementById('modal-dish-title').textContent = currentDish.name;
-            document.getElementById('modal-dish-price').textContent = `R$ ${currentDish.price.toFixed(2).replace('.', ',')}`;
-            document.getElementById('modal-dish-description').textContent = currentDish.description;
-            document.getElementById('modal-dish-img').src = currentDish.image;
+
+            document.getElementById(
+                'modal-dish-title'
+            ).textContent = currentDish.name;
+
+            document.getElementById(
+                'modal-dish-price'
+            ).textContent = `R$ ${currentDish.price.toFixed(2).replace('.', ',')}`;
+
+            document.getElementById(
+                'modal-dish-description'
+            ).textContent = currentDish.description;
+
+            document.getElementById(
+                'modal-dish-img'
+            ).src = currentDish.image;
+
             openModal('modal-dish-detail');
         }
 
         function openCustomizeFromDetail() {
             closeModal('modal-dish-detail');
-            setTimeout(() => { 
+
+            setTimeout(() => {
                 customizeQty = 1;
-                document.getElementById('customize-qty').textContent = customizeQty;
-                document.getElementById('customize-total-price').textContent = `R$ ${currentDish.price.toFixed(2).replace('.', ',')}`;
+
+                document.getElementById(
+                    'customize-qty'
+                ).textContent = customizeQty;
+
+                document.getElementById(
+                    'customize-total-price'
+                ).textContent = `R$ ${currentDish.price.toFixed(2).replace('.', ',')}`;
+
                 document.getElementById('custom-notes').value = '';
-                openModal('modal-customize'); 
+
+                openModal('modal-customize');
             }, 150);
         }
 
         function updateCustomizeQty(delta) {
             customizeQty = Math.max(1, customizeQty + delta);
-            document.getElementById('customize-qty').textContent = customizeQty;
-            document.getElementById('customize-total-price').textContent = `R$ ${(currentDish.price * customizeQty).toFixed(2).replace('.', ',')}`;
+
+            document.getElementById(
+                'customize-qty'
+            ).textContent = customizeQty;
+
+            document.getElementById(
+                'customize-total-price'
+            ).textContent = `R$ ${(currentDish.price * customizeQty).toFixed(2).replace('.', ',')}`;
         }
 
+        // ==========================================
+        // CARRINHO
+        // ==========================================
         function confirmAddToCart() {
             cart.push({
                 cartId: Date.now(),
@@ -473,163 +952,332 @@
                 image: currentDish.image,
                 quantity: customizeQty,
                 unitPrice: currentDish.price,
-                notes: document.getElementById('custom-notes').value.trim()
+                notes: document.getElementById(
+                    'custom-notes'
+                ).value.trim()
             });
+
             updateCartBadge();
             closeModal('modal-customize');
-            showToast('Adicionado', `${currentDish.name} no carrinho.`, 'fa-circle-check');
+
+            showToast(
+                'Adicionado',
+                `${currentDish.name} no carrinho.`,
+                'fa-circle-check'
+            );
         }
 
         function updateCartBadge() {
             const badge = document.getElementById('cart-badge');
-            const total = cart.reduce((sum, item) => sum + item.quantity, 0);
-            if (total > 0) { badge.textContent = total; badge.classList.remove('hidden'); }
-            else { badge.classList.add('hidden'); }
+
+            const total = cart.reduce(
+                (sum, item) => sum + item.quantity,
+                0
+            );
+
+            if (total > 0) {
+                badge.textContent = total;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
         }
 
         function openCartModal() {
-            const container = document.getElementById('cart-items-container');
+            const container = document.getElementById(
+                'cart-items-container'
+            );
+
             container.innerHTML = '';
-            
+
             if (cart.length === 0) {
-                container.innerHTML = `<div class="text-center py-8 text-zinc-500 text-xs">O seu carrinho está vazio.</div>`;
-                document.getElementById('cart-total').textContent = 'R$ 0,00';
-                document.getElementById('btn-proceed-delivery').disabled = true;
+                container.innerHTML = `
+                    <div class="text-center py-8 text-zinc-500 text-xs">
+                        O seu carrinho está vazio.
+                    </div>
+                `;
+
+                document.getElementById(
+                    'cart-total'
+                ).textContent = 'R$ 0,00';
+
+                document.getElementById(
+                    'btn-proceed-delivery'
+                ).disabled = true;
+
                 valorTotalGlobal = 0;
             } else {
                 let total = 0;
-                document.getElementById('btn-proceed-delivery').disabled = false;
+
+                document.getElementById(
+                    'btn-proceed-delivery'
+                ).disabled = false;
+
                 cart.forEach(item => {
                     const itemTotal = item.unitPrice * item.quantity;
+
                     total += itemTotal;
-                    const safeNotes = item.notes.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+                    const safeNotes = item.notes
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;');
+
                     container.innerHTML += `
                         <div class="bg-zinc-800/80 p-3 rounded-xl border border-zinc-700 flex space-x-3">
-                            <img src="${item.image}" loading="lazy" class="w-12 h-12 rounded-lg object-cover">
+                            <img
+                                src="${item.image}"
+                                loading="lazy"
+                                class="w-12 h-12 rounded-lg object-cover"
+                            >
+
                             <div class="flex-1">
                                 <div class="flex justify-between">
-                                    <h5 class="text-xs font-bold text-white">${item.name}</h5>
-                                    <button onclick="removeCartItem(${item.cartId})" class="text-rose-400 text-xs p-1"><i class="fa-solid fa-trash"></i></button>
+                                    <h5 class="text-xs font-bold text-white">
+                                        ${item.name}
+                                    </h5>
+
+                                    <button
+                                        onclick="removeCartItem(${item.cartId})"
+                                        class="text-rose-400 text-xs p-1"
+                                    >
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
                                 </div>
-                                <div class="text-xs text-orange-500 font-bold">R$ ${itemTotal.toFixed(2).replace('.', ',')} (Qtd: ${item.quantity})</div>
-                                ${item.notes ? `<div class="text-[10px] text-zinc-400 italic">Obs: ${safeNotes}</div>` : ''}
+
+                                <div class="text-xs text-orange-500 font-bold">
+                                    R$ ${itemTotal.toFixed(2).replace('.', ',')}
+                                    (Qtd: ${item.quantity})
+                                </div>
+
+                                ${
+                                    item.notes
+                                        ? `<div class="text-[10px] text-zinc-400 italic">Obs: ${safeNotes}</div>`
+                                        : ''
+                                }
                             </div>
                         </div>
                     `;
                 });
+
                 valorTotalGlobal = total;
-                document.getElementById('cart-total').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+
+                document.getElementById(
+                    'cart-total'
+                ).textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
             }
+
             openModal('modal-cart');
         }
 
         function removeCartItem(id) {
             cart = cart.filter(i => i.cartId !== id);
+
             openCartModal();
             updateCartBadge();
         }
 
         // ==========================================
-        // FLUXO DE ENTREGA E PAGAMENTO
+        // ENTREGA
         // ==========================================
         function openDeliveryForm() {
             if (cart.length === 0) return;
+
             closeModal('modal-cart');
-            setTimeout(() => { openModal('modal-delivery-form'); }, 150);
+
+            setTimeout(() => {
+                openModal('modal-delivery-form');
+            }, 150);
         }
 
         function voltarParaCarrinho() {
             closeModal('modal-delivery-form');
-            setTimeout(() => { openModal('modal-cart'); }, 150);
+
+            setTimeout(() => {
+                openModal('modal-cart');
+            }, 150);
         }
 
         function openPaymentScreen() {
-            // Validar formulário básico
-            const nome = document.getElementById('del-nome').value.trim();
-            const tel = document.getElementById('del-telefone').value.trim();
-            const rua = document.getElementById('del-rua').value.trim();
-            const num = document.getElementById('del-numero').value.trim();
+            const nome = document.getElementById(
+                'del-nome'
+            ).value.trim();
+
+            const tel = document.getElementById(
+                'del-telefone'
+            ).value.trim();
+
+            const rua = document.getElementById(
+                'del-rua'
+            ).value.trim();
+
+            const num = document.getElementById(
+                'del-numero'
+            ).value.trim();
 
             if (!nome || !tel || !rua || !num) {
-                showToast("Dados incompletos", "Por favor, preencha o Nome, Telefone, Rua e Número.", "fa-triangle-exclamation");
+                showToast(
+                    'Dados incompletos',
+                    'Por favor, preencha o Nome, Telefone, Rua e Número.',
+                    'fa-triangle-exclamation'
+                );
+
                 return;
             }
 
             closeModal('modal-delivery-form');
-            document.getElementById('payment-total-display').textContent = `R$ ${valorTotalGlobal.toFixed(2).replace('.', ',')}`;
-            setTimeout(() => { openModal('modal-payment'); }, 150);
+
+            document.getElementById(
+                'payment-total-display'
+            ).textContent = `R$ ${valorTotalGlobal.toFixed(2).replace('.', ',')}`;
+
+            setTimeout(() => {
+                openModal('modal-payment');
+            }, 150);
         }
 
         function voltarParaEntrega() {
             closeModal('modal-payment');
-            setTimeout(() => { openModal('modal-delivery-form'); }, 150);
+
+            setTimeout(() => {
+                openModal('modal-delivery-form');
+            }, 150);
         }
 
-        // AQUI ENTRA A API DO MERCADO PAGO FUTURAMENTE
+        // ==========================================
+        // PAGAMENTO — SIMULAÇÃO ATUAL
+        // A API do Mercado Pago será integrada depois.
+        // ==========================================
         async function processarPagamento(metodo) {
-            showToast("A processar pagamento...", "Aguarde a confirmação do Mercado Pago.", "fa-spinner fa-spin");
-            
-            // Aqui você chamará a API do Mercado Pago para gerar PIX ou link de cartão.
-            // Para já, simulamos que pagou com sucesso e enviamos para a cozinha (Backend)
-            
+            showToast(
+                'A processar pagamento...',
+                'Aguarde a confirmação do Mercado Pago.',
+                'fa-spinner fa-spin'
+            );
+
+            // Simulação mantida para os testes atuais.
             setTimeout(() => {
                 finalizarPedidoEEnviarAoBackend(metodo);
-            }, 1500); // Simula 1.5s de processamento
+            }, 1500);
         }
 
-async function finalizarPedidoEEnviarAoBackend(metodoPagamento) {
-            // 1. Recolhe os dados do formulário de entrega
+        // ==========================================
+        // ENVIO DO PEDIDO PARA O BACKEND
+        // ==========================================
+        async function finalizarPedidoEEnviarAoBackend(metodoPagamento) {
             const deliveryInfo = {
-                nome: document.getElementById('del-nome').value.trim(),
-                telefone: document.getElementById('del-telefone').value.trim(),
-                rua: document.getElementById('del-rua').value.trim(),
-                numero: document.getElementById('del-numero').value.trim(),
-                bairro: document.getElementById('del-bairro').value.trim(),
-                complemento: document.getElementById('del-complemento').value.trim(),
+                nome: document.getElementById(
+                    'del-nome'
+                ).value.trim(),
+
+                telefone: document.getElementById(
+                    'del-telefone'
+                ).value.trim(),
+
+                rua: document.getElementById(
+                    'del-rua'
+                ).value.trim(),
+
+                numero: document.getElementById(
+                    'del-numero'
+                ).value.trim(),
+
+                bairro: document.getElementById(
+                    'del-bairro'
+                ).value.trim(),
+
+                complemento: document.getElementById(
+                    'del-complemento'
+                ).value.trim(),
+
                 metodo_pagamento: metodoPagamento,
+
+                // Mantido para a simulação atual do pagamento.
                 pago_online: true
             };
 
-            showToast("A enviar pedido...", "A registar o seu pedido na cozinha.", "fa-spinner fa-spin");
+            showToast(
+                'A enviar pedido...',
+                'A registar o seu pedido na cozinha.',
+                'fa-spinner fa-spin'
+            );
 
             try {
-                // 2. Envio REAL para o seu Backend no Render
-                const response = await fetch(`${API_URL}/api/delivery/novo`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        cliente: deliveryInfo,
-                        itens: cart,
-                        valor_total: valorTotalGlobal,
-                        origem: 'WHATSAPP_DELIVERY'
-                    })
-                });
+                const response = await fetch(
+                    `${API_URL}/api/delivery/novo`,
+                    {
+                        method: 'POST',
 
-                if (!response.ok) throw new Error("Erro ao salvar pedido no servidor");
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
 
-                // 3. Limpa o carrinho e mostra a tela de sucesso
+                        body: JSON.stringify({
+                            cliente: deliveryInfo,
+                            itens: cart,
+                            valor_total: valorTotalGlobal,
+                            origem: 'WHATSAPP_DELIVERY'
+                        })
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error(
+                        'Erro ao salvar pedido no servidor'
+                    );
+                }
+
                 cart = [];
+
                 updateCartBadge();
                 closeModal('modal-payment');
-                
+
                 document.getElementById('screen-menu').innerHTML = `
                     <div class="h-[80vh] flex flex-col items-center justify-center text-center p-6 space-y-4 animate-fade-in">
                         <div class="w-20 h-20 bg-emerald-500/20 text-emerald-500 rounded-full flex items-center justify-center text-4xl mb-2 border border-emerald-500/30">
                             <i class="fa-solid fa-check"></i>
                         </div>
-                        <h2 class="text-2xl font-black text-white">Pedido Realizado!</h2>
-                        <p class="text-zinc-400 text-sm">O seu pagamento foi aprovado e o pedido já seguiu para a nossa cozinha.</p>
+
+                        <h2 class="text-2xl font-black text-white">
+                            Pedido Realizado!
+                        </h2>
+
+                        <p class="text-zinc-400 text-sm">
+                            O seu pagamento foi aprovado e o pedido
+                            já seguiu para a nossa cozinha.
+                        </p>
+
                         <div class="bg-zinc-900 p-4 rounded-2xl border border-zinc-800 w-full mt-4 text-left space-y-1">
-                            <p class="text-[10px] text-zinc-500 uppercase font-black">Cliente</p>
-                            <p class="text-white text-xs font-bold">${deliveryInfo.nome}</p>
-                            <p class="text-[10px] text-zinc-500 uppercase font-black pt-2">Endereço de Entrega</p>
-                            <p class="text-zinc-300 text-xs">${deliveryInfo.rua}, ${deliveryInfo.numero} - ${deliveryInfo.bairro}</p>
+                            <p class="text-[10px] text-zinc-500 uppercase font-black">
+                                Cliente
+                            </p>
+
+                            <p class="text-white text-xs font-bold">
+                                ${deliveryInfo.nome}
+                            </p>
+
+                            <p class="text-[10px] text-zinc-500 uppercase font-black pt-2">
+                                Endereço de Entrega
+                            </p>
+
+                            <p class="text-zinc-300 text-xs">
+                                ${deliveryInfo.rua},
+                                ${deliveryInfo.numero} -
+                                ${deliveryInfo.bairro}
+                            </p>
                         </div>
                     </div>
                 `;
             } catch (error) {
-                console.error("Erro ao enviar pedido de delivery:", error);
-                showToast("Erro de Envio", "Não foi possível comunicar com o restaurante. Tente novamente.", "fa-triangle-exclamation");
+                console.error(
+                    'Erro ao enviar pedido de delivery:',
+                    error
+                );
+
+                showToast(
+                    'Erro de Envio',
+                    'Não foi possível comunicar com o restaurante. Tente novamente.',
+                    'fa-triangle-exclamation'
+                );
             }
         }
 
@@ -637,19 +1285,48 @@ async function finalizarPedidoEEnviarAoBackend(metodoPagamento) {
         // UTILITÁRIOS
         // ==========================================
         let toastTimeout;
+
         function showToast(title, message, icon = 'fa-bell') {
-            const toast = document.getElementById('toast-notification');
-            document.getElementById('toast-title').textContent = title;
-            document.getElementById('toast-message').textContent = message;
-            document.getElementById('toast-icon').className = `fa-solid ${icon} text-base`;
-            
-            toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-full');
+            const toast = document.getElementById(
+                'toast-notification'
+            );
+
+            document.getElementById(
+                'toast-title'
+            ).textContent = title;
+
+            document.getElementById(
+                'toast-message'
+            ).textContent = message;
+
+            document.getElementById(
+                'toast-icon'
+            ).className = `fa-solid ${icon} text-base`;
+
+            toast.classList.remove(
+                'opacity-0',
+                'pointer-events-none',
+                '-translate-y-full'
+            );
+
             clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => { toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-full'); }, 2500);
+
+            toastTimeout = setTimeout(() => {
+                toast.classList.add(
+                    'opacity-0',
+                    'pointer-events-none',
+                    '-translate-y-full'
+                );
+            }, 2500);
         }
 
-        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
     </script>
 </body>
 </html>
