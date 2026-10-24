@@ -76,7 +76,9 @@
     @media (prefers-reduced-motion: reduce) {
       .badge-pedidos { animation: none; }
     }
-  </style>
+  .wa-layout {display:grid;grid-template-columns:290px minmax(0,1fr);height:65vh;min-height:420px;gap:12px;}
+@media(max-width:700px){.wa-layout{grid-template-columns:1fr;height:auto}.wa-layout>aside{max-height:220px}.wa-layout>section{height:65vh;min-height:390px}}
+</style>
 </head>
 <body class="h-full font-sans text-zinc-100 bg-zinc-950 flex flex-col selection:bg-orange-500 selection:text-white">
 
@@ -136,6 +138,7 @@
       <button onclick="switchTab('estatisticas')" id="tab-btn-estatisticas" class="px-4 py-2 rounded-lg text-xs font-bold transition text-zinc-400 hover:text-white flex items-center space-x-2">
         <i class="fa-solid fa-chart-pie"></i> <span class="hidden sm:inline">Estatísticas</span>
       </button>
+      <button onclick="switchTab('whatsapp')" id="tab-btn-whatsapp" class="px-4 py-2 rounded-lg text-xs font-bold transition text-zinc-400 hover:text-white flex items-center space-x-2"><i class="fa-brands fa-whatsapp"></i><span class="hidden sm:inline">WhatsApp</span><span id="badge-whatsapp" class="badge-pedidos" hidden>0</span></button>
     </div>
     
     <!-- Menus Direitos -->
@@ -166,7 +169,26 @@
     <!-- ========================================== -->
     <!-- JANELA 1: MESAS AO VIVO -->
     <!-- ========================================== -->
-    <div id="view-mesas" class="space-y-4">
+    <div id="view-whatsapp" class="hidden space-y-3">
+  <div class="flex flex-wrap justify-between gap-3 items-center"><h3 class="font-bold text-lg"><i class="fa-brands fa-whatsapp text-green-400 mr-2"></i>Conversas</h3><button onclick="carregarWhatsApp()" class="rounded-lg bg-zinc-800 px-4 py-2 text-sm">Atualizar</button></div>
+  <p id="wa-config" class="text-xs text-zinc-400" role="status">Carregando conexão…</p>
+  <div class="wa-layout">
+    <aside class="bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden flex flex-col min-h-0">
+      <input id="wa-busca" oninput="waRenderLista()" placeholder="Buscar nome ou telefone" aria-label="Buscar conversa" class="bg-zinc-950 p-3 text-sm w-full outline-none border-b border-zinc-800">
+      <div id="wa-lista" class="overflow-y-auto flex-1 p-2 space-y-1"></div>
+    </aside>
+    <section class="bg-zinc-900 rounded-xl border border-zinc-800 flex flex-col min-h-0 overflow-hidden">
+      <div id="wa-titulo" class="border-b border-zinc-800 p-4 font-bold text-sm">Selecione uma conversa</div>
+      <div id="wa-historico" class="p-4 flex-1 overflow-y-auto space-y-3 bg-zinc-950" aria-live="polite"></div>
+      <form onsubmit="event.preventDefault(); waEnviar()" class="p-3 border-t border-zinc-800 space-y-2">
+        <p id="wa-aviso" class="text-xs text-zinc-400">Respostas em texto. Imagens, áudios e documentos recebidos aparecem como indicação de anexo.</p>
+        <div class="flex gap-2"><textarea id="wa-texto" oninput="waSalvarRascunho()" maxlength="4096" rows="2" aria-label="Mensagem" placeholder="Digite sua resposta" class="flex-1 min-w-0 resize-none bg-zinc-950 rounded-xl p-3 text-sm outline-none border border-zinc-700" disabled></textarea><button id="wa-enviar" type="submit" disabled class="bg-green-600 disabled:opacity-40 rounded-xl px-4 font-bold text-sm">Enviar</button></div>
+      </form>
+    </section>
+  </div>
+</div>
+
+<div id="view-mesas" class="space-y-4">
       <div id="tables-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
     </div>
 
@@ -691,6 +713,7 @@
             carregarMesas();
             carregarDeliveriesReais();
             iniciarSocket();
+            carregarWhatsApp();
         } else {
             document.getElementById('login-screen').style.display = 'flex';
         }
@@ -722,6 +745,7 @@
                 carregarMesas();
                 carregarDeliveriesReais();
                 iniciarSocket();
+            carregarWhatsApp();
             } else {
                 err.innerText = data.error || 'Utilizador ou senha incorretos!';
                 err.classList.remove('hidden');
@@ -775,7 +799,7 @@
     }
 
     function switchTab(tab) {
-        ['mesas', 'caixa', 'historico', 'estatisticas', 'delivery'].forEach(t => {
+        ['mesas', 'caixa', 'historico', 'estatisticas', 'delivery', 'whatsapp'].forEach(t => {
             const view = document.getElementById(`view-${t}`);
             const btn = document.getElementById(`tab-btn-${t}`);
             if (view) view.classList.add('hidden');
@@ -790,6 +814,7 @@
 
         if (tab === 'mesas') carregarMesas();
         else if (tab === 'delivery') carregarDeliveriesReais();
+        else if (tab === 'whatsapp') carregarWhatsApp();
         else if (tab === 'caixa') carregarCaixa();
         else if (tab === 'historico') carregarHistorico('todos');
         else if (tab === 'estatisticas') carregarEstatisticas();
@@ -873,6 +898,7 @@
                                 <span class="text-[10px] text-emerald-400">${deliveryTexto(p.origem || 'WhatsApp')} · ${modalidadeDelivery(p)}</span>
                             </div>
                             <h4 class="text-sm font-bold text-white">${deliveryTexto(p.cliente_nome || deliveryCliente(p).nome || 'Cliente')}</h4>
+                            ${status === 'preparo' && !retirada ? (p.pronto_em ? '<p class="text-xs text-green-400 mt-2">Pronto · aguardando saída</p>' : `<button onclick="event.stopPropagation();marcarDeliveryPronto(${id})" class="text-xs text-green-400 border border-green-800 px-3 py-2 mt-2 rounded-lg" ${deliveriesEmAtualizacao.has(id)?'disabled':''}>Marcar pronto</button>`) : ''}
                             <p class="text-xs text-zinc-400 mt-1 truncate">${deliveryTexto(p.endereco || 'Endereço não informado')}</p>
                             <div class="mt-3 pt-3 border-t border-zinc-800 flex justify-between items-center gap-2">
                                 <span class="text-xs font-black text-orange-400">${deliveryMoeda(p.valor_total)}</span>
@@ -895,6 +921,17 @@
             console.error('Erro ao carregar entregas:', error);
             showToast(error.message, 'rose');
         }
+    }
+
+    async function marcarDeliveryPronto(id) {
+        if(deliveriesEmAtualizacao.has(id))return;
+        deliveriesEmAtualizacao.add(id);
+        try {
+            const r=await fetchAPI('/api/delivery/pronto',{method:'POST',body:JSON.stringify({id})});
+            const d=await r.json();if(!r.ok)throw new Error(d.error||'Falha ao marcar pronto.');
+            await carregarDeliveriesReais();
+        } catch(e) {showToast(e.message,'rose');}
+        finally {deliveriesEmAtualizacao.delete(id);await carregarDeliveriesReais();}
     }
 
     function prepararModalDelivery() {
@@ -2218,6 +2255,95 @@
         osc.start(now);
         osc.stop(now + 0.5);
     }
-  </script>
+  // Caixa de entrada. Não envia mensagens por abrir uma conversa.
+let waConversas=[],waSelecionado=null,waMensagens=[],waContato=null,waPodeEnviar=false,waAtivo=false;
+let waCarregando=false,waEnviando=false,waLeituraEmCurso=false;
+const waRascunhos=new Map(),waChaves=new Map();
+const waStatus={fila:'Na fila',enviando:'Enviando',aceita_api:'Aceita pela API',enviada:'Enviada',entregue:'Entregue',lida:'Lida',falhou:'Falha',incerto:'Envio incerto',bloqueada:'Não enviada',recebida:'Recebida'};
+function waHTML(v) { return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+async function waAPI(url,op={}) { const r=await fetchAPI(url,op),d=await r.json(); if(!r.ok) throw new Error(d.error || 'Falha no WhatsApp.'); return d; }
+function waVisivel() { return !document.hidden && !document.getElementById('view-whatsapp').classList.contains('hidden'); }
+function waSalvarRascunho() {
+    if(waSelecionado) { waRascunhos.set(waSelecionado,document.getElementById('wa-texto').value); waChaves.delete(waSelecionado); }
+}
+function waRenderLista() {
+    const busca=document.getElementById('wa-busca').value.toLowerCase();
+    document.getElementById('wa-lista').innerHTML=waConversas.filter(c=>(c.nome+' '+c.telefone).toLowerCase().includes(busca)).map(c=>
+        `<button onclick="waAbrir('${c.telefone}')" class="w-full text-left p-3 rounded-lg ${waSelecionado===c.telefone?'bg-green-900/40':'hover:bg-zinc-800'}"><span class="flex justify-between gap-2"><strong class="text-sm">${waHTML(c.nome||c.telefone)}</strong>${c.nao_lidas?`<b class="bg-red-500 text-white rounded-full px-2 text-xs">${c.nao_lidas}</b>`:''}</span><span class="block text-xs text-zinc-500">+${c.telefone}</span><span class="block truncate text-xs text-zinc-400 mt-1">${waHTML(c.ultima_mensagem)}</span></button>`).join('') || '<p class="p-3 text-sm text-zinc-500">Nenhuma conversa encontrada.</p>';
+}
+async function carregarWhatsApp() {
+    if(waCarregando || !localStorage.getItem('admin_token')) return;
+    waCarregando=true;
+    try {
+        const d=await waAPI('/api/whatsapp/conversas'); waConversas=d.conversas; waAtivo=d.configurado;
+        document.getElementById('wa-config').textContent=waAtivo
+            ? 'Credenciais configuradas. O recebimento depende do webhook conectado à Meta.'+(d.template_configurado?'':' Modelo de avisos fora de 24h ainda não configurado.')
+            : 'Integração aguardando ativação no servidor. Nenhuma mensagem será enviada enquanto estiver desativada.';
+        const total=waConversas.reduce((s,c)=>s+Number(c.nao_lidas),0),badge=document.getElementById('badge-whatsapp');
+        badge.hidden=total===0; badge.textContent=String(total);
+        waRenderLista();
+        if(waSelecionado && waVisivel()) await waAtualizarHistorico();
+    } catch(e) { document.getElementById('wa-config').textContent=e.message; }
+    finally { waCarregando=false; }
+}
+async function waAbrir(tel) {
+    if(waEnviando) return;
+    waSelecionado=tel; waMensagens=[]; waContato=null; waPodeEnviar=false;
+    document.getElementById('wa-texto').value=waRascunhos.get(tel)||'';
+    document.getElementById('wa-texto').disabled=true; document.getElementById('wa-enviar').disabled=true;
+    document.getElementById('wa-historico').textContent='Carregando…';
+    waRenderLista();
+    await waAtualizarHistorico(true);
+}
+async function waAtualizarHistorico(rolar=false,antigas=false) {
+    const tel=waSelecionado; if(!tel) return;
+    try {
+        const cursor=antigas && waMensagens.length?'?antes='+waMensagens[0].id:'';
+        const d=await waAPI('/api/whatsapp/conversas/'+tel+cursor);
+        if(tel!==waSelecionado) return;
+        const anteriores=waMensagens;
+        // Preserva páginas antigas quando a atualização traz apenas as últimas 100.
+        waMensagens=[...new Map([...anteriores,...d.mensagens].map(m=>[String(m.id),m])).values()]
+            .sort((a,b)=>BigInt(a.id)<BigInt(b.id)?-1:1);
+        waContato=d.contato; waPodeEnviar=waAtivo && d.janela_aberta && !waContato?.bloqueado;
+        const nome=waContato?.nome || tel;
+        document.getElementById('wa-titulo').textContent=nome+' · +'+tel;
+        document.getElementById('wa-aviso').textContent=waContato?.bloqueado?'O cliente solicitou parar as mensagens.'
+            :!d.janela_aberta?'Janela de atendimento encerrada. Aguarde uma nova mensagem para responder em texto livre.'
+            :'Janela de atendimento aberta. Respostas em texto disponíveis.';
+        document.getElementById('wa-texto').disabled=!waPodeEnviar || waEnviando;
+        document.getElementById('wa-enviar').disabled=!waPodeEnviar || waEnviando;
+        const el=document.getElementById('wa-historico'),baixo=el.scrollHeight-el.scrollTop-el.clientHeight<80;
+        const altura=el.scrollHeight,pos=el.scrollTop;
+        const html='<button onclick="waAtualizarHistorico(false,true)" class="text-xs text-green-400 block mx-auto mb-3">Carregar mensagens anteriores</button>'+waMensagens.map(m=>
+            `<div class="flex ${m.direcao==='saida'?'justify-end':'justify-start'}"><div class="max-w-[90%] rounded-xl p-3 ${m.direcao==='saida'?'bg-green-900/60':'bg-zinc-800'}"><p class="text-sm whitespace-pre-wrap break-words">${waHTML(m.texto)}</p><p class="text-[10px] text-zinc-400 mt-2">${waHTML(new Date(m.recebida_em||m.criada_em).toLocaleString('pt-BR'))} · ${waHTML(waStatus[m.status]||m.status)}</p>${m.erro?`<p class="text-xs text-rose-300 mt-1">${waHTML(m.erro)}</p>`:''}</div></div>`).join('');
+        if(el.innerHTML!==html) el.innerHTML=html;
+        if(antigas) el.scrollTop=pos+(el.scrollHeight-altura); else if(rolar||baixo) el.scrollTop=el.scrollHeight;
+        if(waVisivel() && (rolar || baixo) && !antigas && !waLeituraEmCurso && waMensagens.length) {
+            waLeituraEmCurso=true;
+            try {
+                await waAPI('/api/whatsapp/conversas/'+tel+'/lida',{method:'POST',body:JSON.stringify({ate:waMensagens[waMensagens.length-1].id})});
+                const c=waConversas.find(c=>c.telefone===tel);if(c)c.nao_lidas=0;
+                waRenderLista();
+                const b=document.getElementById('badge-whatsapp'),n=waConversas.reduce((s,c)=>s+Number(c.nao_lidas),0);b.textContent=String(n);b.hidden=!n;
+            } finally {waLeituraEmCurso=false;}
+        }
+    } catch(e) { showToast(e.message,'rose'); }
+}
+async function waEnviar() {
+    if(!waSelecionado||!waPodeEnviar||waEnviando)return;
+    const tel=waSelecionado,el=document.getElementById('wa-texto'),texto=el.value.trim();if(!texto)return;
+    const chave=waChaves.get(tel)||crypto.randomUUID();waChaves.set(tel,chave);
+    waEnviando=true;el.disabled=true;document.getElementById('wa-enviar').disabled=true;
+    try {
+        await waAPI('/api/whatsapp/enviar',{method:'POST',body:JSON.stringify({telefone:tel,texto,chave})});
+        waRascunhos.delete(tel);waChaves.delete(tel);el.value='';
+        await waAtualizarHistorico(true);
+    } catch(e) {showToast(e.message,'rose');}
+    finally {waEnviando=false;el.disabled=!waPodeEnviar;document.getElementById('wa-enviar').disabled=!waPodeEnviar;}
+}
+setInterval(()=>{if(localStorage.getItem('admin_token')&&!document.hidden)carregarWhatsApp();},10000);
+
+</script>
 </body>
 </html>
