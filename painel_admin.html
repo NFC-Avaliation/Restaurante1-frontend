@@ -60,6 +60,22 @@
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #3f3f46; border-radius: 10px; }
     .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #f97316; }
+    .badge-pedidos {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 21px; height: 21px; padding: 0 6px; flex-shrink: 0;
+      border-radius: 999px; background: #ff1744; color: #fff;
+      font-size: 11px; font-weight: 900; line-height: 1;
+      border: 1px solid #ff6b81; box-shadow: 0 0 10px #ff1744aa;
+      animation: brilho-pedido 1.8s ease-in-out infinite;
+    }
+    .badge-pedidos[hidden] { display: none !important; }
+    @keyframes brilho-pedido {
+      0%, 100% { box-shadow: 0 0 6px #ff174480; }
+      50% { box-shadow: 0 0 15px #ff1744cc; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .badge-pedidos { animation: none; }
+    }
   </style>
 </head>
 <body class="h-full font-sans text-zinc-100 bg-zinc-950 flex flex-col selection:bg-orange-500 selection:text-white">
@@ -103,10 +119,12 @@
     <div class="flex items-center space-x-1 sm:space-x-2 bg-zinc-950 p-1 rounded-xl border border-zinc-800 shadow-inner overflow-x-auto custom-scrollbar max-w-full">
       <button onclick="switchTab('mesas')" id="tab-btn-mesas" class="px-4 py-2 rounded-lg text-xs font-bold transition bg-orange-500 text-black flex items-center space-x-2">
         <i class="fa-solid fa-chair"></i> <span class="hidden sm:inline">Mesas</span>
+        <span id="badge-pedidos-mesas" class="badge-pedidos" hidden aria-live="polite" aria-atomic="true">0</span>
       </button>
       
       <button onclick="switchTab('delivery')" id="tab-btn-delivery" class="px-4 py-2 rounded-lg text-xs font-bold transition text-zinc-400 hover:text-white flex items-center space-x-2">
         <i class="fa-solid fa-motorcycle"></i> <span class="hidden sm:inline">Delivery</span>
+        <span id="badge-pedidos-delivery" class="badge-pedidos" hidden aria-live="polite" aria-atomic="true">0</span>
       </button>
 
       <button onclick="switchTab('caixa')" id="tab-btn-caixa" class="px-4 py-2 rounded-lg text-xs font-bold transition text-zinc-400 hover:text-white flex items-center space-x-2">
@@ -816,6 +834,7 @@
             if (!Array.isArray(pedidos)) throw new Error('Lista de pedidos inválida.');
             if (carga !== deliveryCarga) return;
             deliveriesState = pedidos;
+            atualizarSinalizadores();
             const vazios = {
                 novo: 'Nenhum pedido novo',
                 preparo: 'Nenhum em preparo',
@@ -1095,9 +1114,13 @@
     // MESAS E ATENDIMENTO
     // ==========================================
     async function carregarMesas() {
+        const carga = ++mesasCarga;
         try {
             const res = await fetchAPI('/api/mesas');
+            if (!res.ok) throw new Error('Erro ao carregar mesas.');
             const data = await res.json();
+            if (!Array.isArray(data)) throw new Error('Lista de mesas inválida.');
+            if (carga !== mesasCarga) return;
             
             tablesState = data.map(m => ({
                 id: m.mesa_id, number: m.numero,
@@ -1106,11 +1129,15 @@
                 waiterCalledAt: m.chamando_garcom ? true : false,
                 items: m.items ? m.items.map(i => ({ 
                     id: i.id, name: i.nome_item, 
-                    price: parseFloat(i.preco_unitario), qty: i.quantidade, notes: i.observacoes 
+                    price: parseFloat(i.preco_unitario), qty: Number(i.quantidade), notes: i.observacoes,
+                    pedidoLote: i.pedido_lote || null, quantidadeImpressa: Number(i.quantidade_impressa || 0) 
                 })) : []
             }));
             
             tablesState.sort((a, b) => parseInt(a.number, 10) - parseInt(b.number, 10));
+            itensImpressosGlobais = new Set(tablesState.flatMap(t => t.items)
+                .filter(i => quantidadePendenteMesa(i) === 0).map(i => i.id));
+            atualizarSinalizadores();
             atualizarStatusServidor(true);
             renderTablesGrid();
             renderWaiterQueue();
@@ -1118,6 +1145,7 @@
                 openTableModal(currentEditingTableId);
             }
         } catch (error) {
+            if (carga !== mesasCarga) return;
             atualizarStatusServidor(false);
         }
     }
@@ -1142,6 +1170,7 @@
                 <div>
                     <div class="flex justify-between items-center mb-3">
                         <span class="text-[10px] text-zinc-500 font-bold uppercase tracking-widest"><i class="fa-solid fa-chair"></i> MESA</span>
+                        ${sinalizadorMesa(table)}
                         ${isCalling ? '<span class="bg-amber-500 text-black px-2 py-0.5 rounded text-[10px] font-black">GARÇOM</span>' : ''}
                         ${isBusy && !isCalling ? '<span class="bg-emerald-500 text-black px-2 py-0.5 rounded text-[10px] font-black">ATIVA</span>' : ''}
                     </div>
@@ -1790,26 +1819,56 @@
     // ==========================================
     // IMPRESSÃO (CUPOM COZINHA)
     // ==========================================
+    // Pedidos pendentes: a impressão é registrada no servidor.
+    let mesasCarga = 0;
+    let impressaoMesaSnapshot = null;
+    let impressaoMesaEmAndamento = false;
+
+    function quantidadePendenteMesa(item) {
+        return Math.max(0, Number(item.qty) - Number(item.quantidadeImpressa || 0));
+    }
+
+    function contarPedidosPendentesMesa(table) {
+        return new Set(table.items.filter(i => quantidadePendenteMesa(i) > 0)
+            .map(i => i.pedidoLote || `legado-${table.comandaId || table.id}`)).size;
+    }
+
+    function atualizarSinalizadores() {
+        const pendentesMesa = tablesState.reduce((s, table) => s + contarPedidosPendentesMesa(table), 0);
+        const pendentesDelivery = deliveriesState.filter(p => !p.status || p.status === 'novo').length;
+        for (const [aba, total] of [['mesas', pendentesMesa], ['delivery', pendentesDelivery]]) {
+            const badge = document.getElementById(`badge-pedidos-${aba}`);
+            if (!badge) continue;
+            badge.textContent = String(total);
+            badge.hidden = total === 0;
+            badge.setAttribute('aria-label', `${total} ${total === 1 ? 'pedido pendente' : 'pedidos pendentes'}`);
+        }
+    }
+
+    function sinalizadorMesa(table) {
+        const total = contarPedidosPendentesMesa(table);
+        return total ? `<span class="badge-pedidos" title="Pedidos com itens ainda não impressos" aria-label="${total} pedidos pendentes de impressão">${total}</span>` : '';
+    }
+
     function abrirModalImpressao() {
+        if (impressaoMesaEmAndamento) return;
         const table = tablesState.find(t => t.id === currentEditingTableId);
-        if (!table || table.items.length === 0) {
-            showToast("Nada na comanda para imprimir.", "rose");
+        if (!table || !table.items.length) {
+            showToast('Nada na comanda para imprimir.', 'rose');
             return;
         }
-
-        const listaDiv = document.getElementById('lista-checkboxes-imprimir');
-        listaDiv.innerHTML = ''; 
-        
-        table.items.forEach((item) => {
-            const isJaImpresso = itensImpressosGlobais.has(item.id);
-            listaDiv.innerHTML += `
-                <div class="flex items-center space-x-3 p-3 bg-zinc-950 border border-zinc-800 rounded-lg mb-2">
-                    <input type="checkbox" id="check-print-${item.id}" value="${item.id}" ${isJaImpresso ? '' : 'checked'} class="w-5 h-5 accent-orange-500">
-                    <label for="check-print-${item.id}" class="flex-1 cursor-pointer text-sm font-bold text-white">${item.qty}x ${item.name}</label>
-                </div>
-            `;
-        });
-        
+        impressaoMesaSnapshot = { id: table.id, number: table.number, comandaId: table.comandaId,
+            items: table.items.map(i => ({ ...i })) };
+        document.getElementById('lista-checkboxes-imprimir').innerHTML = impressaoMesaSnapshot.items.map(item => {
+            const pendente = quantidadePendenteMesa(item);
+            return `<div class="flex items-center space-x-3 p-3 bg-zinc-950 border border-zinc-800 rounded-lg mb-2">
+                <input type="checkbox" id="check-print-${item.id}" value="${item.id}" ${pendente > 0 ? 'checked' : ''} class="w-5 h-5 accent-orange-500">
+                <label for="check-print-${item.id}" class="flex-1 cursor-pointer text-sm font-bold text-white">
+                    ${pendente > 0 ? pendente : Number(item.qty)}x ${deliveryTexto(item.name)}
+                    <span class="block text-xs ${pendente > 0 ? 'text-orange-400' : 'text-zinc-500'}">${pendente > 0 ? 'Pendente de impressão' : 'Já impresso — selecionar para reimprimir'}</span>
+                </label>
+            </div>`;
+        }).join('');
         document.getElementById('modal-impressao').classList.remove('hidden');
     }
 
@@ -1817,45 +1876,41 @@
         document.getElementById('modal-impressao').classList.add('hidden');
     }
 
-    function gerarEImprimirCupom() {
-        const table = tablesState.find(t => t.id === currentEditingTableId);
-        const areaCupom = document.getElementById('area-cupom-impresso');
-        
-        let htmlCupom = `
-            <div style="text-align: center; border-bottom: 2px dashed #000; padding-bottom: 10px; margin-bottom: 10px;">
-                <h2>COZINHA</h2>
-                <h1>MESA ${table.number}</h1>
-            </div>
-        `;
-        
-        let count = 0;
-        table.items.forEach((item) => {
-            const cb = document.getElementById(`check-print-${item.id}`);
-            if (cb && cb.checked) {
-                htmlCupom += `
-                    <div>
-                        <b>${item.qty}x ${item.name}</b>
-                        ${item.notes ? `<br>OBS: ${item.notes}` : ''}
-                    </div><br>
-                `;
-                count++;
-                itensImpressosGlobais.add(item.id);
-            }
-        });
-        
-        if (count === 0) {
-            showToast("Nenhum item selecionado", "rose");
+    async function gerarEImprimirCupom() {
+        if (impressaoMesaEmAndamento || !impressaoMesaSnapshot) return;
+        const table = impressaoMesaSnapshot;
+        const selecionados = table.items.filter(i => document.getElementById(`check-print-${i.id}`)?.checked);
+        if (!selecionados.length) {
+            showToast('Nenhum item selecionado.', 'rose');
             return;
         }
-        
-        areaCupom.innerHTML = htmlCupom;
+        document.getElementById('area-cupom-impresso').innerHTML = `
+            <div style="text-align:center"><h2>COZINHA</h2><h1>MESA ${deliveryTexto(table.number)}</h1></div><hr>
+            ${selecionados.map(item => `<div class="cupom-item">
+                <strong>${quantidadePendenteMesa(item) || Number(item.qty)}x ${deliveryTexto(item.name)}</strong>
+                ${item.notes ? `<div class="cupom-observacao">OBS: ${deliveryTexto(item.notes)}</div>` : ''}
+            </div>`).join('')}`;
+        impressaoMesaEmAndamento = true;
         fecharModalImpressao();
-        
-        setTimeout(() => {
+        try {
+            // O navegador não informa se o papel realmente saiu da impressora.
             window.print();
-        }, 100);
+            if (!confirm('A comanda foi impressa corretamente?\n\nOK: registrar os itens como impressos.\nCancelar: manter os sinalizadores pendentes.')) return;
+            const res = await fetchAPI('/api/admin/mesa/impressao', {
+                method: 'POST',
+                body: JSON.stringify({ mesa_id: Number(table.id), comanda_id: Number(table.comandaId),
+                    itens: selecionados.map(i => ({ id: Number(i.id), quantidade: Number(i.qty) })) })
+            });
+            const dados = await res.json();
+            if (!res.ok) throw new Error(dados.error || 'Não foi possível registrar a impressão.');
+            showToast('Impressão registrada.', 'emerald');
+            await carregarMesas();
+        } catch (error) {
+            showToast(error.message || 'Não foi possível registrar a impressão. Os itens continuam pendentes.', 'rose');
+        } finally {
+            impressaoMesaEmAndamento = false;
+        }
     }
-
 
         const MENU_PAINEL = [
             { id: 'h1', name: 'Smash Bacon Supreme', category: 'hamburgueres', price: 34.90, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80', description: 'Dois smashes artesanais 90g, cheddar, bacon crocante e maionese da casa.' },
