@@ -207,7 +207,7 @@
           <!-- Coluna 3: A Caminho -->
           <div class="bg-zinc-950 border border-zinc-800 rounded-2xl flex flex-col overflow-hidden shadow-inner">
             <div class="p-3 border-b border-zinc-800 bg-blue-500/10 flex justify-between items-center shrink-0">
-              <span class="text-xs font-black text-blue-500 uppercase tracking-wider"><i class="fa-solid fa-route mr-1"></i> A Caminho</span>
+              <span class="text-xs font-black text-blue-500 uppercase tracking-wider"><i class="fa-solid fa-route mr-1"></i> A caminho / Prontos</span>
               <span id="delivery-count-caminho" class="bg-blue-500 text-black text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
             </div>
             <div id="delivery-col-caminho" class="p-3 space-y-3 overflow-y-auto flex-1 custom-scrollbar">
@@ -821,6 +821,17 @@
         return p.cliente && typeof p.cliente === 'object' ? p.cliente : {};
     }
 
+    function modalidadeDelivery(p) {
+        return deliveryCliente(p).tipo_atendimento === 'retirada' ? 'Retirada' : 'Entrega';
+    }
+
+    function pagamentoDelivery(p) {
+        const cliente = deliveryCliente(p);
+        const nome = { PAGAR_NA_RETIRADA: 'Pagar na retirada', PIX: 'PIX', CREDITO: 'Cartão de crédito' }[cliente.metodo_pagamento] || cliente.metodo_pagamento || 'Não informado';
+        const status = { pendente_na_retirada: 'pagamento pendente', pendente: 'pagamento pendente', simulado: 'demonstração' }[cliente.status_pagamento];
+        return status ? `${nome} — ${status}` : nome;
+    }
+
     function deliveryItens(p) {
         return Array.isArray(p.itens) ? p.itens : [];
     }
@@ -849,7 +860,8 @@
                     const acao = status === 'novo'
                         ? `abrirResumoDelivery(${id})`
                         : `mudarStatusDelivery(${id}, '${status === 'preparo' ? 'caminho' : 'entregue'}')`;
-                    const rotulo = { novo: 'Aceitar', preparo: 'Despachar', caminho: 'Entregue' }[status];
+                    const retirada = modalidadeDelivery(p) === 'Retirada';
+                    const rotulo = { novo: 'Aceitar', preparo: retirada ? 'Pronto para retirada' : 'Despachar', caminho: retirada ? 'Retirado' : 'Entregue' }[status];
                     return `
                         <article data-delivery-id="${id}" tabindex="0" role="button"
                             aria-label="Ver resumo do pedido ${id}"
@@ -858,7 +870,7 @@
                             class="bg-zinc-900 border border-zinc-700 hover:border-orange-500 p-4 rounded-xl shadow-lg cursor-pointer transition">
                             <div class="flex justify-between mb-2">
                                 <span class="text-xs font-black">#${id}</span>
-                                <span class="text-[10px] text-emerald-400">${deliveryTexto(p.origem || 'WhatsApp')}</span>
+                                <span class="text-[10px] text-emerald-400">${deliveryTexto(p.origem || 'WhatsApp')} · ${modalidadeDelivery(p)}</span>
                             </div>
                             <h4 class="text-sm font-bold text-white">${deliveryTexto(p.cliente_nome || deliveryCliente(p).nome || 'Cliente')}</h4>
                             <p class="text-xs text-zinc-400 mt-1 truncate">${deliveryTexto(p.endereco || 'Endereço não informado')}</p>
@@ -948,7 +960,8 @@
                 <p><strong>Telefone:</strong> ${deliveryTexto(cliente.telefone || 'Não informado')}</p>
                 <p><strong>Endereço:</strong> ${deliveryTexto(p.endereco || 'Não informado')}</p>
                 <p><strong>Origem:</strong> ${deliveryTexto(p.origem || 'WhatsApp')}</p>
-                <p><strong>Pagamento:</strong> ${deliveryTexto(cliente.metodo_pagamento || 'Não informado')}</p>
+                <p><strong>Tipo:</strong> ${modalidadeDelivery(p)}</p>
+                <p><strong>Pagamento:</strong> ${deliveryTexto(pagamentoDelivery(p))}</p>
             </div>
             <div><h4 class="font-bold mb-2">Itens do pedido</h4>${deliveryLinhas(p)}</div>
             <p class="text-lg font-black text-orange-400 text-right">Total: ${deliveryMoeda(p.valor_total)}</p>`;
@@ -1024,7 +1037,8 @@
             <p><strong>Telefone:</strong> ${deliveryTexto(cliente.telefone || 'Não informado')}</p>
             <p><strong>Endereço:</strong> ${deliveryTexto(p.endereco || 'Não informado')}</p>
             <p><strong>Origem:</strong> ${deliveryTexto(p.origem || 'WhatsApp')}</p>
-            <p><strong>Pagamento:</strong> ${deliveryTexto(cliente.metodo_pagamento || 'Não informado')}</p>
+            <p><strong>Tipo:</strong> ${modalidadeDelivery(p)}</p>
+                <p><strong>Pagamento:</strong> ${deliveryTexto(pagamentoDelivery(p))}</p>
             <hr>${deliveryItens(p).map(item => `
                 <div class="cupom-item">
                     <strong>${deliveryTexto(item.quantity)}x ${deliveryTexto(item.name)}</strong>
