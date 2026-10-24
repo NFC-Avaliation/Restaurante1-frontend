@@ -292,6 +292,7 @@
                     <input type="tel" id="del-telefone" placeholder="(DD) 90000-0000" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition">
                 </div>
                 
+                <label class="flex gap-3 items-start text-xs text-zinc-300"><input id="del-whatsapp-avisos" type="checkbox" class="mt-1 accent-green-500"><span>Quero receber no WhatsApp o resumo e as atualizações deste pedido.</span></label>
                 <div id="checkout-endereco" class="border-t border-zinc-800 pt-4 mt-2">
                     <label class="block text-[10px] font-bold text-orange-500 uppercase mb-3">Endereço de Entrega</label>
                     
@@ -752,6 +753,7 @@
                 nome: document.getElementById('del-nome').value.trim(),
                 telefone: document.getElementById('del-telefone').value.trim(),
                 tipo_atendimento: tipoAtendimento,
+                whatsapp_notificacoes: document.getElementById('del-whatsapp-avisos').checked,
                 rua: retirada ? '' : document.getElementById('del-rua').value.trim(),
                 numero: retirada ? '' : document.getElementById('del-numero').value.trim(),
                 bairro: retirada ? '' : document.getElementById('del-bairro').value.trim(),
