@@ -1,37 +1,26 @@
 <!DOCTYPE html>
-<html lang="pt-PT" class="dark">
+<html lang="pt-BR" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Delivery | Restaurante</title>
-
+    
     <script src="https://cdn.tailwindcss.com"></script>
-
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    colors: {
-                        orange: {
-                            500: '#f97316',
-                            600: '#ea580c',
-                            700: '#c2410c'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif']
-                    }
+                    colors: { orange: { 500: '#f97316', 600: '#ea580c', 700: '#c2410c' } },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
                 }
             }
-        };
+        }
     </script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
@@ -43,481 +32,294 @@
             user-select: none;
         }
 
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        .modal-backdrop {
-            background-color: rgba(0, 0, 0, 0.88);
-            backdrop-filter: blur(10px);
-        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .modal-backdrop { background-color: rgba(0, 0, 0, 0.88); backdrop-filter: blur(10px); }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.98);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
         }
-
         @keyframes slideUp {
-            from {
-                transform: translateY(100%);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
-        .animate-fade-in {
-            animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .animate-slide-up {
-            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
+        .animate-fade-in { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-slide-up { animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
         .active-category-btn {
-            background: linear-gradient(
-                135deg,
-                #f97316 0%,
-                #ea580c 100%
-            );
-
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
             color: #000000 !important;
             font-weight: 800 !important;
             box-shadow: 0 4px 14px rgba(249, 115, 22, 0.4);
             border-color: transparent !important;
         }
+        /* Grade simétrica: espaçamento único e cartões com preços alinhados. */
+        body { margin: 0; }
+        #screen-menu { width: 100%; max-width: 560px; margin: 0 auto; }
+        .restaurante-topo { padding: 28px 20px 20px; text-align: center; }
+        .restaurante-topo h1 { margin: 0 0 18px; font-size: 21px; font-weight: 900; letter-spacing: -.4px; }
+        .restaurante-logo { width: 100px; height: 100px; margin: 0 auto 22px; padding: 4px; border-radius: 50%; background: linear-gradient(135deg,#f97316,#ea580c,#f59e0b); box-shadow: 0 8px 28px #f9731625; }
+        .restaurante-logo > div { height: 100%; border-radius: 50%; background: #09090b; border: 2px solid #000; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 5px; }
+        .restaurante-logo i { color: #f97316; font-size: 31px; }
+        .restaurante-logo span { color: #fb923c; font-size: 9px; letter-spacing: 2px; font-weight: 900; text-transform: uppercase; }
+        .restaurante-meta { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; max-width: 360px; margin: 0 auto; }
+        .status-restaurante, .btn-informacoes { min-height: 42px; display: flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid; border-radius: 12px; font-size: 12px; font-weight: 800; }
+        .status-restaurante::before { content: ''; width: 7px; height: 7px; background: currentColor; border-radius: 50%; }
+        .status-restaurante.aberto { background: #052e1680; border-color: #166534; color: #4ade80; }
+        .status-restaurante.fechado { background: #450a0a80; border-color: #991b1b; color: #f87171; }
+        .btn-informacoes { background: #18181b; border-color: #3f3f46; color: #e4e4e7; }
+        .barra-cardapio { position: sticky; top: 0; z-index: 40; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); align-items: center; padding: 12px 20px; border-top: 1px solid #27272a; border-bottom: 1px solid #27272a; background: #09090bf2; backdrop-filter: blur(12px); }
+        .barra-modalidade { justify-self: start; color: #fb923c; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 6px; }
+        .barra-cardapio h2 { margin: 0; text-align: center; font-size: 13px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
+        .botao-carrinho { position: relative; justify-self: end; width: 42px; height: 42px; border: 1px solid #3f3f46; border-radius: 12px; color: #fb923c; background: #18181b; }
+        #cart-badge { position: absolute; right: -5px; top: -5px; min-width: 19px; padding: 2px; border-radius: 50%; border: 2px solid #09090b; background: #f97316; color: #000; font-size: 10px; font-weight: 900; }
+        #screen-menu > nav { margin-top: 16px; padding: 0 20px; }
+        #categories-container { gap: 8px; }
+        #categories-container > * { margin-left: 0 !important; }
+        #screen-menu > main { padding: 0 20px; margin-top: 20px; }
+        #dishes-grid { --grade-gap: 14px; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: var(--grade-gap); align-items: stretch; padding-bottom: 48px; }
+        #dishes-grid > .produto-card:last-child:nth-child(odd) { grid-column: 1 / -1; width: calc((100% - var(--grade-gap)) / 2); justify-self: center; }
+        #modal-dish-title { overflow-wrap: anywhere; }
+        #modal-dish-price { flex-shrink: 0; white-space: nowrap; margin-left: 12px; }
+        .produto-card { min-width: 0; display: flex; flex-direction: column; cursor: pointer; overflow: hidden; border: 1px solid #27272a; border-radius: 16px; background: #18181b; transition: border-color .2s; }
+        .produto-card:hover, .produto-card:focus-visible { border-color: #f97316; outline: none; }
+        .produto-foto { width: 100%; aspect-ratio: 4/3; overflow: hidden; background: #09090b; }
+        .produto-foto img { display: block; width: 100%; height: 100%; object-fit: cover; }
+        .produto-copy { padding: 13px; display: flex; flex: 1; flex-direction: column; gap: 12px; }
+        .produto-copy h4 { margin: 0; color: #fafafa; font-size: 12px; font-weight: 750; line-height: 1.45; min-height: 2.9em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .produto-preco { margin-top: auto; color: #fb923c; font-size: 15px; font-weight: 900; }
+        .info-restaurante-dialog { width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; padding: 24px; border-radius: 22px; background: #18181b; border: 1px solid #3f3f46; display: flex; flex-direction: column; gap: 20px; }
+        .info-restaurante-header { display: flex; align-items: start; justify-content: space-between; gap: 12px; }
+        .info-eyebrow { color: #fb923c; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .info-restaurante-header h2 { font-size: 20px; font-weight: 900; margin: 4px 0 0; }
+        .info-fechar { flex-shrink: 0; width: 32px; height: 32px; border-radius: 10px; background: #27272a; color: #d4d4d8; }
+        .info-bloco h3 { margin: 0 0 10px; font-size: 12px; font-weight: 800; color: #fafafa; }
+        .info-bloco h3 i { color: #fb923c; margin-right: 6px; }
+        .info-bloco p { color: #a1a1aa; font-size: 12px; line-height: 1.6; margin: 0; }
+        .info-horario { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid #27272a; font-size: 12px; color: #d4d4d8; }
+        .info-fuso { margin-top: 10px !important; font-size: 10px !important; }
+        .info-contatos { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; }
+        .info-contatos > * { padding: 13px 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; border: 1px solid #3f3f46; background: #09090b; font-size: 10px; font-weight: 700; text-align: center; }
+        .info-contatos i { color: #fb923c; font-size: 20px; }
+        #info-link-whatsapp i { color: #4ade80; }
+        #info-link-cardapio { width: 100%; background: #09090b; color: #fafafa; border: 1px solid #3f3f46; border-radius: 8px; margin-top: 8px; padding: 10px; font-size: 12px; user-select: text; }
+        .checkout-opcoes { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+        .checkout-opcoes button { min-height: 54px; border-radius: 12px; border: 1px solid #c2410c; background: #f97316; color: #09090b; font-size: 12px; font-weight: 900; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .checkout-opcoes button:disabled { opacity: .4; cursor: not-allowed; }
+        @media (max-width: 360px) {
+            .restaurante-topo { padding-left: 14px; padding-right: 14px; }
+            .barra-cardapio { padding-left: 14px; padding-right: 14px; }
+            #screen-menu > nav, #screen-menu > main { padding-left: 14px; padding-right: 14px; }
+            #dishes-grid { --grade-gap: 10px; }
+            .produto-copy { padding: 10px; }
+        }
     </style>
 </head>
-
 <body class="min-h-screen relative pb-10 bg-black text-zinc-100">
 
-    <!-- ========================================== -->
-    <!-- CARDÁPIO: ABERTURA DIRETA -->
-    <!-- ========================================== -->
-    <section id="screen-menu" class="max-w-md mx-auto animate-fade-in">
-
-        <!-- BOAS-VINDAS E LOGO -->
-        <div class="flex flex-col items-center text-center px-4 pt-6 pb-5">
-            <h1 class="text-xl font-black text-white tracking-tight mb-4">
-                Seja bem-vindo!
-            </h1>
-
-            <!-- Logo atual do restaurante -->
-            <div
-                role="img"
-                aria-label="Logo Gourmet"
-                class="w-24 h-24 rounded-full bg-gradient-to-tr from-orange-500 via-orange-600 to-amber-500 p-1 shadow-xl shadow-orange-500/20"
-            >
-                <div class="w-full h-full bg-zinc-950 rounded-full flex flex-col items-center justify-center border-2 border-black">
-                    <i
-                        aria-hidden="true"
-                        class="fa-solid fa-burger text-orange-500 text-3xl mb-1"
-                    ></i>
-
-                    <span class="text-[9px] font-black tracking-widest text-orange-400 uppercase">
-                        Gourmet
-                    </span>
-                </div>
+    <!-- Cardápio com cabeçalho centralizado e informações do restaurante. -->
+    <section id="screen-menu" class="animate-fade-in">
+        <div class="restaurante-topo">
+            <h1>Seja bem-vindo!</h1>
+            <div role="img" aria-label="Logo Gourmet" class="restaurante-logo">
+                <div><i aria-hidden="true" class="fa-solid fa-burger"></i><span>Gourmet</span></div>
+            </div>
+            <div class="restaurante-meta">
+                <div id="restaurante-status" class="status-restaurante fechado" role="status" aria-live="polite">Fechado</div>
+                <button type="button" onclick="abrirInformacoesRestaurante()" class="btn-informacoes"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> Informações</button>
             </div>
         </div>
-
-        <!-- BARRA DO CARDÁPIO -->
-        <header class="sticky top-0 z-40 bg-zinc-950/90 backdrop-blur-md border-b border-zinc-800 px-4 py-3 shadow-xl">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-2 text-orange-500 font-bold text-xs uppercase tracking-wider bg-orange-500/10 px-3 py-2 rounded-xl border border-orange-500/20">
-                    <i class="fa-solid fa-motorcycle"></i>
-                    <span>Delivery</span>
-                </div>
-
-                <div class="text-center">
-                    <h2 class="font-black text-sm text-white uppercase tracking-widest">
-                        Cardápio
-                    </h2>
-                </div>
-
-                <button
-                    onclick="openCartModal()"
-                    class="relative bg-zinc-900 text-orange-500 p-2.5 rounded-xl border border-zinc-800 active:scale-95 transition"
-                >
-                    <i class="fa-solid fa-basket-shopping text-base"></i>
-
-                    <span
-                        id="cart-badge"
-                        class="absolute -top-1.5 -right-1.5 bg-orange-600 text-black text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-black hidden"
-                    >0</span>
-                </button>
-            </div>
+        <header class="barra-cardapio">
+            <span class="barra-modalidade"><i class="fa-solid fa-utensils" aria-hidden="true"></i> Pedidos</span>
+            <h2>Cardápio</h2>
+            <button type="button" onclick="openCartModal()" class="botao-carrinho" aria-label="Abrir carrinho">
+                <i class="fa-solid fa-basket-shopping" aria-hidden="true"></i>
+                <span id="cart-badge" class="hidden">0</span>
+            </button>
         </header>
 
-        <!-- CATEGORIAS -->
         <nav class="mt-4 px-4">
-            <div
-                id="categories-container"
-                class="flex space-x-2 overflow-x-auto no-scrollbar py-1 scroll-smooth"
-            ></div>
+            <div id="categories-container" class="flex space-x-2 overflow-x-auto no-scrollbar py-1 scroll-smooth"></div>
         </nav>
 
-        <!-- PRODUTOS -->
         <main class="px-4 mt-5">
             <div class="flex items-center justify-between mb-3">
-                <h3
-                    id="current-category-title"
-                    class="text-xs font-bold text-zinc-300 uppercase tracking-wide flex items-center"
-                >
-                    <i class="fa-solid fa-fire text-orange-500 mr-2"></i>
-                    Todos os Pratos
+                <h3 id="current-category-title" class="text-xs font-bold text-zinc-300 uppercase tracking-wide flex items-center">
+                    <i class="fa-solid fa-fire text-orange-500 mr-2"></i> Todos os Pratos
                 </h3>
             </div>
-
-            <div
-                id="dishes-grid"
-                class="grid grid-cols-2 gap-3.5 pb-20"
-            ></div>
+            <div id="dishes-grid" class="grid grid-cols-2 gap-3.5 pb-20"></div>
         </main>
     </section>
 
-    <!-- ========================================== -->
-    <!-- MODAL: DETALHES DO PRATO -->
-    <!-- ========================================== -->
-    <div
-        id="modal-dish-detail"
-        class="fixed inset-0 z-50 modal-backdrop hidden flex items-end sm:items-center justify-center p-0 sm:p-4"
-    >
+    <!-- Informações fictícias: editar o objeto RESTAURANTE no JavaScript. -->
+    <div id="modal-restaurante-info" class="fixed inset-0 z-[90] modal-backdrop hidden flex items-center justify-center p-4">
+        <section role="dialog" aria-modal="true" aria-labelledby="info-restaurante-nome" class="info-restaurante-dialog">
+            <header class="info-restaurante-header">
+                <div><span class="info-eyebrow">Conheça o restaurante</span><h2 id="info-restaurante-nome"></h2></div>
+                <button type="button" onclick="closeModal('modal-restaurante-info')" aria-label="Fechar informações" class="info-fechar">✕</button>
+            </header>
+            <div id="info-restaurante-status" class="status-restaurante fechado" role="status" aria-live="polite">Fechado</div>
+            <div class="info-bloco"><h3><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Endereço</h3><p id="info-restaurante-endereco"></p></div>
+            <div class="info-bloco"><h3><i class="fa-regular fa-clock" aria-hidden="true"></i> Horário de funcionamento</h3><div id="info-restaurante-horarios"></div><p class="info-fuso">Horário de Brasília</p></div>
+            <div class="info-contatos">
+                <a id="info-link-whatsapp" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span>WhatsApp</span></a>
+                <a id="info-link-instagram" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram" aria-hidden="true"></i><span>Instagram</span></a>
+                <button type="button" onclick="compartilharCardapio()"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i><span>Compartilhar</span></button>
+            </div>
+            <div id="info-compartilhar-manual" class="hidden info-bloco"><label for="info-link-cardapio">Copie o link do cardápio:</label><input id="info-link-cardapio" type="text" readonly onclick="this.select()"></div>
+        </section>
+    </div>
+
+    <!-- MODAL 1: DETALHE DO PRATO -->
+    <div id="modal-dish-detail" class="fixed inset-0 z-50 modal-backdrop hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="bg-zinc-900 border-t sm:border border-zinc-800 rounded-t-3xl sm:rounded-2xl w-full max-w-md max-h-[92vh] flex flex-col overflow-hidden animate-slide-up shadow-2xl">
-            <button
-                onclick="closeModal('modal-dish-detail')"
-                class="absolute top-3 right-3 z-10 w-9 h-9 bg-black/80 text-white rounded-full flex items-center justify-center border border-zinc-700/60 active:scale-90 transition"
-            >
+            <button onclick="closeModal('modal-dish-detail')" class="absolute top-3 right-3 z-10 w-9 h-9 bg-black/80 text-white rounded-full flex items-center justify-center border border-zinc-700/60 active:scale-90 transition">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
-
             <div class="relative bg-black w-full h-56 flex items-center justify-center overflow-hidden">
-                <img
-                    id="modal-dish-img"
-                    src=""
-                    loading="lazy"
-                    class="w-full h-full object-cover"
-                >
+                <img id="modal-dish-img" src="" loading="lazy" class="w-full h-full object-cover">
             </div>
-
             <div class="p-5 flex-1 overflow-y-auto">
                 <div class="flex items-start justify-between">
                     <div>
-                        <h3
-                            id="modal-dish-title"
-                            class="text-lg font-bold text-white leading-tight"
-                        >
-                            Nome do Prato
-                        </h3>
-
-                        <span
-                            id="modal-dish-category"
-                            class="text-[11px] font-semibold text-orange-500 uppercase"
-                        >
-                            Categoria
-                        </span>
+                        <h3 id="modal-dish-title" class="text-lg font-bold text-white leading-tight">Nome do Prato</h3>
+                        <span id="modal-dish-category" class="text-[11px] font-semibold text-orange-500 uppercase">Categoria</span>
                     </div>
-
-                    <div
-                        id="modal-dish-price"
-                        class="text-base font-black text-orange-500 bg-orange-500/10 px-3 py-1 rounded-xl border border-orange-500/20"
-                    >
-                        R$ 0,00
-                    </div>
+                    <div id="modal-dish-price" class="text-base font-black text-orange-500 bg-orange-500/10 px-3 py-1 rounded-xl border border-orange-500/20">R$ 0,00</div>
                 </div>
-
-                <p
-                    id="modal-dish-description"
-                    class="text-xs text-zinc-300 mt-3 leading-relaxed"
-                ></p>
-
+                <p id="modal-dish-description" class="text-xs text-zinc-300 mt-3 leading-relaxed"></p>
                 <div class="mt-6">
-                    <button
-                        onclick="openCustomizeFromDetail()"
-                        class="w-full py-3 px-2 bg-gradient-to-r from-orange-500 to-orange-600 text-black active:scale-95 rounded-xl font-black text-xs shadow-lg shadow-orange-500/20 transition flex items-center justify-center uppercase tracking-wide"
-                    >
-                        <i class="fa-solid fa-plus mr-1.5"></i>
-                        Adicionar ao Pedido
+                    <button onclick="openCustomizeFromDetail()" class="w-full py-3 px-2 bg-gradient-to-r from-orange-500 to-orange-600 text-black active:scale-95 rounded-xl font-black text-xs shadow-lg shadow-orange-500/20 transition flex items-center justify-center uppercase tracking-wide">
+                        <i class="fa-solid fa-plus mr-1.5"></i> Adicionar ao Pedido
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- MODAL: PERSONALIZAR PRATO -->
-    <!-- ========================================== -->
-    <div
-        id="modal-customize"
-        class="fixed inset-0 z-50 modal-backdrop hidden flex items-end sm:items-center justify-center p-0 sm:p-4"
-    >
+    <!-- MODAL 2: CUSTOMIZAR PRATO -->
+    <div id="modal-customize" class="fixed inset-0 z-50 modal-backdrop hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="bg-zinc-900 border-t sm:border border-zinc-800 rounded-t-3xl sm:rounded-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden animate-slide-up shadow-2xl">
             <div class="p-4 border-b border-zinc-800 flex items-center justify-between bg-zinc-950">
-                <h4
-                    id="customize-dish-title"
-                    class="font-bold text-sm text-white leading-tight"
-                >
-                    Personalizar Pedido
-                </h4>
-
-                <button
-                    onclick="closeModal('modal-customize')"
-                    class="text-zinc-400 hover:text-white w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center"
-                >
+                <h4 id="customize-dish-title" class="font-bold text-sm text-white leading-tight">Personalizar Pedido</h4>
+                <button onclick="closeModal('modal-customize')" class="text-zinc-400 hover:text-white w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-
             <div class="p-4 overflow-y-auto flex-1 space-y-4">
                 <div>
-                    <h5 class="text-xs font-bold text-zinc-300 uppercase tracking-wider mb-1.5">
-                        Observações Adicionais
-                    </h5>
-
-                    <textarea
-                        id="custom-notes"
-                        rows="2"
-                        placeholder="Ex: Ponto da carne bem passado, sem salada..."
-                        class="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-2.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-orange-500 transition"
-                    ></textarea>
+                    <h5 class="text-xs font-bold text-zinc-300 uppercase tracking-wider mb-1.5">Observações Adicionais</h5>
+                    <textarea id="custom-notes" rows="2" placeholder="Ex: Ponto da carne bem passado, sem salada..." class="w-full bg-zinc-800 border border-zinc-700 rounded-xl p-2.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-orange-500 transition"></textarea>
                 </div>
-
                 <div class="flex items-center justify-between bg-zinc-800 p-3 rounded-xl border border-zinc-700">
-                    <span class="text-xs font-bold text-zinc-200">
-                        Quantidade:
-                    </span>
-
+                    <span class="text-xs font-bold text-zinc-200">Quantidade:</span>
                     <div class="flex items-center space-x-3">
-                        <button
-                            onclick="updateCustomizeQty(-1)"
-                            class="w-8 h-8 rounded-lg bg-zinc-700 text-white font-bold flex items-center justify-center active:scale-90 transition"
-                        >-</button>
-
-                        <span
-                            id="customize-qty"
-                            class="text-sm font-black text-orange-500 min-w-[20px] text-center"
-                        >1</span>
-
-                        <button
-                            onclick="updateCustomizeQty(1)"
-                            class="w-8 h-8 rounded-lg bg-zinc-700 text-white font-bold flex items-center justify-center active:scale-90 transition"
-                        >+</button>
+                        <button onclick="updateCustomizeQty(-1)" class="w-8 h-8 rounded-lg bg-zinc-700 text-white font-bold flex items-center justify-center active:scale-90 transition">-</button>
+                        <span id="customize-qty" class="text-sm font-black text-orange-500 min-w-[20px] text-center">1</span>
+                        <button onclick="updateCustomizeQty(1)" class="w-8 h-8 rounded-lg bg-zinc-700 text-white font-bold flex items-center justify-center active:scale-90 transition">+</button>
                     </div>
                 </div>
             </div>
-
             <div class="p-4 border-t border-zinc-800 bg-zinc-950 flex items-center space-x-3">
-                <button
-                    onclick="confirmAddToCart()"
-                    class="w-full py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-black font-black text-xs rounded-xl shadow-lg shadow-orange-500/20 active:scale-95 transition flex items-center justify-center space-x-2 uppercase"
-                >
+                <button onclick="confirmAddToCart()" class="w-full py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-black font-black text-xs rounded-xl shadow-lg shadow-orange-500/20 active:scale-95 transition flex items-center justify-center space-x-2 uppercase">
                     <span>Adicionar</span>
-
-                    <span
-                        id="customize-total-price"
-                        class="bg-black/30 px-2 py-0.5 rounded text-[10px] font-extrabold text-orange-300"
-                    >
-                        R$ 0,00
-                    </span>
+                    <span id="customize-total-price" class="bg-black/30 px-2 py-0.5 rounded text-[10px] font-extrabold text-orange-300">R$ 0,00</span>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- ========================================== -->
+    <!-- ========================================================= -->
+    <!-- FLUXO DE CHECKOUT DELIVERY (CARRINHO -> ENTREGA -> PAGO)  -->
+    <!-- ========================================================= -->
+
     <!-- PASSO 1: CARRINHO -->
-    <!-- ========================================== -->
-    <div
-        id="modal-cart"
-        class="fixed inset-0 z-[60] modal-backdrop hidden flex items-end sm:items-center justify-center p-0 sm:p-4"
-    >
+    <div id="modal-cart" class="fixed inset-0 z-[60] modal-backdrop hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="bg-zinc-900 border-t sm:border border-zinc-800 rounded-t-3xl sm:rounded-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden animate-slide-up shadow-2xl">
             <div class="p-4 border-b border-zinc-800 flex items-center justify-between bg-zinc-950">
                 <div class="flex items-center space-x-2">
                     <div class="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center text-orange-500">
                         <i class="fa-solid fa-basket-shopping text-sm"></i>
                     </div>
-
-                    <h4 class="font-bold text-sm text-white uppercase tracking-wider">
-                        Seu Carrinho
-                    </h4>
+                    <h4 class="font-bold text-sm text-white uppercase tracking-wider">Seu Carrinho</h4>
                 </div>
-
-                <button
-                    onclick="closeModal('modal-cart')"
-                    class="text-zinc-400 hover:text-white w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center"
-                >
+                <button onclick="closeModal('modal-cart')" class="text-zinc-400 hover:text-white w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <div
-                id="cart-items-container"
-                class="p-4 overflow-y-auto flex-1 space-y-3"
-            ></div>
+            <div id="cart-items-container" class="p-4 overflow-y-auto flex-1 space-y-3"></div>
 
             <div class="p-4 border-t border-zinc-800 bg-zinc-950 space-y-3">
                 <div class="flex justify-between text-sm font-black text-white pt-2">
                     <span>Subtotal:</span>
-
-                    <span
-                        id="cart-total"
-                        class="text-orange-500 text-base"
-                    >
-                        R$ 0,00
-                    </span>
+                    <span id="cart-total" class="text-orange-500 text-base">R$ 0,00</span>
                 </div>
-
-                <button
-                    id="btn-proceed-delivery"
-                    onclick="openDeliveryForm()"
-                    class="w-full py-3.5 bg-gradient-to-r from-orange-500 to-orange-600 active:scale-95 text-black font-black text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-orange-500/20 transition flex items-center justify-center space-x-2"
-                >
-                    <span>Avançar para Entrega</span>
-                    <i class="fa-solid fa-arrow-right"></i>
-                </button>
+                <div class="checkout-opcoes">
+                    <button id="btn-proceed-pickup" type="button" onclick="openDeliveryForm('retirada')"><i class="fa-solid fa-store" aria-hidden="true"></i> Retirada</button>
+                    <button id="btn-proceed-delivery" type="button" onclick="openDeliveryForm('entrega')"><i class="fa-solid fa-motorcycle" aria-hidden="true"></i> Entrega</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- ========================================== -->
     <!-- PASSO 2: DADOS DE ENTREGA -->
-    <!-- ========================================== -->
-    <div
-        id="modal-delivery-form"
-        class="fixed inset-0 z-[70] modal-backdrop hidden flex items-end sm:items-center justify-center p-0 sm:p-4"
-    >
+    <div id="modal-delivery-form" class="fixed inset-0 z-[70] modal-backdrop hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="bg-zinc-900 border-t sm:border border-zinc-800 rounded-t-3xl sm:rounded-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden animate-slide-up shadow-2xl">
             <div class="p-4 border-b border-zinc-800 flex items-center justify-between bg-zinc-950">
                 <div class="flex items-center space-x-2">
-                    <button
-                        onclick="voltarParaCarrinho()"
-                        class="w-8 h-8 rounded-full bg-zinc-800 text-zinc-400 flex items-center justify-center"
-                    >
+                    <button onclick="voltarParaCarrinho()" class="w-8 h-8 rounded-full bg-zinc-800 text-zinc-400 flex items-center justify-center">
                         <i class="fa-solid fa-arrow-left"></i>
                     </button>
-
-                    <h4 class="font-bold text-sm text-white uppercase tracking-wider">
-                        Dados de Entrega
-                    </h4>
+                    <h4 id="checkout-dados-titulo" class="font-bold text-sm text-white uppercase tracking-wider">Dados de Entrega</h4>
                 </div>
-
-                <button
-                    onclick="closeModal('modal-delivery-form')"
-                    class="text-zinc-400 hover:text-white w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center"
-                >
+                <button onclick="closeModal('modal-delivery-form')" class="text-zinc-400 hover:text-white w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
             <div class="p-5 overflow-y-auto flex-1 space-y-4">
+                <div id="checkout-retirada-info" class="hidden bg-orange-500/10 border border-orange-500/20 rounded-xl p-3 text-xs text-orange-300"></div>
                 <div>
-                    <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1.5">
-                        Nome Completo
-                    </label>
-
-                    <input
-                        type="text"
-                        id="del-nome"
-                        placeholder="Ex: João Silva"
-                        class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition"
-                    >
+                    <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1.5">Nome Completo</label>
+                    <input type="text" id="del-nome" placeholder="Ex: João Silva" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition">
                 </div>
-
                 <div>
-                    <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1.5">
-                        WhatsApp
-                    </label>
-
-                    <input
-                        type="tel"
-                        id="del-telefone"
-                        placeholder="(DD) 90000-0000"
-                        class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition"
-                    >
+                    <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1.5">WhatsApp</label>
+                    <input type="tel" id="del-telefone" placeholder="(DD) 90000-0000" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition">
                 </div>
-
-                <div class="border-t border-zinc-800 pt-4 mt-2">
-                    <label class="block text-[10px] font-bold text-orange-500 uppercase mb-3">
-                        Endereço de Entrega
-                    </label>
-
+                
+                <div id="checkout-endereco" class="border-t border-zinc-800 pt-4 mt-2">
+                    <label class="block text-[10px] font-bold text-orange-500 uppercase mb-3">Endereço de Entrega</label>
+                    
                     <div class="grid grid-cols-3 gap-3 mb-3">
                         <div class="col-span-2">
-                            <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1.5">
-                                Rua / Avenida
-                            </label>
-
-                            <input
-                                type="text"
-                                id="del-rua"
-                                placeholder="Ex: Rua das Flores"
-                                class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition"
-                            >
+                            <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1.5">Rua / Avenida</label>
+                            <input type="text" id="del-rua" placeholder="Ex: Rua das Flores" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition">
                         </div>
-
                         <div class="col-span-1">
-                            <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1.5">
-                                Número
-                            </label>
-
-                            <input
-                                type="text"
-                                id="del-numero"
-                                placeholder="Ex: 123"
-                                class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition"
-                            >
+                            <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1.5">Número</label>
+                            <input type="text" id="del-numero" placeholder="Ex: 123" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition">
                         </div>
                     </div>
-
+                    
                     <div class="mb-3">
-                        <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1.5">
-                            Bairro
-                        </label>
-
-                        <input
-                            type="text"
-                            id="del-bairro"
-                            placeholder="Ex: Centro"
-                            class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition"
-                        >
+                        <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1.5">Bairro</label>
+                        <input type="text" id="del-bairro" placeholder="Ex: Centro" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition">
                     </div>
 
                     <div>
-                        <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1.5">
-                            Complemento / Ponto de Referência
-                        </label>
-
-                        <input
-                            type="text"
-                            id="del-complemento"
-                            placeholder="Ex: Apt 42 / Ao lado do mercado"
-                            class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition"
-                        >
+                        <label class="block text-[10px] font-bold text-zinc-400 uppercase mb-1.5">Complemento / Ponto de Referência</label>
+                        <input type="text" id="del-complemento" placeholder="Ex: Apt 42 / Ao lado do mercado" class="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-orange-500 transition">
                     </div>
                 </div>
             </div>
 
             <div class="p-4 border-t border-zinc-800 bg-zinc-950">
-                <button
-                    onclick="openPaymentScreen()"
-                    class="w-full py-3.5 bg-orange-500 active:scale-95 text-black font-black text-xs uppercase tracking-wider rounded-xl shadow-lg transition flex items-center justify-center space-x-2"
-                >
+                <button onclick="openPaymentScreen()" class="w-full py-3.5 bg-orange-500 active:scale-95 text-black font-black text-xs uppercase tracking-wider rounded-xl shadow-lg transition flex items-center justify-center space-x-2">
                     <span>Ir para Pagamento</span>
                     <i class="fa-solid fa-credit-card"></i>
                 </button>
@@ -525,425 +327,184 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- PASSO 3: PAGAMENTO -->
-    <!-- Integração Mercado Pago ainda simulada -->
-    <!-- ========================================== -->
-    <div
-        id="modal-payment"
-        class="fixed inset-0 z-[80] modal-backdrop hidden flex items-end sm:items-center justify-center p-0 sm:p-4"
-    >
+    <!-- PASSO 3: PAGAMENTO (Preparo Mercado Pago) -->
+    <div id="modal-payment" class="fixed inset-0 z-[80] modal-backdrop hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
         <div class="bg-zinc-900 border-t sm:border border-zinc-800 rounded-t-3xl sm:rounded-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden animate-slide-up shadow-2xl">
             <div class="p-4 border-b border-zinc-800 flex items-center justify-between bg-zinc-950">
                 <div class="flex items-center space-x-2">
-                    <button
-                        onclick="voltarParaEntrega()"
-                        class="w-8 h-8 rounded-full bg-zinc-800 text-zinc-400 flex items-center justify-center"
-                    >
+                    <button onclick="voltarParaEntrega()" class="w-8 h-8 rounded-full bg-zinc-800 text-zinc-400 flex items-center justify-center">
                         <i class="fa-solid fa-arrow-left"></i>
                     </button>
-
-                    <h4 class="font-bold text-sm text-white uppercase tracking-wider">
-                        Pagamento
-                    </h4>
+                    <h4 class="font-bold text-sm text-white uppercase tracking-wider">Pagamento</h4>
                 </div>
-
-                <button
-                    onclick="closeModal('modal-payment')"
-                    class="text-zinc-400 hover:text-white w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center"
-                >
+                <button onclick="closeModal('modal-payment')" class="text-zinc-400 hover:text-white w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
             <div class="p-5 flex-1 overflow-y-auto space-y-4 bg-zinc-900">
+                
                 <div class="bg-zinc-950 p-4 rounded-xl border border-zinc-800 text-center mb-6 shadow-inner">
-                    <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
-                        Total a Pagar
-                    </span>
-
-                    <div
-                        id="payment-total-display"
-                        class="text-3xl font-black text-emerald-400 mt-1"
-                    >
-                        R$ 0,00
-                    </div>
+                    <span class="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Total a Pagar</span>
+                    <div id="payment-total-display" class="text-3xl font-black text-emerald-400 mt-1">R$ 0,00</div>
                 </div>
 
-                <h5 class="text-[10px] font-bold text-orange-500 uppercase tracking-wider mb-2 text-center">
-                    Escolha como pagar online
-                </h5>
-
+                <h5 id="checkout-pagamento-titulo" class="text-[10px] font-bold text-orange-500 uppercase tracking-wider mb-2 text-center">Escolha como pagar</h5>
+                
+                <!-- Botões simulando a chamada da API do Mercado Pago -->
+                <p class="text-xs text-zinc-400 text-center">PIX e cartão estão em demonstração. Nenhum valor será cobrado online.</p>
                 <div class="space-y-3">
-                    <button
-                        onclick="processarPagamento('PIX')"
-                        class="w-full bg-zinc-800 hover:bg-emerald-900/30 border border-zinc-700 hover:border-emerald-500 p-4 rounded-xl flex items-center justify-between transition group"
-                    >
+                    <button id="btn-pagar-retirada" type="button" onclick="processarPagamento('PAGAR_NA_RETIRADA')" class="hidden w-full bg-orange-500 text-black p-4 rounded-xl items-center justify-between font-bold"><span><i class="fa-solid fa-store mr-2"></i>Pagar na retirada</span><i class="fa-solid fa-chevron-right text-xs"></i></button>
+                    <button onclick="processarPagamento('PIX')" class="w-full bg-zinc-800 hover:bg-emerald-900/30 border border-zinc-700 hover:border-emerald-500 p-4 rounded-xl flex items-center justify-between transition group">
                         <div class="flex items-center space-x-3">
                             <i class="fa-brands fa-pix text-emerald-400 text-xl group-hover:scale-110 transition"></i>
-
-                            <span class="font-bold text-white text-sm">
-                                Pagar com PIX
-                            </span>
+                            <span class="font-bold text-white text-sm">Pagar com PIX</span>
                         </div>
-
                         <i class="fa-solid fa-chevron-right text-zinc-600 group-hover:text-emerald-400 text-xs"></i>
                     </button>
 
-                    <button
-                        onclick="processarPagamento('CREDITO')"
-                        class="w-full bg-zinc-800 hover:bg-blue-900/30 border border-zinc-700 hover:border-blue-500 p-4 rounded-xl flex items-center justify-between transition group"
-                    >
+                    <button onclick="processarPagamento('CREDITO')" class="w-full bg-zinc-800 hover:bg-blue-900/30 border border-zinc-700 hover:border-blue-500 p-4 rounded-xl flex items-center justify-between transition group">
                         <div class="flex items-center space-x-3">
                             <i class="fa-solid fa-credit-card text-blue-400 text-xl group-hover:scale-110 transition"></i>
-
-                            <span class="font-bold text-white text-sm">
-                                Cartão de Crédito
-                            </span>
+                            <span class="font-bold text-white text-sm">Cartão de Crédito</span>
                         </div>
-
                         <i class="fa-solid fa-chevron-right text-zinc-600 group-hover:text-blue-400 text-xs"></i>
                     </button>
                 </div>
 
                 <div class="pt-6 text-center">
                     <span class="text-[10px] text-zinc-500 font-medium flex justify-center items-center gap-2">
-                        <i class="fa-solid fa-lock"></i>
-                        Pagamento Seguro via Mercado Pago
+                        <i class="fa-solid fa-lock"></i> Finalize seu pedido com segurança
                     </span>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- NOTIFICAÇÕES -->
-    <!-- ========================================== -->
-    <div
-        id="toast-notification"
-        class="fixed top-4 left-1/2 -translate-x-1/2 z-[110] w-11/12 max-w-md bg-zinc-900 border border-orange-500/50 backdrop-blur-md rounded-2xl p-3.5 shadow-2xl flex items-center space-x-3 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-full"
-    >
-        <div
-            id="toast-icon-bg"
-            class="w-9 h-9 rounded-xl bg-orange-500/20 text-orange-500 flex items-center justify-center shrink-0"
-        >
+
+    <!-- NOTIFICAÇÃO TOAST -->
+    <div id="toast-notification" class="fixed top-4 left-1/2 -translate-x-1/2 z-[110] w-11/12 max-w-md bg-zinc-900 border border-orange-500/50 backdrop-blur-md rounded-2xl p-3.5 shadow-2xl flex items-center space-x-3 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-full">
+        <div id="toast-icon-bg" class="w-9 h-9 rounded-xl bg-orange-500/20 text-orange-500 flex items-center justify-center shrink-0">
             <i id="toast-icon" class="fa-solid fa-bell text-base"></i>
         </div>
-
         <div class="flex-1">
-            <h5
-                id="toast-title"
-                class="text-xs font-bold text-white uppercase"
-            >
-                Notificação
-            </h5>
-
-            <p
-                id="toast-message"
-                class="text-[11px] text-zinc-300"
-            >
-                Mensagem do sistema.
-            </p>
+            <h5 id="toast-title" class="text-xs font-bold text-white uppercase">Notificação</h5>
+            <p id="toast-message" class="text-[11px] text-zinc-300">Mensagem do sistema.</p>
         </div>
     </div>
 
     <script>
         // ==========================================
-        // CONFIGURAÇÕES
+        // DADOS E CONFIGURAÇÕES BASE (COPIADOS DA MESA PARA MANTER O PADRÃO)
         // ==========================================
         const API_URL = 'https://restaurante1-backend.onrender.com';
-
+        
         window.addEventListener('DOMContentLoaded', () => {
             renderCategories();
             renderDishes();
+            atualizarStatusRestaurante();
+            setInterval(atualizarStatusRestaurante, 60000);
         });
 
-        // ==========================================
-        // PRODUTOS DO CARDÁPIO
-        // ==========================================
+        // NOTA: Estes arrays são IDÊNTICOS aos do painel de mesa.
         const MENU_DATA = [
-            {
-                id: 'h1',
-                name: 'Smash Bacon Supreme',
-                category: 'hamburgueres',
-                price: 34.90,
-                image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80',
-                description: 'Dois smashes artesanais 90g, cheddar, bacon crocante e maionese da casa.'
-            },
-            {
-                id: 'h2',
-                name: 'Double Cheddar Melt',
-                category: 'hamburgueres',
-                price: 38.90,
-                image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80',
-                description: 'Blend especial 180g, muito creme cheddar melt e cebola caramelizada.'
-            },
-            {
-                id: 'h3',
-                name: 'Crispy Chicken Burger',
-                category: 'hamburgueres',
-                price: 32.90,
-                image: 'https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&w=600&q=80',
-                description: 'Sobrecoxa empanada crocante, alface americana, molho tártaro artesanal.'
-            },
-            {
-                id: 'h4',
-                name: 'Burger Vegetariano de Grão',
-                category: 'hamburgueres',
-                price: 29.90,
-                image: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80',
-                description: 'Hambúrguer de grão-de-bico com quinoa, queijo prato, tomate e rúcula.'
-            },
-            {
-                id: 'p1',
-                name: 'Batata Rústica Trufada',
-                category: 'petiscos',
-                price: 28.90,
-                image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80',
-                description: 'Batatas com azeite de trufas, flor de sal e parmesão ralado.'
-            },
-            {
-                id: 'p2',
-                name: 'Onion Rings Crocantes',
-                category: 'petiscos',
-                price: 24.90,
-                image: 'https://images.unsplash.com/photo-1639024471283-03518883512d?auto=format&fit=crop&w=600&q=80',
-                description: 'Anéis de cebola empanados super crocantes acompanhados de molho barbecue.'
-            },
-            {
-                id: 'p3',
-                name: 'Dadinhos de Tapioca',
-                category: 'petiscos',
-                price: 31.90,
-                image: 'https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&w=600&q=80',
-                description: 'Dadinhos de tapioca com queijo coalho servidos com geleia de pimenta.'
-            },
-            {
-                id: 'b1',
-                name: 'Refrigerante Lata',
-                category: 'bebidas',
-                price: 7.00,
-                image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80',
-                description: 'Lata 350ml gelada (Coca-Cola, Guaraná, Sprite).'
-            },
-            {
-                id: 'b2',
-                name: 'Suco Natural de Laranja',
-                category: 'bebidas',
-                price: 9.50,
-                image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=600&q=80',
-                description: 'Feito na hora com frutas frescas 400ml.'
-            },
-            {
-                id: 'b3',
-                name: 'Cerveja Artesanal IPA 500ml',
-                category: 'bebidas',
-                price: 19.90,
-                image: 'https://images.unsplash.com/photo-1608270105387-98565538e12d?auto=format&fit=crop&w=600&q=80',
-                description: 'Cerveja artesanal encorpada com notas cítricas.'
-            },
-            {
-                id: 'b4',
-                name: 'Água Mineral com Gás',
-                category: 'bebidas',
-                price: 5.00,
-                image: 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?auto=format&fit=crop&w=600&q=80',
-                description: 'Garrafa 500ml.'
-            },
-            {
-                id: 's1',
-                name: 'Petit Gâteau com Sorvete',
-                category: 'sobremesas',
-                price: 22.00,
-                image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80',
-                description: 'Bolinho de chocolate quente com recheio cremoso e sorvete de baunilha.'
-            },
-            {
-                id: 's2',
-                name: 'Brownie de Chocolate Belga',
-                category: 'sobremesas',
-                price: 18.50,
-                image: 'https://images.unsplash.com/photo-1514517521153-1be72277b32f?auto=format&fit=crop&w=600&q=80',
-                description: 'Brownie denso com nozes e calda de chocolate belga.'
-            }
+            { id: 'h1', name: 'Smash Bacon Supreme', category: 'hamburgueres', price: 34.90, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80', description: 'Dois smashes artesanais 90g, cheddar, bacon crocante e maionese da casa.' },
+            { id: 'h2', name: 'Double Cheddar Melt', category: 'hamburgueres', price: 38.90, image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80', description: 'Blend especial 180g, muito creme cheddar melt e cebola caramelizada.' },
+            { id: 'h3', name: 'Crispy Chicken Burger', category: 'hamburgueres', price: 32.90, image: 'https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&w=600&q=80', description: 'Sobrecoxa empanada crocante, alface americana, molho tártaro artesanal.' },
+            { id: 'h4', name: 'Burger Vegetariano de Grão', category: 'hamburgueres', price: 29.90, image: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80', description: 'Hambúrguer de grão-de-bico com quinoa, queijo prato, tomate e rúcula.' },
+            
+            { id: 'p1', name: 'Batata Rústica Trufada', category: 'petiscos', price: 28.90, image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80', description: 'Batatas com azeite de trufas, flor de sal e parmesão ralado.' },
+            { id: 'p2', name: 'Onion Rings Crocantes', category: 'petiscos', price: 24.90, image: 'https://images.unsplash.com/photo-1639024471283-03518883512d?auto=format&fit=crop&w=600&q=80', description: 'Anéis de cebola empanados super crocantes acompanhados de molho barbecue.' },
+            { id: 'p3', name: 'Dadinhos de Tapioca', category: 'petiscos', price: 31.90, image: 'https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&w=600&q=80', description: 'Dadinhos de tapioca com queijo coalho servidos com geleia de pimenta.' },
+
+            { id: 'b1', name: 'Refrigerante Lata', category: 'bebidas', price: 7.00, image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80', description: 'Lata 350ml gelada (Coca-Cola, Guaraná, Sprite).' },
+            { id: 'b2', name: 'Suco Natural de Laranja', category: 'bebidas', price: 9.50, image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=600&q=80', description: 'Feito na hora com frutas frescas 400ml.' },
+            { id: 'b3', name: 'Cerveja Artesanal IPA 500ml', category: 'bebidas', price: 19.90, image: 'https://images.unsplash.com/photo-1608270105387-98565538e12d?auto=format&fit=crop&w=600&q=80', description: 'Cerveja artesanal encorpada com notas cítricas.' },
+            { id: 'b4', name: 'Água Mineral com Gás', category: 'bebidas', price: 5.00, image: 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?auto=format&fit=crop&w=600&q=80', description: 'Garrafa 500ml.' },
+
+            { id: 's1', name: 'Petit Gâteau com Sorvete', category: 'sobremesas', price: 22.00, image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80', description: 'Bolinho de chocolate quente com recheio cremoso e sorvete de baunilha.' },
+            { id: 's2', name: 'Brownie de Chocolate Belga', category: 'sobremesas', price: 18.50, image: 'https://images.unsplash.com/photo-1514517521153-1be72277b32f?auto=format&fit=crop&w=600&q=80', description: 'Brownie denso com nozes e calda de chocolate belga.' }
         ];
 
         const CATEGORIES = [
-            {
-                id: 'hamburgueres',
-                name: 'Hambúrgueres',
-                icon: 'fa-burger'
-            },
-            {
-                id: 'petiscos',
-                name: 'Petiscos',
-                icon: 'fa-utensils'
-            },
-            {
-                id: 'bebidas',
-                name: 'Bebidas',
-                icon: 'fa-glass-water'
-            },
-            {
-                id: 'sobremesas',
-                name: 'Sobremesas',
-                icon: 'fa-ice-cream'
-            }
+            { id: 'hamburgueres', name: 'Hambúrgueres', icon: 'fa-burger' },
+            { id: 'petiscos', name: 'Petiscos', icon: 'fa-utensils' },
+            { id: 'bebidas', name: 'Bebidas', icon: 'fa-glass-water' },
+            { id: 'sobremesas', name: 'Sobremesas', icon: 'fa-ice-cream' }
         ];
 
-        // ==========================================
-        // ESTADO
-        // ==========================================
         let activeCategory = null;
         let cart = [];
         let currentDish = null;
         let customizeQty = 1;
-        let valorTotalGlobal = 0;
+        let valorTotalGlobal = 0; // Guarda o total para usar no final
 
         // ==========================================
-        // CATEGORIAS E PRODUTOS
+        // RENDERIZAÇÃO DO MENU (Igual à Mesa)
         // ==========================================
         function renderCategories() {
-            const container = document.getElementById(
-                'categories-container'
-            );
-
+            const container = document.getElementById('categories-container');
             container.innerHTML = '';
-
             CATEGORIES.forEach(cat => {
                 const isActive = activeCategory === cat.id;
                 const btn = document.createElement('button');
-
-                btn.className = `
-                    px-3.5 py-2 rounded-xl text-xs font-bold border
-                    transition-all shrink-0 flex items-center space-x-1.5
-                    ${
-                        isActive
-                            ? 'active-category-btn'
-                            : 'bg-zinc-900 text-zinc-300 border-zinc-800'
-                    }
-                `;
-
-                btn.onclick = () => {
-                    activeCategory = activeCategory === cat.id
-                        ? null
-                        : cat.id;
-
-                    renderCategories();
-                    renderDishes();
-                };
-
-                btn.innerHTML = `
-                    <i class="fa-solid ${cat.icon} text-sm"></i>
-                    <span>${cat.name}</span>
-                `;
-
+                btn.className = `px-3.5 py-2 rounded-xl text-xs font-bold border transition-all shrink-0 flex items-center space-x-1.5 ${isActive ? 'active-category-btn' : 'bg-zinc-900 text-zinc-300 border-zinc-800'}`;
+                btn.onclick = () => { activeCategory = activeCategory === cat.id ? null : cat.id; renderCategories(); renderDishes(); };
+                btn.innerHTML = `<i class="fa-solid ${cat.icon} text-sm"></i> <span>${cat.name}</span>`;
                 container.appendChild(btn);
             });
         }
 
         function renderDishes() {
             const grid = document.getElementById('dishes-grid');
-
             grid.innerHTML = '';
-
-            const filteredDishes = activeCategory
-                ? MENU_DATA.filter(d => d.category === activeCategory)
-                : MENU_DATA;
+            const filteredDishes = activeCategory ? MENU_DATA.filter(d => d.category === activeCategory) : MENU_DATA;
 
             filteredDishes.forEach(dish => {
                 const card = document.createElement('div');
-
-                card.className = 'bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden shadow-lg active:scale-95 transition-all cursor-pointer flex flex-col';
-
-                card.onclick = () => {
-                    openDishDetailModal(dish.id);
-                };
-
+                card.className = 'produto-card';
+                card.tabIndex = 0;
+                card.setAttribute('role', 'button');
+                card.setAttribute('aria-label', `Ver ${dish.name}`);
+                card.onclick = () => openDishDetailModal(dish.id);
+                card.onkeydown = event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openDishDetailModal(dish.id); } };
                 card.innerHTML = `
-                    <div class="w-full aspect-square relative bg-black overflow-hidden">
-                        <img
-                            src="${dish.image}"
-                            loading="lazy"
-                            class="w-full h-full object-cover"
-                        >
-                    </div>
-
-                    <div class="p-3 bg-zinc-900 flex-1 flex flex-col justify-between">
-                        <div class="text-orange-500 font-black text-sm mb-0.5">
-                            R$ ${dish.price.toFixed(2).replace('.', ',')}
-                        </div>
-
-                        <h4 class="text-xs font-bold text-white line-clamp-2">
-                            ${dish.name}
-                        </h4>
-                    </div>
-                `;
-
+                    <div class="produto-foto"><img src="${dish.image}" alt="${textoSeguro(dish.name)}" loading="lazy"></div>
+                    <div class="produto-copy"><h4>${textoSeguro(dish.name)}</h4><div class="produto-preco">${formatarMoeda(dish.price)}</div></div>`;
                 grid.appendChild(card);
             });
         }
 
         // ==========================================
-        // DETALHES DO PRATO
+        // SELEÇÃO E CARRINHO
         // ==========================================
         function openDishDetailModal(dishId) {
             currentDish = MENU_DATA.find(d => d.id === dishId);
-
-            document.getElementById(
-                'modal-dish-title'
-            ).textContent = currentDish.name;
-
-            document.getElementById(
-                'modal-dish-price'
-            ).textContent = `R$ ${currentDish.price.toFixed(2).replace('.', ',')}`;
-
-            document.getElementById(
-                'modal-dish-description'
-            ).textContent = currentDish.description;
-
-            document.getElementById(
-                'modal-dish-img'
-            ).src = currentDish.image;
-
+            document.getElementById('modal-dish-title').textContent = currentDish.name;
+            document.getElementById('modal-dish-price').textContent = `R$ ${currentDish.price.toFixed(2).replace('.', ',')}`;
+            document.getElementById('modal-dish-description').textContent = currentDish.description;
+            document.getElementById('modal-dish-img').src = currentDish.image;
+            document.getElementById('modal-dish-category').textContent = CATEGORIES.find(c => c.id === currentDish.category)?.name || '';
             openModal('modal-dish-detail');
         }
 
         function openCustomizeFromDetail() {
             closeModal('modal-dish-detail');
-
-            setTimeout(() => {
+            setTimeout(() => { 
                 customizeQty = 1;
-
-                document.getElementById(
-                    'customize-qty'
-                ).textContent = customizeQty;
-
-                document.getElementById(
-                    'customize-total-price'
-                ).textContent = `R$ ${currentDish.price.toFixed(2).replace('.', ',')}`;
-
+                document.getElementById('customize-qty').textContent = customizeQty;
+                document.getElementById('customize-total-price').textContent = `R$ ${currentDish.price.toFixed(2).replace('.', ',')}`;
                 document.getElementById('custom-notes').value = '';
-
-                openModal('modal-customize');
+                openModal('modal-customize'); 
             }, 150);
         }
 
         function updateCustomizeQty(delta) {
             customizeQty = Math.max(1, customizeQty + delta);
-
-            document.getElementById(
-                'customize-qty'
-            ).textContent = customizeQty;
-
-            document.getElementById(
-                'customize-total-price'
-            ).textContent = `R$ ${(currentDish.price * customizeQty).toFixed(2).replace('.', ',')}`;
+            document.getElementById('customize-qty').textContent = customizeQty;
+            document.getElementById('customize-total-price').textContent = `R$ ${(currentDish.price * customizeQty).toFixed(2).replace('.', ',')}`;
         }
 
-        // ==========================================
-        // CARRINHO
-        // ==========================================
         function confirmAddToCart() {
             cart.push({
                 cartId: Date.now(),
@@ -952,332 +513,290 @@
                 image: currentDish.image,
                 quantity: customizeQty,
                 unitPrice: currentDish.price,
-                notes: document.getElementById(
-                    'custom-notes'
-                ).value.trim()
+                notes: document.getElementById('custom-notes').value.trim()
             });
-
             updateCartBadge();
             closeModal('modal-customize');
-
-            showToast(
-                'Adicionado',
-                `${currentDish.name} no carrinho.`,
-                'fa-circle-check'
-            );
+            showToast('Adicionado', `${currentDish.name} no carrinho.`, 'fa-circle-check');
         }
 
         function updateCartBadge() {
             const badge = document.getElementById('cart-badge');
-
-            const total = cart.reduce(
-                (sum, item) => sum + item.quantity,
-                0
-            );
-
-            if (total > 0) {
-                badge.textContent = total;
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
-            }
+            const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+            if (total > 0) { badge.textContent = total; badge.classList.remove('hidden'); }
+            else { badge.classList.add('hidden'); }
         }
 
         function openCartModal() {
-            const container = document.getElementById(
-                'cart-items-container'
-            );
-
+            const container = document.getElementById('cart-items-container');
             container.innerHTML = '';
-
+            
             if (cart.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-8 text-zinc-500 text-xs">
-                        O seu carrinho está vazio.
-                    </div>
-                `;
-
-                document.getElementById(
-                    'cart-total'
-                ).textContent = 'R$ 0,00';
-
-                document.getElementById(
-                    'btn-proceed-delivery'
-                ).disabled = true;
-
+                container.innerHTML = `<div class="text-center py-8 text-zinc-500 text-xs">O seu carrinho está vazio.</div>`;
+                document.getElementById('cart-total').textContent = 'R$ 0,00';
+                document.getElementById('btn-proceed-delivery').disabled = true;
+                document.getElementById('btn-proceed-pickup').disabled = true;
                 valorTotalGlobal = 0;
             } else {
                 let total = 0;
-
-                document.getElementById(
-                    'btn-proceed-delivery'
-                ).disabled = false;
-
+                document.getElementById('btn-proceed-delivery').disabled = false;
+                document.getElementById('btn-proceed-pickup').disabled = false;
                 cart.forEach(item => {
                     const itemTotal = item.unitPrice * item.quantity;
-
                     total += itemTotal;
-
-                    const safeNotes = item.notes
-                        .replace(/</g, '&lt;')
-                        .replace(/>/g, '&gt;');
-
+                    const safeNotes = item.notes.replace(/</g, "&lt;").replace(/>/g, "&gt;");
                     container.innerHTML += `
                         <div class="bg-zinc-800/80 p-3 rounded-xl border border-zinc-700 flex space-x-3">
-                            <img
-                                src="${item.image}"
-                                loading="lazy"
-                                class="w-12 h-12 rounded-lg object-cover"
-                            >
-
+                            <img src="${item.image}" loading="lazy" class="w-12 h-12 rounded-lg object-cover">
                             <div class="flex-1">
                                 <div class="flex justify-between">
-                                    <h5 class="text-xs font-bold text-white">
-                                        ${item.name}
-                                    </h5>
-
-                                    <button
-                                        onclick="removeCartItem(${item.cartId})"
-                                        class="text-rose-400 text-xs p-1"
-                                    >
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
+                                    <h5 class="text-xs font-bold text-white">${item.name}</h5>
+                                    <button onclick="removeCartItem(${item.cartId})" class="text-rose-400 text-xs p-1"><i class="fa-solid fa-trash"></i></button>
                                 </div>
-
-                                <div class="text-xs text-orange-500 font-bold">
-                                    R$ ${itemTotal.toFixed(2).replace('.', ',')}
-                                    (Qtd: ${item.quantity})
-                                </div>
-
-                                ${
-                                    item.notes
-                                        ? `<div class="text-[10px] text-zinc-400 italic">Obs: ${safeNotes}</div>`
-                                        : ''
-                                }
+                                <div class="text-xs text-orange-500 font-bold">R$ ${itemTotal.toFixed(2).replace('.', ',')} (Qtd: ${item.quantity})</div>
+                                ${item.notes ? `<div class="text-[10px] text-zinc-400 italic">Obs: ${safeNotes}</div>` : ''}
                             </div>
                         </div>
                     `;
                 });
-
                 valorTotalGlobal = total;
-
-                document.getElementById(
-                    'cart-total'
-                ).textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+                document.getElementById('cart-total').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
             }
-
             openModal('modal-cart');
         }
 
         function removeCartItem(id) {
             cart = cart.filter(i => i.cartId !== id);
-
             openCartModal();
             updateCartBadge();
         }
 
-        // ==========================================
-        // ENTREGA
-        // ==========================================
-        function openDeliveryForm() {
-            if (cart.length === 0) return;
+        // DADOS FICTÍCIOS DO RESTAURANTE — substitua pelos dados reais.
+        const RESTAURANTE = {
+            nome: 'Gourmet Burger House',
+            endereco: 'Rua Exemplo, 123 — Centro, Blumenau/SC',
+            whatsapp: '5500000000000',
+            instagram: 'https://www.instagram.com/restaurante_exemplo_ficticio/',
+            fuso: 'America/Sao_Paulo',
+            abertoManual: null, // null = seguir horários; true = aberto; false = fechado.
+            // 0 = domingo; 1 = segunda-feira; ...; 6 = sábado.
+            horarios: {
+                0: [['18:00', '23:00']],
+                1: [],
+                2: [['18:00', '23:00']],
+                3: [['18:00', '23:00']],
+                4: [['18:00', '23:00']],
+                5: [['18:00', '00:30']],
+                6: [['18:00', '00:30']]
+            }
+        };
+        let tipoAtendimento = 'entrega';
+        let enviandoPedido = false;
 
+        function textoSeguro(valor) {
+            return String(valor ?? '').replace(/[&<>"']/g, c => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[c]));
+        }
+
+        function formatarMoeda(valor) {
+            return Number(valor || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        function minutosHorario(hora) {
+            const [h, m] = hora.split(':').map(Number);
+            return h * 60 + m;
+        }
+
+        function restauranteEstaAberto(agora = new Date()) {
+            if (typeof RESTAURANTE.abertoManual === 'boolean') return RESTAURANTE.abertoManual;
+            const partes = new Intl.DateTimeFormat('en-US', {
+                timeZone: RESTAURANTE.fuso, weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
+            }).formatToParts(agora);
+            const valor = tipo => partes.find(p => p.type === tipo).value;
+            const dia = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(valor('weekday'));
+            const minuto = Number(valor('hour')) * 60 + Number(valor('minute'));
+            const hoje = RESTAURANTE.horarios[dia] || [];
+            const ontem = RESTAURANTE.horarios[(dia + 6) % 7] || [];
+            return hoje.some(([inicio, fim]) => {
+                const a = minutosHorario(inicio), b = minutosHorario(fim);
+                return a !== b && (b > a ? minuto >= a && minuto < b : minuto >= a);
+            }) || ontem.some(([inicio, fim]) => {
+                const a = minutosHorario(inicio), b = minutosHorario(fim);
+                return b < a && minuto < b;
+            });
+        }
+
+        function atualizarStatusRestaurante() {
+            const aberto = restauranteEstaAberto();
+            for (const id of ['restaurante-status', 'info-restaurante-status']) {
+                const caixa = document.getElementById(id);
+                if (!caixa) continue;
+                caixa.textContent = aberto ? 'Aberto' : 'Fechado';
+                caixa.classList.remove('aberto', 'fechado');
+                caixa.classList.add(aberto ? 'aberto' : 'fechado');
+            }
+        }
+
+        function abrirInformacoesRestaurante() {
+            document.getElementById('info-restaurante-nome').textContent = RESTAURANTE.nome;
+            document.getElementById('info-restaurante-endereco').textContent = RESTAURANTE.endereco;
+            const dias = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+            document.getElementById('info-restaurante-horarios').innerHTML = [1, 2, 3, 4, 5, 6, 0].map(dia => {
+                const janelas = RESTAURANTE.horarios[dia] || [];
+                const horario = janelas.length ? janelas.map(([a, b]) => `${a} às ${b}${minutosHorario(b) < minutosHorario(a) ? ' (dia seguinte)' : ''}`).join(' / ') : 'Fechado';
+                return `<div class="info-horario"><span>${dias[dia]}</span><span>${textoSeguro(horario)}</span></div>`;
+            }).join('');
+            document.getElementById('info-link-whatsapp').href = `https://wa.me/${RESTAURANTE.whatsapp}?text=${encodeURIComponent('Olá! Gostaria de informações sobre o cardápio.')}`;
+            document.getElementById('info-link-instagram').href = RESTAURANTE.instagram;
+            atualizarStatusRestaurante();
+            openModal('modal-restaurante-info');
+        }
+
+        async function compartilharCardapio() {
+            const endereco = new URL(window.location.href);
+            endereco.hash = '';
+            const url = endereco.href;
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title: RESTAURANTE.nome, text: 'Confira o nosso cardápio!', url });
+                    return;
+                } catch (error) {
+                    if (error.name === 'AbortError') return;
+                }
+            }
+            try {
+                if (!navigator.clipboard?.writeText) throw new Error('Copiar manualmente');
+                await navigator.clipboard.writeText(url);
+                showToast('Link copiado', 'Compartilhe o cardápio com quem quiser.', 'fa-link');
+            } catch {
+                document.getElementById('info-compartilhar-manual').classList.remove('hidden');
+                const campo = document.getElementById('info-link-cardapio');
+                campo.value = url;
+                campo.focus();
+                campo.select();
+                showToast('Compartilhar cardápio', 'Copie o link e envie para quem quiser.', 'fa-link');
+            }
+        }
+
+        function openDeliveryForm(tipo = 'entrega') {
+            if (!cart.length || enviandoPedido || !['entrega', 'retirada'].includes(tipo)) return;
+            tipoAtendimento = tipo;
+            const retirada = tipo === 'retirada';
+            document.getElementById('checkout-dados-titulo').textContent = retirada ? 'Dados para retirada' : 'Dados de entrega';
+            document.getElementById('checkout-endereco').classList.toggle('hidden', retirada);
+            const aviso = document.getElementById('checkout-retirada-info');
+            aviso.classList.toggle('hidden', !retirada);
+            aviso.textContent = `Retire seu pedido em ${RESTAURANTE.endereco}. Informe seu nome e WhatsApp para identificação.`;
             closeModal('modal-cart');
-
-            setTimeout(() => {
-                openModal('modal-delivery-form');
-            }, 150);
+            openModal('modal-delivery-form');
         }
 
         function voltarParaCarrinho() {
+            if (enviandoPedido) return;
             closeModal('modal-delivery-form');
+            openCartModal();
+        }
 
-            setTimeout(() => {
-                openModal('modal-cart');
-            }, 150);
+        function dadosCheckoutValidos() {
+            if (!cart.length) {
+                showToast('Carrinho vazio', 'Adicione um produto antes de continuar.', 'fa-triangle-exclamation');
+                return false;
+            }
+            const nome = document.getElementById('del-nome').value.trim();
+            const telefone = document.getElementById('del-telefone').value.replace(/\D/g, '');
+            if (!nome || telefone.length < 10 || telefone.length > 13) {
+                showToast('Dados incompletos', 'Informe seu nome e um WhatsApp com DDD.', 'fa-triangle-exclamation');
+                return false;
+            }
+            if (tipoAtendimento === 'entrega' && ['del-rua', 'del-numero', 'del-bairro'].some(id => !document.getElementById(id).value.trim())) {
+                showToast('Endereço incompleto', 'Preencha a rua, o número e o bairro para a entrega.', 'fa-triangle-exclamation');
+                return false;
+            }
+            return true;
         }
 
         function openPaymentScreen() {
-            const nome = document.getElementById(
-                'del-nome'
-            ).value.trim();
-
-            const tel = document.getElementById(
-                'del-telefone'
-            ).value.trim();
-
-            const rua = document.getElementById(
-                'del-rua'
-            ).value.trim();
-
-            const num = document.getElementById(
-                'del-numero'
-            ).value.trim();
-
-            if (!nome || !tel || !rua || !num) {
-                showToast(
-                    'Dados incompletos',
-                    'Por favor, preencha o Nome, Telefone, Rua e Número.',
-                    'fa-triangle-exclamation'
-                );
-
-                return;
-            }
-
+            if (enviandoPedido || !dadosCheckoutValidos()) return;
+            valorTotalGlobal = cart.reduce((s, i) => s + Math.round(i.unitPrice * 100) * i.quantity, 0) / 100;
+            const retirada = tipoAtendimento === 'retirada';
+            const botao = document.getElementById('btn-pagar-retirada');
+            botao.classList.toggle('hidden', !retirada);
+            botao.classList.toggle('flex', retirada);
+            document.getElementById('checkout-pagamento-titulo').textContent = retirada ? 'Pagamento do pedido para retirada' : 'Pagamento do pedido para entrega';
+            document.getElementById('payment-total-display').textContent = formatarMoeda(valorTotalGlobal);
             closeModal('modal-delivery-form');
-
-            document.getElementById(
-                'payment-total-display'
-            ).textContent = `R$ ${valorTotalGlobal.toFixed(2).replace('.', ',')}`;
-
-            setTimeout(() => {
-                openModal('modal-payment');
-            }, 150);
+            openModal('modal-payment');
         }
 
         function voltarParaEntrega() {
+            if (enviandoPedido) return;
             closeModal('modal-payment');
-
-            setTimeout(() => {
-                openModal('modal-delivery-form');
-            }, 150);
+            openModal('modal-delivery-form');
         }
 
-        // ==========================================
-        // PAGAMENTO — SIMULAÇÃO ATUAL
-        // A API do Mercado Pago será integrada depois.
-        // ==========================================
         async function processarPagamento(metodo) {
-            showToast(
-                'A processar pagamento...',
-                'Aguarde a confirmação do Mercado Pago.',
-                'fa-spinner fa-spin'
-            );
-
-            // Simulação mantida para os testes atuais.
-            setTimeout(() => {
-                finalizarPedidoEEnviarAoBackend(metodo);
-            }, 1500);
+            if (enviandoPedido || !['PIX', 'CREDITO', 'PAGAR_NA_RETIRADA'].includes(metodo)) return;
+            if (metodo === 'PAGAR_NA_RETIRADA' && tipoAtendimento !== 'retirada') return;
+            // PIX e cartão continuam em demonstração até a integração do Mercado Pago.
+            return finalizarPedidoEEnviarAoBackend(metodo);
         }
 
-        // ==========================================
-        // ENVIO DO PEDIDO PARA O BACKEND
-        // ==========================================
         async function finalizarPedidoEEnviarAoBackend(metodoPagamento) {
+            if (enviandoPedido || !dadosCheckoutValidos()) return;
+            if (!['PIX', 'CREDITO', 'PAGAR_NA_RETIRADA'].includes(metodoPagamento)) return;
+            const retirada = tipoAtendimento === 'retirada';
+            if (metodoPagamento === 'PAGAR_NA_RETIRADA' && !retirada) return;
+            const pagarNaRetirada = metodoPagamento === 'PAGAR_NA_RETIRADA';
             const deliveryInfo = {
-                nome: document.getElementById(
-                    'del-nome'
-                ).value.trim(),
-
-                telefone: document.getElementById(
-                    'del-telefone'
-                ).value.trim(),
-
-                rua: document.getElementById(
-                    'del-rua'
-                ).value.trim(),
-
-                numero: document.getElementById(
-                    'del-numero'
-                ).value.trim(),
-
-                bairro: document.getElementById(
-                    'del-bairro'
-                ).value.trim(),
-
-                complemento: document.getElementById(
-                    'del-complemento'
-                ).value.trim(),
-
+                nome: document.getElementById('del-nome').value.trim(),
+                telefone: document.getElementById('del-telefone').value.trim(),
+                tipo_atendimento: tipoAtendimento,
+                rua: retirada ? '' : document.getElementById('del-rua').value.trim(),
+                numero: retirada ? '' : document.getElementById('del-numero').value.trim(),
+                bairro: retirada ? '' : document.getElementById('del-bairro').value.trim(),
+                complemento: retirada ? '' : document.getElementById('del-complemento').value.trim(),
                 metodo_pagamento: metodoPagamento,
-
-                // Mantido para a simulação atual do pagamento.
-                pago_online: true
+                pago_online: false,
+                pagamento_simulado: !pagarNaRetirada,
+                status_pagamento: pagarNaRetirada ? 'pendente_na_retirada' : 'simulado'
             };
-
-            showToast(
-                'A enviar pedido...',
-                'A registar o seu pedido na cozinha.',
-                'fa-spinner fa-spin'
-            );
-
+            enviandoPedido = true;
+            document.querySelectorAll('#modal-payment button').forEach(b => b.disabled = true);
+            showToast('Enviando pedido...', 'Aguarde a confirmação do restaurante.', 'fa-spinner fa-spin');
             try {
-                const response = await fetch(
-                    `${API_URL}/api/delivery/novo`,
-                    {
-                        method: 'POST',
-
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-
-                        body: JSON.stringify({
-                            cliente: deliveryInfo,
-                            itens: cart,
-                            valor_total: valorTotalGlobal,
-                            origem: 'WHATSAPP_DELIVERY'
-                        })
-                    }
-                );
-
-                if (!response.ok) {
-                    throw new Error(
-                        'Erro ao salvar pedido no servidor'
-                    );
-                }
-
+                const response = await fetch(`${API_URL}/api/delivery/novo`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ cliente: deliveryInfo, itens: cart,
+                        valor_total: cart.reduce((s, i) => s + Math.round(i.unitPrice * 100) * i.quantity, 0) / 100,
+                        origem: 'WHATSAPP_DELIVERY' })
+                });
+                const dados = await response.json().catch(() => ({}));
+                if (!response.ok || !dados.sucesso) throw new Error(dados.error || dados.erro || 'Não foi possível confirmar o pedido.');
                 cart = [];
-
                 updateCartBadge();
                 closeModal('modal-payment');
-
+                const forma = pagarNaRetirada ? 'Pagar na retirada' : `${metodoPagamento === 'PIX' ? 'PIX' : 'Cartão de crédito'} — demonstração`;
+                const endereco = retirada ? RESTAURANTE.endereco : [deliveryInfo.rua + ', ' + deliveryInfo.numero, deliveryInfo.bairro, deliveryInfo.complemento].filter(Boolean).join(' — ');
                 document.getElementById('screen-menu').innerHTML = `
-                    <div class="h-[80vh] flex flex-col items-center justify-center text-center p-6 space-y-4 animate-fade-in">
-                        <div class="w-20 h-20 bg-emerald-500/20 text-emerald-500 rounded-full flex items-center justify-center text-4xl mb-2 border border-emerald-500/30">
-                            <i class="fa-solid fa-check"></i>
+                    <div class="min-h-[80vh] flex flex-col items-center justify-center text-center p-6 space-y-4">
+                        <div class="w-20 h-20 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center text-4xl"><i class="fa-solid fa-check"></i></div>
+                        <h2 class="text-2xl font-black text-white">Pedido realizado!</h2>
+                        <p class="text-zinc-400 text-sm">Seu pedido ${dados.pedido?.id ? '#' + textoSeguro(dados.pedido.id) : ''} foi recebido pelo restaurante.</p>
+                        <div class="bg-zinc-900 p-5 rounded-2xl border border-zinc-800 w-full text-left space-y-3">
+                            <p><strong>${retirada ? 'Retirada no restaurante' : 'Entrega no endereço'}</strong></p>
+                            <p class="text-sm text-zinc-300">${textoSeguro(deliveryInfo.nome)}<br>${textoSeguro(deliveryInfo.telefone)}</p>
+                            <p class="text-sm text-zinc-300">${textoSeguro(endereco)}</p>
+                            <p class="text-sm text-orange-400">${textoSeguro(forma)}</p>
+                            ${pagarNaRetirada ? '<p class="text-xs text-zinc-400">O pagamento será feito ao buscar o pedido.</p>' : ''}
                         </div>
-
-                        <h2 class="text-2xl font-black text-white">
-                            Pedido Realizado!
-                        </h2>
-
-                        <p class="text-zinc-400 text-sm">
-                            O seu pagamento foi aprovado e o pedido
-                            já seguiu para a nossa cozinha.
-                        </p>
-
-                        <div class="bg-zinc-900 p-4 rounded-2xl border border-zinc-800 w-full mt-4 text-left space-y-1">
-                            <p class="text-[10px] text-zinc-500 uppercase font-black">
-                                Cliente
-                            </p>
-
-                            <p class="text-white text-xs font-bold">
-                                ${deliveryInfo.nome}
-                            </p>
-
-                            <p class="text-[10px] text-zinc-500 uppercase font-black pt-2">
-                                Endereço de Entrega
-                            </p>
-
-                            <p class="text-zinc-300 text-xs">
-                                ${deliveryInfo.rua},
-                                ${deliveryInfo.numero} -
-                                ${deliveryInfo.bairro}
-                            </p>
-                        </div>
-                    </div>
-                `;
+                    </div>`;
             } catch (error) {
-                console.error(
-                    'Erro ao enviar pedido de delivery:',
-                    error
-                );
-
-                showToast(
-                    'Erro de Envio',
-                    'Não foi possível comunicar com o restaurante. Tente novamente.',
-                    'fa-triangle-exclamation'
-                );
+                console.error('Erro ao enviar pedido:', error);
+                showToast('Pedido não confirmado', error.message || 'Confira com o restaurante antes de reenviar.', 'fa-triangle-exclamation');
+            } finally {
+                enviandoPedido = false;
+                document.querySelectorAll('#modal-payment button').forEach(b => b.disabled = false);
             }
         }
 
@@ -1285,48 +804,19 @@
         // UTILITÁRIOS
         // ==========================================
         let toastTimeout;
-
         function showToast(title, message, icon = 'fa-bell') {
-            const toast = document.getElementById(
-                'toast-notification'
-            );
-
-            document.getElementById(
-                'toast-title'
-            ).textContent = title;
-
-            document.getElementById(
-                'toast-message'
-            ).textContent = message;
-
-            document.getElementById(
-                'toast-icon'
-            ).className = `fa-solid ${icon} text-base`;
-
-            toast.classList.remove(
-                'opacity-0',
-                'pointer-events-none',
-                '-translate-y-full'
-            );
-
+            const toast = document.getElementById('toast-notification');
+            document.getElementById('toast-title').textContent = title;
+            document.getElementById('toast-message').textContent = message;
+            document.getElementById('toast-icon').className = `fa-solid ${icon} text-base`;
+            
+            toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-full');
             clearTimeout(toastTimeout);
-
-            toastTimeout = setTimeout(() => {
-                toast.classList.add(
-                    'opacity-0',
-                    'pointer-events-none',
-                    '-translate-y-full'
-                );
-            }, 2500);
+            toastTimeout = setTimeout(() => { toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-full'); }, 2500);
         }
 
-        function openModal(id) {
-            document.getElementById(id).classList.remove('hidden');
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).classList.add('hidden');
-        }
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
     </script>
 </body>
 </html>
