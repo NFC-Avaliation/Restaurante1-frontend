@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="pt-PT" class="dark">
+<html lang="pt-BR" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Cardápio Digital NFC | Restaurante</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -56,6 +56,137 @@
             border-color: transparent !important;
         }
     </style>
+<style id="liquid-design-system">/* Identidade compartilhada — Bento / Liquid Glass. Estilos só na tela. */
+@media screen {
+  :root{--ui-bg:#090c10;--ui-panel:rgba(25,30,36,.84);--ui-line:rgba(255,255,255,.105);--ui-line-bright:rgba(255,255,255,.2);--ui-ink:#f5f6f7;--ui-muted:#a5adb8;--ui-accent:#ffb45b;--ui-ease:cubic-bezier(.22,1,.36,1);color-scheme:dark}
+  html{background:var(--ui-bg)!important;scroll-behavior:smooth}
+  body{background:radial-gradient(ellipse at 5% 0%,#65412128,transparent 45%),radial-gradient(ellipse at 100% 30%,#264e522b,transparent 46%),#090c10!important;background-attachment:fixed!important;color:var(--ui-ink);font-family:'Inter',ui-sans-serif,system-ui,sans-serif!important;-webkit-font-smoothing:antialiased;line-height:1.5}
+  body button,body input,body textarea,body select{font-family:inherit}
+  body button,body [role="button"]{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+  body button{transition:background .22s,border-color .22s,box-shadow .22s,opacity .22s,transform .22s var(--ui-ease)}
+  body button:not(:disabled):active{transform:scale(.97)}
+  body button:disabled{cursor:not-allowed}
+  body :is(button,a,input,textarea,select,[tabindex]):focus-visible{outline:2px solid var(--ui-accent)!important;outline-offset:4px}
+  body :is(input,textarea,select){background:#0b1018bb!important;border-color:#ffffff20!important;border-radius:14px!important;min-height:44px;color:#f7f8fa;box-shadow:inset 0 1px 2px #0003;transition:border-color .2s,box-shadow .2s}
+  body input[type="checkbox"],body input[type="radio"]{min-height:initial;accent-color:#ffb45b}
+  body :is(input,textarea,select):focus{border-color:#ffb45b80!important;box-shadow:0 0 0 4px #ffb45b12}
+  body ::placeholder{color:#818b99}
+  body .text-zinc-400{color:#a6aeb9}
+  body .text-zinc-500{color:#929ba8}
+  body :is(.text-orange-400,.text-orange-500){color:var(--ui-accent)}
+  body :is(.bg-orange-500,.bg-orange-600){background:linear-gradient(135deg,#ffd196,#ffb45b)!important;color:#26190e!important;border-color:#ffdfaf80!important;box-shadow:0 6px 18px #ffae3a18,inset 0 1px #ffffff70}
+  body .bg-gradient-to-r.from-orange-500{background:linear-gradient(125deg,#ffd69c,#ffad50)!important;color:#26190e;box-shadow:0 8px 26px #ffaf3d23,inset 0 1px #ffffff70}
+  body .glass-panel{background:linear-gradient(145deg,#ffffff08,transparent 50%),var(--ui-panel);border:1px solid var(--ui-line);border-radius:26px;box-shadow:inset 0 1px #ffffff0b,0 16px 46px #0000001f}
+  body .glass-eyebrow{font-size:10px;line-height:1.4;letter-spacing:.15em;text-transform:uppercase;color:#b7bfc9;font-weight:700}
+  body .glass-title{font-size:clamp(25px,3vw,38px);font-weight:750;line-height:1.13;letter-spacing:-.05em}
+  body .glass-caption{font-size:12px;color:var(--ui-muted);line-height:1.65}
+  body [id^="view-"]:not(.hidden),body section[id^="screen-"]:not(.hidden){animation:glass-scene .42s var(--ui-ease)}
+  body [id^="modal-"].fixed:not(.hidden){animation:glass-overlay .18s ease-out;background-color:#05080eb8!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  body [id^="modal-"].fixed>:first-child{background:linear-gradient(135deg,#ffffff08,transparent 50%),#151b23f5!important;border-color:#ffffff26!important;box-shadow:0 30px 100px #0009,inset 0 1px #ffffff18;position:relative}
+  body [id^="modal-"].fixed:not(.hidden)>:first-child{animation:glass-dialog .38s var(--ui-ease)}
+  body [id^="modal-"].fixed>div>div.bg-zinc-950,body [id^="modal-"].fixed header,body [id^="modal-"].fixed footer{background:#0d131ac9;border-color:var(--ui-line)}
+  body #toast,body #toast-notification{background:#18212aee!important;border:1px solid #ffffff26!important;box-shadow:0 18px 60px #0007,inset 0 1px #ffffff10;border-radius:22px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)}
+  body #cart-badge{background:#ffb45b!important;color:#271a0c;border-color:#10151c;box-shadow:0 3px 14px #ffb45b3b}
+  body #cart-badge:not(.hidden){animation:glass-pop .4s var(--ui-ease)}
+  .ui-order-status{position:fixed;z-index:115;bottom:max(24px,env(safe-area-inset-bottom));left:50%;width:min(380px,calc(100% - 32px));transform:translateX(-50%);display:flex;align-items:center;gap:16px;padding:18px 22px;border-radius:24px;border:1px solid #ffffff30;background:#16212af5;box-shadow:0 20px 70px #0008;backdrop-filter:blur(20px);pointer-events:none;animation:glass-status-in .32s var(--ui-ease)}
+  .ui-order-status[hidden]{display:none!important}
+  .ui-order-status strong{display:block;font-size:14px;font-weight:700;letter-spacing:-.02em}
+  .ui-order-status small{display:block;font-size:11px;color:#afbac7;margin-top:3px}
+  .ui-order-symbol{width:42px;height:42px;flex-shrink:0;border-radius:50%;border:2px solid #ffb45b26;border-top-color:#ffb45b;animation:glass-spin .8s linear infinite}
+  .ui-order-status[data-state="sucesso"] .ui-order-symbol{border:1px solid #6ee7b740;background:#6ee7b718;animation:glass-pop .4s var(--ui-ease)}
+  .ui-order-status[data-state="sucesso"] .ui-order-symbol::after{content:'';display:block;width:16px;height:9px;border-left:2px solid #8cf0c5;border-bottom:2px solid #8cf0c5;transform:rotate(-45deg);margin:12px auto}
+  .ui-order-status[data-state="erro"] .ui-order-symbol{border:1px solid #fb718540;background:#fb718518;animation:none}
+  .ui-order-status[data-state="erro"] .ui-order-symbol::after{content:'!';display:block;text-align:center;line-height:38px;font-size:22px;font-weight:800;color:#fda4af}
+  @supports(backdrop-filter:blur(1px)){body .glass-panel{backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}}
+  @media(hover:hover){body .glass-interactive:hover{border-color:#ffffff35;box-shadow:0 15px 45px #0004,inset 0 1px #ffffff18;transform:translateY(-3px)}}
+  @media(prefers-reduced-transparency:reduce){body .glass-panel,body [id^="modal-"].fixed>:first-child{background:#151b23!important;backdrop-filter:none!important}}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}body *,body *::before,body *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+  @keyframes glass-scene{from{opacity:.25;translate:0 10px}to{opacity:1;translate:0 0}}
+  @keyframes glass-overlay{from{opacity:0}to{opacity:1}}
+  @keyframes glass-dialog{from{opacity:0;transform:translateY(24px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+  @keyframes glass-pop{0%{scale:.8}55%{scale:1.12}100%{scale:1}}
+  @keyframes glass-spin{to{transform:rotate(360deg)}}
+  @keyframes glass-status-in{from{opacity:0;translate:0 16px}to{opacity:1;translate:0 0}}
+}
+
+@media screen {
+  body{padding-bottom:110px!important}
+  body #screen-menu{max-width:980px;width:100%;margin:0 auto}
+  body .restaurante-topo{padding:36px 24px 28px;margin:18px 20px 0;border:1px solid var(--ui-line);border-radius:32px;background:radial-gradient(ellipse at 50% -70%,#ffb45b28,transparent 75%),linear-gradient(135deg,#ffffff08,transparent),#141b23be;box-shadow:inset 0 1px #ffffff13,0 24px 70px #0002}
+  body .restaurante-topo h1{color:#c0c7d0;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;margin-bottom:20px}
+  body .restaurante-logo{border-radius:26px;width:84px;height:84px;background:linear-gradient(135deg,#ffdcab,#f6a849);padding:1px;box-shadow:0 8px 40px #ffb45b14;margin-bottom:18px}
+  body .restaurante-logo>div{border-radius:25px;border:0;background:linear-gradient(150deg,#4c3420,#211e19)}
+  body .restaurante-logo i{font-size:29px;color:#ffd69d}body .restaurante-logo span{color:#ffe2bc}
+  body .menu-brand-title{font-size:clamp(23px,4.5vw,34px);font-weight:750;letter-spacing:-.05em;line-height:1.2;margin:0 0 8px}
+  body .menu-brand-caption{font-size:12px;color:#a5aeb9;margin:0 auto 23px;max-width:360px}
+  body .restaurante-meta{max-width:360px;gap:10px}
+  body .status-restaurante,body .btn-informacoes{border-radius:14px;min-height:44px;font-size:11px;backdrop-filter:blur(12px)}
+  body .btn-informacoes{background:#ffffff07;border-color:#ffffff1c;color:#d5dbe2}
+  body .barra-cardapio,body #screen-menu>header{background:#111821df!important;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid #ffffff1b!important;border-radius:20px;margin:16px 20px 0;padding:12px 16px;top:12px;box-shadow:0 12px 30px #0004,inset 0 1px #ffffff0c}
+  body .barra-cardapio h2{font-size:12px;letter-spacing:.06em}
+  body .barra-modalidade{color:#c2c9d2;font-size:10px}
+  body .botao-carrinho{width:42px;height:42px;background:#ffffff08;border-color:#ffffff20;color:#ffbd71;border-radius:14px}
+  body #screen-menu>nav{margin-top:20px;padding:0 20px}
+  body #categories-container{padding:4px 0 12px;gap:8px;scroll-snap-type:x proximity}
+  body #categories-container>button{min-height:43px;margin:0!important;padding:11px 16px;border-radius:15px;background:#151c25b3;border-color:#ffffff16;font-size:11px;color:#b8c1cd;scroll-snap-align:start}
+  body #categories-container>button.active-category-btn{background:linear-gradient(135deg,#ffd9a5,#ffb25b)!important;color:#2c1d0e!important;box-shadow:0 6px 22px #ffad4020;border-color:#ffe7be80!important}
+  body #screen-menu>main{margin-top:18px;padding:0 20px}
+  body #current-category-title{font-size:11px;font-weight:650;letter-spacing:.04em}
+  body #dishes-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding-bottom:40px}
+  body #dishes-grid>.produto-card{width:auto!important;grid-column:auto!important;justify-self:stretch!important;min-width:0;display:flex;flex-direction:column;background:linear-gradient(155deg,#ffffff07,transparent 70%),#171e27d4;border:1px solid #ffffff16;border-radius:23px;padding:7px;box-shadow:0 6px 24px #0002,inset 0 1px #ffffff08;transition:transform .3s var(--ui-ease),border-color .3s,box-shadow .3s;animation:glass-scene .38s var(--ui-ease)}
+  body .produto-foto{position:relative;width:100%;aspect-ratio:4/3;border-radius:17px;overflow:hidden;background:#11161e}
+  body .produto-foto img{width:100%;height:100%;display:block;object-fit:cover;transition:transform .65s var(--ui-ease)}
+  body .produto-copy{padding:13px 7px 9px;display:flex;flex-direction:column;gap:12px;flex:1}
+  body .produto-copy h4{margin:0;font-size:12px;font-weight:650;line-height:1.5;min-height:3em;color:#f3f5f7;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  body .produto-footer{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:auto}
+  body .produto-preco{color:#ffd29a;font-size:14px;font-weight:750;letter-spacing:-.025em;white-space:nowrap}
+  body .produto-add{display:flex;align-items:center;justify-content:center;width:29px;height:29px;flex-shrink:0;border-radius:10px;border:1px solid #ffbb6c26;background:#ffbb6c0c;color:#ffd197;font-size:17px}
+  body .menu-bento{display:grid;grid-template-columns:1.4fr 1fr;gap:12px;margin:20px 20px 0}
+  body .menu-bento>div{padding:19px 20px;border-radius:22px;min-width:0}
+  body .menu-bento .bento-intro{background:radial-gradient(ellipse at 0% 0%,#e7a34b16,transparent 90%),#171e26bd}
+  body .menu-bento h3{font-size:17px;letter-spacing:-.035em;font-weight:650;margin:6px 0 4px;line-height:1.25}
+  body .menu-bento p{font-size:11px;color:#a4aebc;line-height:1.65;margin:0}
+  body .bento-bag-icon{color:#ffd19a;font-size:21px;margin-bottom:8px}
+  body .ui-cart-dock{position:fixed;z-index:45;bottom:max(14px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:min(440px,calc(100% - 32px));background:linear-gradient(115deg,#ffdcaa,#ffb35e)!important;color:#291c10;border:1px solid #ffe1b3;box-shadow:0 16px 50px #0008,inset 0 1px #ffffff90;border-radius:21px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:16px;animation:glass-status-in .35s var(--ui-ease);font-size:13px;font-weight:750;min-height:58px}
+  body .ui-cart-dock[hidden]{display:none!important}
+  body .ui-cart-dock small{display:block;font-size:10px;font-weight:600;opacity:.7;margin-top:1px}
+  body .ui-cart-dock:not(:disabled):active{transform:translateX(-50%) scale(.98)}
+  body .checkout-opcoes button{min-height:56px;border-radius:16px;background:linear-gradient(130deg,#ffdbab,#ffb35f);border-color:#ffe7c380;color:#2c1b09;text-transform:none;font-size:12px;box-shadow:inset 0 1px #fff7}
+  body #modal-dish-detail>div,body #modal-customize>div,body #modal-cart>div,body #modal-delivery-form>div,body #modal-payment>div{border-radius:28px;max-width:520px}
+  body #modal-dish-detail>div>button{position:absolute}
+  body .info-restaurante-dialog{border-radius:28px}
+  body .menu-success{margin:20px;border:1px solid #ffffff1c;border-radius:30px;background:radial-gradient(ellipse at 50% 0%,#6ee7b71c,transparent 65%),#141c25d9;animation:glass-scene .5s var(--ui-ease)}
+  @media(min-width:780px){body .restaurante-topo{margin-top:26px;padding:30px}body .menu-bento{grid-template-columns:2fr 1fr}body #dishes-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}body .produto-copy h4{font-size:14px}body .produto-preco{font-size:17px}body .produto-add{width:34px;height:34px}body .produto-foto{aspect-ratio:16/11}}
+  @media(max-width:380px){body .restaurante-topo{margin-left:14px;margin-right:14px;padding:26px 18px}body .barra-cardapio,body #screen-menu>header{margin-left:14px;margin-right:14px}body .menu-bento{margin-left:14px;margin-right:14px;gap:10px}body .menu-bento>div{padding:15px}body .menu-bento h3{font-size:15px}body #screen-menu>nav,body #screen-menu>main{padding:0 14px}body #dishes-grid{gap:10px}body #dishes-grid>.produto-card{padding:6px;border-radius:19px}body .produto-copy{padding:11px 5px 7px}body .produto-preco{font-size:12px}}
+  @media(max-width:639px){body [id^="modal-"].fixed{padding:10px 10px max(10px,env(safe-area-inset-bottom))!important}body #modal-dish-detail>div,body #modal-customize>div,body #modal-cart>div,body #modal-delivery-form>div,body #modal-payment>div{max-height:92dvh}}
+  @media(hover:hover){body #dishes-grid>.produto-card:hover{transform:translateY(-4px);border-color:#ffd29a55;box-shadow:0 16px 40px #0005}body .produto-card:hover img{transform:scale(1.055)}}
+}
+
+@media screen {
+  body #screen-landing{max-width:900px;padding:20px;min-height:94dvh;gap:18px;justify-content:center}
+  body #screen-landing>div:first-child{padding:40px 28px;border-radius:32px;border:1px solid #ffffff1c;background:radial-gradient(ellipse at 50% 0%,#e7aa5230,transparent 65%),linear-gradient(140deg,#ffffff06,transparent),#151d26d9;box-shadow:inset 0 1px #ffffff10,0 20px 60px #0003;min-height:340px;justify-content:center}
+  body #screen-landing h1{font-size:clamp(29px,4.5vw,45px);line-height:1.06;font-weight:750;letter-spacing:-.055em;max-width:340px;margin:10px 0 12px}
+  body #screen-landing>div:first-child>p{max-width:230px;color:#aeb7c3;font-size:12px;line-height:1.7}
+  body #screen-landing>div:nth-child(2){padding:0;margin:0;display:grid;grid-template-columns:1.3fr 1fr;gap:12px}
+  body #screen-landing>div:nth-child(2)>button{margin:0!important;min-height:110px;padding:24px 20px;border-radius:24px;text-align:left;letter-spacing:-.02em;text-transform:none;font-size:15px}
+  body #screen-landing>div:nth-child(2)>button:first-child{background:linear-gradient(130deg,#ffe0b6,#ffb458)!important;box-shadow:0 12px 35px #ffb45b18,inset 0 1px #fffa;color:#32200e}
+  body #screen-landing>div:nth-child(2)>button:last-child{background:linear-gradient(140deg,#ffffff09,transparent),#19212b;border:1px solid #ffffff1e;font-size:12px;box-shadow:inset 0 1px #ffffff0c}
+  body #screen-landing>div:nth-child(2)>button>div{gap:10px;margin:0}
+  body #screen-landing>div:last-child{border:1px solid #ffffff13;border-radius:20px;background:#111a23b3;padding:17px}
+  body #screen-landing .w-28{border-radius:27px;width:88px;height:88px;padding:1px;background:linear-gradient(135deg,#ffdfae,#f0a54c);box-shadow:0 8px 30px #ffb45b13}
+  body #screen-landing .w-28>div{border-radius:26px;border:0;background:linear-gradient(145deg,#4b321e,#241e17)}
+  body #screen-landing .w-28 i{color:#ffddad;font-size:30px}
+  body #screen-landing .w-28 span{color:#ffe6c5}
+  body #screen-menu>header>div{display:grid;grid-template-columns:1fr auto 1fr;gap:8px}
+  body #screen-menu>header>div>button:last-child{justify-self:end;border-radius:14px;background:#ffffff08;border-color:#ffffff1c;min-width:42px;min-height:42px}
+  body #btn-call-waiter-nav{justify-self:start;min-height:42px;background:#ffb45b0a;border-color:#ffb45b26;color:#ffcb8e;border-radius:13px}
+  body #screen-blocked{background:radial-gradient(ellipse at 50% 0%,#77423124,transparent 70%),#090d13!important;backdrop-filter:blur(20px)}
+  body #screen-blocked>div{background:linear-gradient(135deg,#ffffff08,transparent),#171f29;border-color:#ffffff1c;border-radius:30px;padding:34px}
+  body #btn-send-order{min-height:52px;border-radius:16px;font-size:12px;letter-spacing:0;text-transform:none}
+  @media(max-width:420px){body #screen-landing>div:nth-child(2){grid-template-columns:1fr}body #screen-landing>div:nth-child(2)>button{min-height:78px;padding:20px 22px}}
+  @media(min-width:760px){body #screen-landing{display:grid;grid-template-columns:1.2fr 1fr;align-content:center;min-height:100dvh}body #screen-landing.hidden{display:none}body #screen-landing>div:first-child{grid-row:span 2;min-height:450px}body #screen-landing>div:nth-child(2){display:flex;flex-direction:column}body #screen-landing>div:nth-child(2)>button{min-height:150px}body #screen-landing>div:last-child{align-self:start}}
+}
+</style>
 </head>
 <body class="min-h-screen relative pb-10 bg-black text-zinc-100">
 
@@ -137,6 +268,7 @@
             </div>
         </header>
 
+<div class="menu-bento"><div class="glass-panel bento-intro"><span class="glass-eyebrow">Seu próximo favorito</span><h3>Escolha. Personalize. Aproveite.</h3><p>Explore o cardápio e monte o pedido do seu jeito.</p></div><div class="glass-panel"><div class="bento-bag-icon"><i class="fa-solid fa-bag-shopping" aria-hidden="true"></i></div><p>Seus favoritos ficam juntos no carrinho.</p></div></div>
         <nav class="mt-4 px-4">
             <div id="categories-container" class="flex space-x-2 overflow-x-auto no-scrollbar py-1 scroll-smooth"></div>
         </nav>
@@ -246,8 +378,10 @@
         </div>
     </div>
 
+<button id="ui-cart-dock" class="ui-cart-dock" hidden onclick="openCartModal()" aria-label="Abrir seu pedido"><span><i class="fa-solid fa-bag-shopping" aria-hidden="true"></i> Ver meu pedido<small id="ui-cart-dock-qtd">0 itens no pedido</small></span><span><span id="ui-cart-dock-total">R$ 0,00</span> <i class="fa-solid fa-arrow-right ml-2" aria-hidden="true"></i></span></button>
+<div id="ui-order-status" class="ui-order-status" hidden role="status" aria-live="polite" aria-atomic="true"><span class="ui-order-symbol" aria-hidden="true"></span><div><strong id="ui-order-title"></strong><small id="ui-order-caption"></small></div></div>
     <!-- NOTIFICAÇÃO TOAST -->
-    <div id="toast-notification" class="fixed top-4 left-1/2 -translate-x-1/2 z-[110] w-11/12 max-w-md bg-zinc-900 border border-orange-500/50 backdrop-blur-md rounded-2xl p-3.5 shadow-2xl flex items-center space-x-3 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-full">
+    <div id="toast-notification" role="status" aria-live="polite" aria-atomic="true" class="fixed top-4 left-1/2 -translate-x-1/2 z-[110] w-11/12 max-w-md bg-zinc-900 border border-orange-500/50 backdrop-blur-md rounded-2xl p-3.5 shadow-2xl flex items-center space-x-3 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-full">
         <div id="toast-icon-bg" class="w-9 h-9 rounded-xl bg-orange-500/20 text-orange-500 flex items-center justify-center shrink-0">
             <i id="toast-icon" class="fa-solid fa-bell text-base"></i>
         </div>
@@ -329,7 +463,9 @@
         }
 
         async function submitOrder() {
-            if (cart.length === 0) return;
+            if (cart.length === 0 || enviandoPedidoMesa) return;
+            enviandoPedidoMesa = true;
+            uiEstadoPedido('enviando');
 
             const btn = document.getElementById('btn-send-order');
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> <span>A Enviar...</span>';
@@ -338,14 +474,17 @@
             try {
                 await enviarParaServidor('/api/pedidos', { mesa_numero: NUMERO_DA_MESA, cart: cart, token_sessao: MESA_TOKEN });
                 cart = [];
+                uiEstadoPedido('sucesso');
                 updateCartBadge();
                 closeModal('modal-cart');
                 showToast('Pedido Confirmado!', 'O seu pedido foi enviado diretamente para a cozinha.', 'fa-circle-check');
             } catch (error) {
+                uiEstadoPedido('erro');
                 console.error(error);
             } finally {
                 btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> <span>Enviar para Cozinha</span>';
                 btn.disabled = false;
+                enviandoPedidoMesa = false;
             }
         }
 
@@ -382,6 +521,7 @@
         let cart = [];
         let currentDish = null;
         let customizeQty = 1;
+        let enviandoPedidoMesa = false;
 
         function navigateTo(screenId) {
             document.getElementById('screen-landing').classList.add('hidden');
@@ -409,16 +549,15 @@
 
             filteredDishes.forEach(dish => {
                 const card = document.createElement('div');
-                card.className = "bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden shadow-lg active:scale-95 transition-all cursor-pointer flex flex-col";
+                card.className = 'produto-card';
+                card.tabIndex = 0; card.setAttribute('role','button'); card.setAttribute('aria-label',`Ver ${dish.name}`);
+                card.onkeydown = e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openDishDetailModal(dish.id)}};
                 card.onclick = () => openDishDetailModal(dish.id);
                 card.innerHTML = `
-                    <div class="w-full aspect-square relative bg-black overflow-hidden">
-                        <img src="${dish.image}" loading="lazy" class="w-full h-full object-cover">
+                    <div class="produto-foto">
+                        <img src="${dish.image}" alt="${dish.name}" loading="lazy" class="w-full h-full object-cover">
                     </div>
-                    <div class="p-3 bg-zinc-900 flex-1 flex flex-col justify-between">
-                        <div class="text-orange-500 font-black text-sm mb-0.5">R$ ${dish.price.toFixed(2).replace('.', ',')}</div>
-                        <h4 class="text-xs font-bold text-white line-clamp-2">${dish.name}</h4>
-                    </div>
+                    <div class="produto-copy"><h4>${dish.name}</h4><div class="produto-footer"><div class="produto-preco">R$ ${dish.price.toFixed(2).replace('.', ',')}</div><span class="produto-add" aria-hidden="true">+</span></div></div>
                 `;
                 grid.appendChild(card);
             });
@@ -510,6 +649,7 @@
         }
 
         function updateCartBadge() {
+            uiAtualizarCarrinho();
             const badge = document.getElementById('cart-badge');
             const total = cart.reduce((sum, item) => sum + item.quantity, 0);
             if (total > 0) { badge.textContent = total; badge.classList.remove('hidden'); }
@@ -533,6 +673,26 @@
 
         function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-    </script>
+    // Somente apresentação: confirmações continuam dependentes da resposta do servidor.
+let uiPedidoTimer;
+function uiEstadoPedido(estado) {
+    const el=document.getElementById('ui-order-status');if(!el)return;
+    clearTimeout(uiPedidoTimer);
+    const textos={enviando:['Enviando seu pedido','Só um instante. Estamos falando com o restaurante.'],sucesso:['Pedido recebido!','Tudo certo. Seu pedido chegou ao restaurante.'],erro:['Pedido não confirmado','Confira a mensagem e tente novamente quando estiver pronto.']};
+    const texto=textos[estado];if(!texto){el.hidden=true;return;}
+    el.hidden=false;el.setAttribute('data-state',estado);
+    document.getElementById('ui-order-title').textContent=texto[0];
+    document.getElementById('ui-order-caption').textContent=texto[1];
+    if(estado!=='enviando')uiPedidoTimer=setTimeout(()=>{el.hidden=true},estado==='sucesso'?3200:4200);
+}
+function uiAtualizarCarrinho() {
+    const el=document.getElementById('ui-cart-dock');if(!el)return;
+    const qtd=cart.reduce((n,i)=>n+i.quantity,0),total=cart.reduce((n,i)=>n+Math.round(i.unitPrice*100)*i.quantity,0)/100;
+    el.hidden=qtd===0;
+    document.getElementById('ui-cart-dock-qtd').textContent=qtd===1?'1 item no pedido':qtd+' itens no pedido';
+    document.getElementById('ui-cart-dock-total').textContent=total.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+}
+</script>
 </body>
 </html>
+
