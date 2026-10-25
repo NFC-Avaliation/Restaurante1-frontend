@@ -470,7 +470,6 @@
     <!-- JANELA 5: ESTATÍSTICAS -->
     <!-- ========================================== -->
     <div id="view-estatisticas" class="hidden space-y-6">
-      <div class="estat-filtro"><div><h3>Estatísticas de mesas e delivery</h3><p>Comandas fechadas e pedidos entregues ou retirados. Percentuais por quantidade de pedidos.</p><p id="stat-periodo-descricao"></p></div><label for="stat-periodo">Gráfico e itens do período<select id="stat-periodo" onchange="renderizarPeriodoEstatisticas(this.value)"><option value="dia">Hoje</option><option value="semana">Esta semana</option><option value="mes">Este mês</option></select></label></div>
       <p id="stat-erro" class="stat-erro" hidden role="alert"></p>
       
       <h3 class="text-xs font-black text-zinc-500 uppercase tracking-widest border-b border-zinc-800 pb-2">Faturamentos Realizados</h3>
@@ -514,7 +513,6 @@
         </div>
       </div>
 
-      <section class="glass-panel p-5 sm:p-6"><div class="flex flex-wrap justify-between gap-2"><h4 class="text-sm font-bold">Pedidos por origem</h4><p id="stat-origem-resumo" class="text-xs text-zinc-400"></p></div><div class="origens-layout"><div class="origem-grafico-wrapper"><div id="stat-origem-pizza"></div><div id="stat-origem-tooltip" class="origem-tooltip" role="status" aria-live="polite" hidden></div></div><div id="stat-origem-legenda"></div></div><p class="text-xs text-zinc-500">Passe o mouse, toque ou use o teclado para ver quantidade e valor de cada origem.</p></section>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
         <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg">
           <h4 class="text-xs font-black text-emerald-400 uppercase mb-4">Itens Mais Vendidos</h4>
@@ -525,6 +523,11 @@
           <div id="stat-low-itens" class="space-y-2.5"></div>
         </div>
       </div>
+      <div id="estatisticas-origens-final" class="space-y-4">
+      <div class="estat-filtro"><div><h3>Estatísticas de mesas e delivery</h3><p>Comandas fechadas e pedidos entregues ou retirados. Percentuais por quantidade de pedidos.</p><p id="stat-periodo-descricao"></p></div><label for="stat-periodo">Gráfico e itens do período<select id="stat-periodo" onchange="renderizarPeriodoEstatisticas(this.value)"><option value="dia">Hoje</option><option value="semana">Esta semana</option><option value="mes">Este mês</option></select></label></div>
+      <section class="glass-panel p-5 sm:p-6"><div class="flex flex-wrap justify-between gap-2"><h4 class="text-sm font-bold">Pedidos por origem</h4><p id="stat-origem-resumo" class="text-xs text-zinc-400"></p></div><div class="origens-layout"><div class="origem-grafico-wrapper"><div id="stat-origem-pizza"></div><div id="stat-origem-tooltip" class="origem-tooltip" role="status" aria-live="polite" hidden></div></div><div id="stat-origem-legenda"></div></div><p class="text-xs text-zinc-500">Passe o mouse, toque ou use o teclado para ver quantidade e valor de cada origem.</p></section>
+      </div>
+
     </div>
 
   </main>
@@ -2544,3 +2547,4 @@ function uiEstadoPedido(estado) {
 <div id="ui-order-status" class="ui-order-status" hidden role="status" aria-live="polite" aria-atomic="true"><span class="ui-order-symbol" aria-hidden="true"></span><div><strong id="ui-order-title"></strong><small id="ui-order-caption"></small></div></div>
 </body>
 </html>
+
