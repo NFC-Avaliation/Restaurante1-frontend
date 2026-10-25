@@ -57,7 +57,7 @@
         }
         /* Grade simétrica: espaçamento único e cartões com preços alinhados. */
         body { margin: 0; }
-        #screen-menu { width: 100%; max-width: 560px; margin: 0 auto; }
+        #screen-menu { width: 100%; max-width: 448px; margin: 0 auto; }
         .restaurante-topo { padding: 28px 20px 20px; text-align: center; }
         .restaurante-topo h1 { margin: 0 0 18px; font-size: 21px; font-weight: 900; letter-spacing: -.4px; }
         .restaurante-logo { width: 100px; height: 100px; margin: 0 auto 22px; padding: 4px; border-radius: 50%; background: linear-gradient(135deg,#f97316,#ea580c,#f59e0b); box-shadow: 0 8px 28px #f9731625; }
@@ -118,7 +118,7 @@
     </style>
 <style id="liquid-design-system">/* Identidade compartilhada — Bento / Liquid Glass. Estilos só na tela. */
 @media screen {
-  :root{--ui-bg:#090c10;--ui-panel:rgba(25,30,36,.84);--ui-line:rgba(255,255,255,.105);--ui-line-bright:rgba(255,255,255,.2);--ui-ink:#f5f6f7;--ui-muted:#a5adb8;--ui-accent:#ffb45b;--ui-ease:cubic-bezier(.22,1,.36,1);color-scheme:dark}
+  :root{--ui-bg:#090c10;--ui-panel:rgba(25,30,36,.84);--ui-line:rgba(255,255,255,.105);--ui-line-bright:rgba(255,255,255,.2);--ui-ink:#f5f6f7;--ui-muted:#a5adb8;--ui-accent:#ff6817;--ui-ease:cubic-bezier(.22,1,.36,1);color-scheme:dark}
   html{background:var(--ui-bg)!important;scroll-behavior:smooth}
   body{background:radial-gradient(ellipse at 5% 0%,#65412128,transparent 45%),radial-gradient(ellipse at 100% 30%,#264e522b,transparent 46%),#090c10!important;background-attachment:fixed!important;color:var(--ui-ink);font-family:'Inter',ui-sans-serif,system-ui,sans-serif!important;-webkit-font-smoothing:antialiased;line-height:1.5}
   body button,body input,body textarea,body select{font-family:inherit}
@@ -128,14 +128,14 @@
   body button:disabled{cursor:not-allowed}
   body :is(button,a,input,textarea,select,[tabindex]):focus-visible{outline:2px solid var(--ui-accent)!important;outline-offset:4px}
   body :is(input,textarea,select){background:#0b1018bb!important;border-color:#ffffff20!important;border-radius:14px!important;min-height:44px;color:#f7f8fa;box-shadow:inset 0 1px 2px #0003;transition:border-color .2s,box-shadow .2s}
-  body input[type="checkbox"],body input[type="radio"]{min-height:initial;accent-color:#ffb45b}
-  body :is(input,textarea,select):focus{border-color:#ffb45b80!important;box-shadow:0 0 0 4px #ffb45b12}
+  body input[type="checkbox"],body input[type="radio"]{min-height:initial;accent-color:#ff6817}
+  body :is(input,textarea,select):focus{border-color:#ff681780!important;box-shadow:0 0 0 4px #ff681712}
   body ::placeholder{color:#818b99}
   body .text-zinc-400{color:#a6aeb9}
   body .text-zinc-500{color:#929ba8}
   body :is(.text-orange-400,.text-orange-500){color:var(--ui-accent)}
-  body :is(.bg-orange-500,.bg-orange-600){background:linear-gradient(135deg,#ffd196,#ffb45b)!important;color:#26190e!important;border-color:#ffdfaf80!important;box-shadow:0 6px 18px #ffae3a18,inset 0 1px #ffffff70}
-  body .bg-gradient-to-r.from-orange-500{background:linear-gradient(125deg,#ffd69c,#ffad50)!important;color:#26190e;box-shadow:0 8px 26px #ffaf3d23,inset 0 1px #ffffff70}
+  body :is(.bg-orange-500,.bg-orange-600){background:linear-gradient(135deg,#ff6817,#ff6817)!important;color:#26190e!important;border-color:#ff681780!important;box-shadow:0 6px 18px #ff681718,inset 0 1px #ffffff70}
+  body .bg-gradient-to-r.from-orange-500{background:linear-gradient(125deg,#ff6817,#ff6817)!important;color:#26190e;box-shadow:0 8px 26px #ff681723,inset 0 1px #ffffff70}
   body .glass-panel{background:linear-gradient(145deg,#ffffff08,transparent 50%),var(--ui-panel);border:1px solid var(--ui-line);border-radius:26px;box-shadow:inset 0 1px #ffffff0b,0 16px 46px #0000001f}
   body .glass-eyebrow{font-size:10px;line-height:1.4;letter-spacing:.15em;text-transform:uppercase;color:#b7bfc9;font-weight:700}
   body .glass-title{font-size:clamp(25px,3vw,38px);font-weight:750;line-height:1.13;letter-spacing:-.05em}
@@ -146,13 +146,13 @@
   body [id^="modal-"].fixed:not(.hidden)>:first-child{animation:glass-dialog .38s var(--ui-ease)}
   body [id^="modal-"].fixed>div>div.bg-zinc-950,body [id^="modal-"].fixed header,body [id^="modal-"].fixed footer{background:#0d131ac9;border-color:var(--ui-line)}
   body #toast,body #toast-notification{background:#18212aee!important;border:1px solid #ffffff26!important;box-shadow:0 18px 60px #0007,inset 0 1px #ffffff10;border-radius:22px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)}
-  body #cart-badge{background:#ffb45b!important;color:#271a0c;border-color:#10151c;box-shadow:0 3px 14px #ffb45b3b}
+  body #cart-badge{background:#ff6817!important;color:#271a0c;border-color:#10151c;box-shadow:0 3px 14px #ff68173b}
   body #cart-badge:not(.hidden){animation:glass-pop .4s var(--ui-ease)}
   .ui-order-status{position:fixed;z-index:115;bottom:max(24px,env(safe-area-inset-bottom));left:50%;width:min(380px,calc(100% - 32px));transform:translateX(-50%);display:flex;align-items:center;gap:16px;padding:18px 22px;border-radius:24px;border:1px solid #ffffff30;background:#16212af5;box-shadow:0 20px 70px #0008;backdrop-filter:blur(20px);pointer-events:none;animation:glass-status-in .32s var(--ui-ease)}
   .ui-order-status[hidden]{display:none!important}
   .ui-order-status strong{display:block;font-size:14px;font-weight:700;letter-spacing:-.02em}
   .ui-order-status small{display:block;font-size:11px;color:#afbac7;margin-top:3px}
-  .ui-order-symbol{width:42px;height:42px;flex-shrink:0;border-radius:50%;border:2px solid #ffb45b26;border-top-color:#ffb45b;animation:glass-spin .8s linear infinite}
+  .ui-order-symbol{width:42px;height:42px;flex-shrink:0;border-radius:50%;border:2px solid #ff681726;border-top-color:#ff6817;animation:glass-spin .8s linear infinite}
   .ui-order-status[data-state="sucesso"] .ui-order-symbol{border:1px solid #6ee7b740;background:#6ee7b718;animation:glass-pop .4s var(--ui-ease)}
   .ui-order-status[data-state="sucesso"] .ui-order-symbol::after{content:'';display:block;width:16px;height:9px;border-left:2px solid #8cf0c5;border-bottom:2px solid #8cf0c5;transform:rotate(-45deg);margin:12px auto}
   .ui-order-status[data-state="erro"] .ui-order-symbol{border:1px solid #fb718540;background:#fb718518;animation:none}
@@ -171,12 +171,12 @@
 
 @media screen {
   body{padding-bottom:110px!important}
-  body #screen-menu{max-width:980px;width:100%;margin:0 auto}
-  body .restaurante-topo{padding:36px 24px 28px;margin:18px 20px 0;border:1px solid var(--ui-line);border-radius:32px;background:radial-gradient(ellipse at 50% -70%,#ffb45b28,transparent 75%),linear-gradient(135deg,#ffffff08,transparent),#141b23be;box-shadow:inset 0 1px #ffffff13,0 24px 70px #0002}
+  body #screen-menu{max-width:448px;width:100%;margin:0 auto}
+  body .restaurante-topo{padding:36px 24px 28px;margin:18px 20px 0;border:1px solid var(--ui-line);border-radius:32px;background:radial-gradient(ellipse at 50% -70%,#ff681728,transparent 75%),linear-gradient(135deg,#ffffff08,transparent),#141b23be;box-shadow:inset 0 1px #ffffff13,0 24px 70px #0002}
   body .restaurante-topo h1{color:#c0c7d0;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;margin-bottom:20px}
-  body .restaurante-logo{border-radius:26px;width:84px;height:84px;background:linear-gradient(135deg,#ffdcab,#f6a849);padding:1px;box-shadow:0 8px 40px #ffb45b14;margin-bottom:18px}
+  body .restaurante-logo{border-radius:26px;width:84px;height:84px;background:linear-gradient(135deg,#ff6817,#f66416);padding:1px;box-shadow:0 8px 40px #ff681714;margin-bottom:18px}
   body .restaurante-logo>div{border-radius:25px;border:0;background:linear-gradient(150deg,#4c3420,#211e19)}
-  body .restaurante-logo i{font-size:29px;color:#ffd69d}body .restaurante-logo span{color:#ffe2bc}
+  body .restaurante-logo i{font-size:29px;color:#ff6817}body .restaurante-logo span{color:#ff6817}
   body .menu-brand-title{font-size:clamp(23px,4.5vw,34px);font-weight:750;letter-spacing:-.05em;line-height:1.2;margin:0 0 8px}
   body .menu-brand-caption{font-size:12px;color:#a5aeb9;margin:0 auto 23px;max-width:360px}
   body .restaurante-meta{max-width:360px;gap:10px}
@@ -185,11 +185,11 @@
   body .barra-cardapio,body #screen-menu>header{background:#111821df!important;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid #ffffff1b!important;border-radius:20px;margin:16px 20px 0;padding:12px 16px;top:12px;box-shadow:0 12px 30px #0004,inset 0 1px #ffffff0c}
   body .barra-cardapio h2{font-size:12px;letter-spacing:.06em}
   body .barra-modalidade{color:#c2c9d2;font-size:10px}
-  body .botao-carrinho{width:42px;height:42px;background:#ffffff08;border-color:#ffffff20;color:#ffbd71;border-radius:14px}
+  body .botao-carrinho{width:42px;height:42px;background:#ffffff08;border-color:#ffffff20;color:#ff6817;border-radius:14px}
   body #screen-menu>nav{margin-top:20px;padding:0 20px}
   body #categories-container{padding:4px 0 12px;gap:8px;scroll-snap-type:x proximity}
   body #categories-container>button{min-height:43px;margin:0!important;padding:11px 16px;border-radius:15px;background:#151c25b3;border-color:#ffffff16;font-size:11px;color:#b8c1cd;scroll-snap-align:start}
-  body #categories-container>button.active-category-btn{background:linear-gradient(135deg,#ffd9a5,#ffb25b)!important;color:#2c1d0e!important;box-shadow:0 6px 22px #ffad4020;border-color:#ffe7be80!important}
+  body #categories-container>button.active-category-btn{background:linear-gradient(135deg,#ff6817,#ff6817)!important;color:#2c1d0e!important;box-shadow:0 6px 22px #ff681720;border-color:#ff681780!important}
   body #screen-menu>main{margin-top:18px;padding:0 20px}
   body #current-category-title{font-size:11px;font-weight:650;letter-spacing:.04em}
   body #dishes-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding-bottom:40px}
@@ -199,27 +199,44 @@
   body .produto-copy{padding:13px 7px 9px;display:flex;flex-direction:column;gap:12px;flex:1}
   body .produto-copy h4{margin:0;font-size:12px;font-weight:650;line-height:1.5;min-height:3em;color:#f3f5f7;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   body .produto-footer{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-top:auto}
-  body .produto-preco{color:#ffd29a;font-size:14px;font-weight:750;letter-spacing:-.025em;white-space:nowrap}
-  body .produto-add{display:flex;align-items:center;justify-content:center;width:29px;height:29px;flex-shrink:0;border-radius:10px;border:1px solid #ffbb6c26;background:#ffbb6c0c;color:#ffd197;font-size:17px}
-  body .menu-bento{display:grid;grid-template-columns:1.4fr 1fr;gap:12px;margin:20px 20px 0}
-  body .menu-bento>div{padding:19px 20px;border-radius:22px;min-width:0}
-  body .menu-bento .bento-intro{background:radial-gradient(ellipse at 0% 0%,#e7a34b16,transparent 90%),#171e26bd}
-  body .menu-bento h3{font-size:17px;letter-spacing:-.035em;font-weight:650;margin:6px 0 4px;line-height:1.25}
-  body .menu-bento p{font-size:11px;color:#a4aebc;line-height:1.65;margin:0}
-  body .bento-bag-icon{color:#ffd19a;font-size:21px;margin-bottom:8px}
-  body .ui-cart-dock{position:fixed;z-index:45;bottom:max(14px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:min(440px,calc(100% - 32px));background:linear-gradient(115deg,#ffdcaa,#ffb35e)!important;color:#291c10;border:1px solid #ffe1b3;box-shadow:0 16px 50px #0008,inset 0 1px #ffffff90;border-radius:21px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:16px;animation:glass-status-in .35s var(--ui-ease);font-size:13px;font-weight:750;min-height:58px}
+  body .produto-preco{color:#ff6817;font-size:14px;font-weight:750;letter-spacing:-.025em;white-space:nowrap}
+  body .produto-add{display:flex;align-items:center;justify-content:center;width:29px;height:29px;flex-shrink:0;border-radius:10px;border:1px solid #ff681726;background:#ff68170c;color:#ff6817;font-size:17px}
+  body .ui-cart-dock{position:fixed;z-index:45;bottom:max(14px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:min(440px,calc(100% - 32px));background:linear-gradient(115deg,#ff6817,#ff6817)!important;color:#291c10;border:1px solid #ff6817;box-shadow:0 16px 50px #0008,inset 0 1px #ffffff90;border-radius:21px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:16px;animation:glass-status-in .35s var(--ui-ease);font-size:13px;font-weight:750;min-height:58px}
   body .ui-cart-dock[hidden]{display:none!important}
   body .ui-cart-dock small{display:block;font-size:10px;font-weight:600;opacity:.7;margin-top:1px}
   body .ui-cart-dock:not(:disabled):active{transform:translateX(-50%) scale(.98)}
-  body .checkout-opcoes button{min-height:56px;border-radius:16px;background:linear-gradient(130deg,#ffdbab,#ffb35f);border-color:#ffe7c380;color:#2c1b09;text-transform:none;font-size:12px;box-shadow:inset 0 1px #fff7}
+  body .checkout-opcoes button{min-height:56px;border-radius:16px;background:linear-gradient(130deg,#ff6817,#ff6817);border-color:#ff681780;color:#2c1b09;text-transform:none;font-size:12px;box-shadow:inset 0 1px #fff7}
   body #modal-dish-detail>div,body #modal-customize>div,body #modal-cart>div,body #modal-delivery-form>div,body #modal-payment>div{border-radius:28px;max-width:520px}
   body #modal-dish-detail>div>button{position:absolute}
   body .info-restaurante-dialog{border-radius:28px}
   body .menu-success{margin:20px;border:1px solid #ffffff1c;border-radius:30px;background:radial-gradient(ellipse at 50% 0%,#6ee7b71c,transparent 65%),#141c25d9;animation:glass-scene .5s var(--ui-ease)}
-  @media(min-width:780px){body .restaurante-topo{margin-top:26px;padding:30px}body .menu-bento{grid-template-columns:2fr 1fr}body #dishes-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}body .produto-copy h4{font-size:14px}body .produto-preco{font-size:17px}body .produto-add{width:34px;height:34px}body .produto-foto{aspect-ratio:16/11}}
-  @media(max-width:380px){body .restaurante-topo{margin-left:14px;margin-right:14px;padding:26px 18px}body .barra-cardapio,body #screen-menu>header{margin-left:14px;margin-right:14px}body .menu-bento{margin-left:14px;margin-right:14px;gap:10px}body .menu-bento>div{padding:15px}body .menu-bento h3{font-size:15px}body #screen-menu>nav,body #screen-menu>main{padding:0 14px}body #dishes-grid{gap:10px}body #dishes-grid>.produto-card{padding:6px;border-radius:19px}body .produto-copy{padding:11px 5px 7px}body .produto-preco{font-size:12px}}
   @media(max-width:639px){body [id^="modal-"].fixed{padding:10px 10px max(10px,env(safe-area-inset-bottom))!important}body #modal-dish-detail>div,body #modal-customize>div,body #modal-cart>div,body #modal-delivery-form>div,body #modal-payment>div{max-height:92dvh}}
-  @media(hover:hover){body #dishes-grid>.produto-card:hover{transform:translateY(-4px);border-color:#ffd29a55;box-shadow:0 16px 40px #0005}body .produto-card:hover img{transform:scale(1.055)}}
+  @media(hover:hover){body #dishes-grid>.produto-card:hover{transform:translateY(-4px);border-color:#ff681755;box-shadow:0 16px 40px #0005}body .produto-card:hover img{transform:scale(1.055)}}
+  body #screen-menu>nav{margin-top:16px}
+  body #screen-menu>main{margin-top:14px}
+  body #screen-menu>header{top:8px;margin:12px 14px 0;padding:10px 12px;border-radius:18px}
+  body #screen-menu>nav,body #screen-menu>main{padding-left:14px;padding-right:14px}
+  body #dishes-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  body .produto-copy h4{font-size:12px;line-height:1.5}
+  body .produto-preco{font-size:14px}
+  body .produto-foto{aspect-ratio:4/3}
+  body .restaurante-topo{margin:12px 14px 0;padding:24px 18px;border-radius:25px}
+  body .restaurante-topo h1{margin-bottom:14px}
+  body .restaurante-logo{width:76px;height:76px;margin-bottom:14px}
+  body .menu-brand-title{font-size:25px}
+  body .restaurante-meta{gap:10px;width:100%;max-width:330px}
+  body .status-restaurante,body .btn-informacoes,body .botao-carrinho,body #btn-call-waiter-nav{min-height:44px}
+  body .botao-carrinho{width:44px}
+  body #modal-dish-detail>div,body #modal-customize>div,body #modal-cart>div,body #modal-delivery-form>div,body #modal-payment>div{width:100%;max-width:448px;max-height:92vh;max-height:92dvh}
+  body #modal-dish-detail .flex.items-start>div:first-child{min-width:0}
+  body .info-restaurante-dialog{width:100%;max-width:420px}
+  body .info-contatos{gap:8px}
+  body .checkout-opcoes{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  body .checkout-opcoes button{min-width:0;padding:12px 8px}
+  body #categories-container{scroll-padding:0 14px}
+  body #categories-container>button{font-size:11px;padding:10px 13px;min-height:44px}
+  @media(max-width:600px){body input:not([type="checkbox"]):not([type="radio"]),body textarea,body select{font-size:16px!important}}
+  @media(max-width:360px){body #dishes-grid{gap:10px}body #dishes-grid>.produto-card{padding:6px;border-radius:19px}body .produto-copy{padding:11px 5px 7px}body .produto-preco{font-size:13px}body .produto-add{width:28px;height:28px}body .menu-brand-title{font-size:23px}body .info-contatos{gap:6px}}
 }
 </style>
 </head>
@@ -232,7 +249,7 @@
             <div role="img" aria-label="Logo Gourmet" class="restaurante-logo">
                 <div><i aria-hidden="true" class="fa-solid fa-burger"></i><span>Gourmet</span></div>
             </div>
-            <h2 class="menu-brand-title">Gourmet Burger House</h2><p class="menu-brand-caption">Seu próximo pedido começa com uma boa escolha.</p>
+            <h2 class="menu-brand-title">Gourmet Burger House</h2>
             <div class="restaurante-meta">
                 <div id="restaurante-status" class="status-restaurante fechado" role="status" aria-live="polite">Fechado</div>
                 <button type="button" onclick="abrirInformacoesRestaurante()" class="btn-informacoes"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> Informações</button>
@@ -247,7 +264,6 @@
             </button>
         </header>
 
-<div class="menu-bento"><div class="glass-panel bento-intro"><span class="glass-eyebrow">Seu próximo favorito</span><h3>Escolha. Personalize. Aproveite.</h3><p>Explore o cardápio e monte o pedido do seu jeito.</p></div><div class="glass-panel"><div class="bento-bag-icon"><i class="fa-solid fa-bag-shopping" aria-hidden="true"></i></div><p>Seus favoritos ficam juntos no carrinho.</p></div></div>
         <nav class="mt-4 px-4">
             <div id="categories-container" class="flex space-x-2 overflow-x-auto no-scrollbar py-1 scroll-smooth"></div>
         </nav>
