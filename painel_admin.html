@@ -187,6 +187,37 @@
   @media(max-width:760px){body>nav{margin:10px 12px 0;padding:12px;border-radius:21px}body>main{padding:18px 14px 36px}body #tables-grid{gap:10px}body #tables-grid>.mesa-card{padding:17px;min-height:179px;border-radius:22px}body button[id^="tab-btn-"]{padding:10px 12px}body #view-delivery{height:auto}body .wa-layout>section{height:66dvh}}
 }
 </style>
+<style id="relatorios-style">@media screen {
+  body>nav{position:relative;z-index:40;overflow:visible}
+  body>main{position:relative;z-index:0}
+  body #waiter-queue-drawer{z-index:60;max-height:60vh;overflow-y:auto;width:min(288px,calc(100vw - 32px))}
+  #mesa-garcom-chamada[hidden],#stat-erro[hidden],#stat-origem-tooltip[hidden]{display:none!important}
+  .mesa-garcom-chamada{padding:14px;border:1px solid #f9731650;border-radius:16px;background:#f9731610;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+  .mesa-garcom-chamada p{font-size:12px;color:#ff9b55}
+  .mesa-garcom-chamada button{background:#f97316;color:#261407;font-size:12px;font-weight:800;border-radius:12px;padding:12px 16px}
+  .estat-filtro{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px;padding:20px;border:1px solid #ffffff17;border-radius:23px;background:#151e27ce}
+  .estat-filtro h3{font-size:15px;font-weight:700;letter-spacing:-.02em}
+  .estat-filtro p{font-size:11px;color:#a9b3c0;margin-top:5px;line-height:1.6}
+  .estat-filtro label{font-size:11px;color:#aab5c1}
+  .estat-filtro select{display:block;margin-top:5px;min-width:165px;padding:9px 12px;font-size:12px}
+  .stat-erro{border:1px solid #f0627f50;background:#f0627f10;border-radius:14px;padding:14px;font-size:12px;color:#ffaabb}
+  .stat-qtd{font-size:11px;color:#a2adbb;margin-top:8px}
+  .origens-layout{display:grid;grid-template-columns:minmax(260px,1fr) minmax(220px,1fr);gap:25px;align-items:center}
+  .origem-grafico-wrapper{position:relative;max-width:380px;width:100%;min-height:360px;margin:auto;padding-bottom:75px}
+  #stat-origem-pizza svg{display:block;width:100%;max-height:280px}
+  #stat-origem-pizza [role="button"]{cursor:pointer;transition:filter .2s;outline:none}
+  #stat-origem-pizza [role="button"]:hover,#stat-origem-pizza [role="button"]:focus{filter:brightness(1.2);stroke:#fff;stroke-width:3}
+  .origem-tooltip{position:absolute;bottom:6px;left:0;right:0;border:1px solid #ffffff25;border-radius:17px;background:#0b131af2;padding:15px;pointer-events:none;box-shadow:0 12px 30px #0004}
+  .origem-tooltip strong,.origem-tooltip span{display:block;font-size:12px;line-height:1.6}.origem-tooltip span{color:#b5c1cf}
+  .origem-legenda-linha{display:grid;grid-template-columns:10px 1fr auto;gap:5px 12px;align-items:center;width:100%;text-align:left;padding:13px;border:1px solid #ffffff0d;border-radius:15px;margin-bottom:8px;background:#ffffff03;font-size:12px}
+  .origem-legenda-linha:hover,.origem-legenda-linha:focus{background:#ffffff07;border-color:#ffffff25}
+  .origem-legenda-linha small{grid-column:2/4;font-size:10px;color:#9daaba}
+  .origem-cor{width:8px;height:8px;border-radius:50%}
+  #view-historico [data-historico-filtro]{padding:9px 12px;font-size:11px;border-radius:10px;background:transparent;color:#aab5c1}
+  #view-historico [data-historico-filtro][aria-pressed="true"]{background:#f97316;color:#251408;font-weight:800}
+  @media(max-width:760px){.origens-layout{grid-template-columns:1fr;gap:10px}.origem-grafico-wrapper{min-height:340px}.estat-filtro select{min-width:140px}}
+}
+</style>
 </head>
 <body class="h-full font-sans text-zinc-100 bg-zinc-950 flex flex-col selection:bg-orange-500 selection:text-white">
 
@@ -417,16 +448,19 @@
     <!-- ========================================== -->
     <!-- JANELA 4: HISTÓRICO -->
     <!-- ========================================== -->
-    <div id="view-historico" class="hidden space-y-4">
+    <div id="view-historico" class="hidden space-y-4"><p class="text-xs text-zinc-400">Até 150 pedidos concluídos mais recentes · comandas de mesa e delivery · horário de Brasília</p>
       <div class="flex flex-wrap justify-between bg-zinc-900 p-4 rounded-2xl border border-zinc-800 shadow-lg">
-        <h3 class="font-bold text-white text-sm uppercase">Histórico de Comandas</h3>
+        <h3 class="font-bold text-white text-sm uppercase">Histórico de Pedidos</h3>
         <div class="flex space-x-2 bg-zinc-950 p-1 rounded-xl">
-          <button onclick="carregarHistorico('dia')" class="px-4 py-1 bg-zinc-800 text-xs rounded-lg text-zinc-300">Hoje</button>
-          <button onclick="carregarHistorico('todos')" class="px-4 py-1 bg-orange-500 text-black text-xs rounded-lg font-black">Todos</button>
+          <button onclick="carregarHistorico('dia')" data-historico-filtro="dia" aria-pressed="false">Hoje</button>
+          <button onclick="carregarHistorico('semana')" data-historico-filtro="semana" aria-pressed="false">Semana</button>
+          <button onclick="carregarHistorico('mes')" data-historico-filtro="mes" aria-pressed="false">Mês</button>
+          <button onclick="carregarHistorico('todos')" data-historico-filtro="todos" aria-pressed="true">Todos</button>
         </div>
       </div>
       <div class="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-x-auto shadow-2xl">
         <table class="w-full text-left border-collapse">
+          <thead><tr class="text-xs text-zinc-400"><th class="p-4">Mesa / Origem</th><th class="p-4">Pedido</th><th class="p-4">Concluído em</th><th class="p-4">Valor total</th></tr></thead>
           <tbody id="historico-table-body" class="divide-y divide-zinc-800 text-sm"></tbody>
         </table>
       </div>
@@ -436,24 +470,26 @@
     <!-- JANELA 5: ESTATÍSTICAS -->
     <!-- ========================================== -->
     <div id="view-estatisticas" class="hidden space-y-6">
+      <div class="estat-filtro"><div><h3>Estatísticas de mesas e delivery</h3><p>Comandas fechadas e pedidos entregues ou retirados. Percentuais por quantidade de pedidos.</p><p id="stat-periodo-descricao"></p></div><label for="stat-periodo">Gráfico e itens do período<select id="stat-periodo" onchange="renderizarPeriodoEstatisticas(this.value)"><option value="dia">Hoje</option><option value="semana">Esta semana</option><option value="mes">Este mês</option></select></label></div>
+      <p id="stat-erro" class="stat-erro" hidden role="alert"></p>
       
       <h3 class="text-xs font-black text-zinc-500 uppercase tracking-widest border-b border-zinc-800 pb-2">Faturamentos Realizados</h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg relative">
-          <span class="text-[10px] text-zinc-400 uppercase font-bold tracking-wider">Acumulado Hoje</span>
-          <div id="stat-fat-dia" class="text-3xl font-black text-white mt-1">R$ 0,00</div>
+          <span class="text-[10px] text-zinc-400 uppercase font-bold tracking-wider">Hoje</span>
+          <div id="stat-fat-dia" class="text-3xl font-black text-white mt-1">R$ 0,00</div><p id="stat-qtd-dia" class="stat-qtd"></p>
         </div>
         <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg relative">
-          <span class="text-[10px] text-zinc-400 uppercase font-bold tracking-wider">Acumulado 7 Dias</span>
-          <div id="stat-fat-semana" class="text-3xl font-black text-emerald-400 mt-1">R$ 0,00</div>
+          <span class="text-[10px] text-zinc-400 uppercase font-bold tracking-wider">Esta semana</span>
+          <div id="stat-fat-semana" class="text-3xl font-black text-emerald-400 mt-1">R$ 0,00</div><p id="stat-qtd-semana" class="stat-qtd"></p>
         </div>
         <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg relative">
-          <span class="text-[10px] text-zinc-400 uppercase font-bold tracking-wider">Acumulado 30 Dias</span>
-          <div id="stat-fat-mes" class="text-3xl font-black text-blue-400 mt-1">R$ 0,00</div>
+          <span class="text-[10px] text-zinc-400 uppercase font-bold tracking-wider">Este mês</span>
+          <div id="stat-fat-mes" class="text-3xl font-black text-blue-400 mt-1">R$ 0,00</div><p id="stat-qtd-mes" class="stat-qtd"></p>
         </div>
       </div>
 
-      <h3 class="text-xs font-black text-zinc-500 uppercase tracking-widest border-b border-zinc-800 pb-2 mt-6">Médias Históricas (Desempenho)</h3>
+      <h3 class="text-xs font-black text-zinc-500 uppercase tracking-widest border-b border-zinc-800 pb-2 mt-6">Médias históricas · períodos com pedidos concluídos</h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="bg-zinc-950 border border-zinc-800 p-5 rounded-xl shadow-inner flex justify-between items-center">
           <div class="space-y-1">
@@ -478,6 +514,7 @@
         </div>
       </div>
 
+      <section class="glass-panel p-5 sm:p-6"><div class="flex flex-wrap justify-between gap-2"><h4 class="text-sm font-bold">Pedidos por origem</h4><p id="stat-origem-resumo" class="text-xs text-zinc-400"></p></div><div class="origens-layout"><div class="origem-grafico-wrapper"><div id="stat-origem-pizza"></div><div id="stat-origem-tooltip" class="origem-tooltip" role="status" aria-live="polite" hidden></div></div><div id="stat-origem-legenda"></div></div><p class="text-xs text-zinc-500">Passe o mouse, toque ou use o teclado para ver quantidade e valor de cada origem.</p></section>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
         <div class="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-lg">
           <h4 class="text-xs font-black text-emerald-400 uppercase mb-4">Itens Mais Vendidos</h4>
@@ -504,6 +541,7 @@
       </div>
       
       <div class="p-5 overflow-y-auto space-y-5 flex-1 bg-zinc-900/50">
+        <div id="mesa-garcom-chamada" class="mesa-garcom-chamada" hidden><p><i class="fa-solid fa-bell mr-2"></i>Esta mesa chamou o garçom.</p><button id="btn-atender-garcom-mesa" type="button">Atender chamado</button></div>
         <button id="btn-pedido-manual" type="button" onclick="abrirPedidoManual()" class="w-full bg-orange-500 hover:bg-orange-400 text-black font-black p-3 rounded-xl disabled:opacity-50">+ Montar pedido</button>
         <div id="modal-items-list" class="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar"></div>
       </div>
@@ -885,8 +923,8 @@
                 carregarDeliveriesReais();
             });
             socket.on('disconnect', () => { atualizarStatusServidor(false); });
-            socket.on('atualizacao_dados', () => { carregarMesas(); });
-            socket.on('atualizacao_delivery', () => { carregarDeliveriesReais(); });
+            socket.on('atualizacao_dados', () => { carregarMesas(); atualizarRelatoriosVisiveis(); });
+            socket.on('atualizacao_delivery', () => { carregarDeliveriesReais(); atualizarRelatoriosVisiveis(); });
             socket.on('chamada_garcom', (dados) => {
                 playWaiterChimeSound();
                 showToast(`Mesa ${dados.mesa} chamando garçom!`, 'amber');
@@ -1370,26 +1408,41 @@
             queueList.innerHTML += `
                 <div class="bg-amber-950/30 border border-amber-500/20 p-3 rounded-xl flex justify-between items-center">
                     <span class="text-sm font-black text-amber-400"><i class="fa-solid fa-bell mr-2"></i> Mesa ${table.number}</span>
-                    <button onclick="atenderGarcom(${table.id})" class="bg-amber-500 text-black text-xs font-black px-3 py-1.5 rounded-lg uppercase transition hover:bg-amber-400">Atender</button>
+                    <button onclick="atenderGarcom(${table.id})" ${atendimentosEmCurso.has(table.id)?'disabled':''} class="bg-amber-500 text-black text-xs font-black px-3 py-1.5 rounded-lg uppercase transition hover:bg-amber-400">Atender</button>
                 </div>
             `;
         });
     }
 
+    const atendimentosEmCurso=new Set();
     async function atenderGarcom(tableId) {
+        if(atendimentosEmCurso.has(tableId))return;
+        atendimentosEmCurso.add(tableId);renderWaiterQueue();
+        if(currentEditingTableId===tableId)atualizarBotaoGarcomMesa(tablesState.find(t=>t.id===tableId));
         try {
-            await fetchAPI('/api/garcom/atender', { method: 'POST', body: JSON.stringify({ mesa_id: tableId }) });
-            showToast("Atendimento registado!", "emerald");
-            carregarMesas();
-        } catch (e) {
-            console.error(e);
+            const res=await fetchAPI('/api/garcom/atender',{method:'POST',body:JSON.stringify({mesa_id:Number(tableId)})});
+            const data=await res.json();if(!res.ok)throw new Error(data.error||'Não foi possível atender o chamado.');
+            showToast('Atendimento registrado!','emerald');
+            await carregarMesas();
+        } catch(e) {showToast(e.message||'Falha ao registrar atendimento.','rose');}
+        finally {
+            atendimentosEmCurso.delete(tableId);renderWaiterQueue();
+            if(currentEditingTableId===tableId)atualizarBotaoGarcomMesa(tablesState.find(t=>t.id===tableId));
         }
+    }
+    function atualizarBotaoGarcomMesa(table) {
+        const box=document.getElementById('mesa-garcom-chamada'),btn=document.getElementById('btn-atender-garcom-mesa');
+        box.hidden=!table?.waiterCalledAt;
+        if(!table)return;
+        btn.disabled=atendimentosEmCurso.has(table.id);
+        btn.textContent=btn.disabled?'Registrando…':'Atender chamado';btn.onclick=()=>atenderGarcom(table.id);
     }
 
     function openTableModal(tableId) {
         const table = tablesState.find(t => t.id === tableId);
         if (!table) return;
         currentEditingTableId = tableId;
+        atualizarBotaoGarcomMesa(table);
         document.getElementById('modal-table-num').innerText = table.number;
         const list = document.getElementById('modal-items-list');
         const bloqueado = mesaOperacaoPendente ? 'disabled' : '';
@@ -1896,86 +1949,102 @@
     // ==========================================
     // ESTATÍSTICAS
     // ==========================================
-    async function carregarEstatisticas() {
-        try {
-            const res = await fetchAPI('/api/estatisticas');
-            const data = await res.json();
-            
-            document.getElementById('stat-fat-dia').innerText = `R$ ${parseFloat(data.faturamento.dia || 0).toFixed(2).replace('.', ',')}`;
-            document.getElementById('stat-fat-semana').innerText = `R$ ${parseFloat(data.faturamento.semana || 0).toFixed(2).replace('.', ',')}`;
-            document.getElementById('stat-fat-mes').innerText = `R$ ${parseFloat(data.faturamento.mes || 0).toFixed(2).replace('.', ',')}`;
-            
-            if (data.medias) {
-                document.getElementById('stat-media-dia').innerText = `R$ ${parseFloat(data.medias.dia || 0).toFixed(2).replace('.', ',')}`;
-                document.getElementById('stat-media-semana').innerText = `R$ ${parseFloat(data.medias.semana || 0).toFixed(2).replace('.', ',')}`;
-                document.getElementById('stat-media-mes').innerText = `R$ ${parseFloat(data.medias.mes || 0).toFixed(2).replace('.', ',')}`;
-            }
-
-            const topList = document.getElementById('stat-top-itens');
-            const lowList = document.getElementById('stat-low-itens');
-            topList.innerHTML = '';
-            lowList.innerHTML = '';
-            
-            if (data.itens && data.itens.length > 0) {
-                data.itens.slice(0, 5).forEach(i => {
-                    topList.innerHTML += `
-                        <div class="flex justify-between items-center text-sm bg-zinc-950 p-3 rounded-xl border border-zinc-800">
-                            <span class="font-bold text-white">${i.nome_item}</span>
-                            <span class="bg-emerald-500/20 text-emerald-400 px-2 py-1 rounded text-xs font-black">${i.total_qtd}x</span>
-                        </div>
-                    `;
-                });
-                data.itens.slice(-5).reverse().forEach(i => {
-                    lowList.innerHTML += `
-                        <div class="flex justify-between items-center text-sm bg-zinc-950 p-3 rounded-xl border border-zinc-800">
-                            <span class="font-bold text-white">${i.nome_item}</span>
-                            <span class="bg-rose-500/20 text-rose-400 px-2 py-1 rounded text-xs font-black">${i.total_qtd}x</span>
-                        </div>
-                    `;
-                });
-            }
-        } catch (e) {
-            console.error("Erro ao carregar as estatísticas", e);
+// Relatórios de pedidos concluídos, unificados por origem.
+let estatisticasAtuais=null,estatPeriodo='dia',estatCarga=0,historicoCarga=0;
+let origensGrafico=[];
+const nomeOrigem = origem => ({MESA:'Mesas',WHATSAPP:'WhatsApp',WHATSAPP_DELIVERY:'WhatsApp',IFOOD:'iFood',RAPPI:'Rappi','UBER EATS':'Uber Eats',OUTROS:'Outros'}[origem] || String(origem || 'Outros'));
+const coresOrigem={MESA:'#f97316',WHATSAPP:'#47d59a',IFOOD:'#f0627f',RAPPI:'#f6b957','UBER EATS':'#68b3ed',OUTROS:'#a798eb'};
+function corOrigem(origem,idx){return coresOrigem[origem] || ['#b89be4','#5dcec8','#e891bb','#9cc768'][idx%4]}
+function itensDoPeriodo(itens) {
+    const mapa=new Map();
+    for(const item of itens || [])mapa.set(String(item.nome_item).trim().toLocaleLowerCase('pt-BR'),{nome_item:item.nome_item,total_qtd:Number(item.total_qtd)||0});
+    // O catálogo em cache permite mostrar também produtos que ainda não venderam.
+    for(const item of MENU_PAINEL){const chave=item.name.trim().toLocaleLowerCase('pt-BR');if(!mapa.has(chave))mapa.set(chave,{nome_item:item.name,total_qtd:0})}
+    return [...mapa.values()].sort((a,b)=>b.total_qtd-a.total_qtd || a.nome_item.localeCompare(b.nome_item,'pt-BR'));
+}
+async function carregarEstatisticas() {
+    const carga=++estatCarga;
+    document.getElementById('stat-erro').hidden=true;
+    try {
+        const res=await fetchAPI('/api/estatisticas'),dados=await res.json();
+        if(!res.ok || !dados.periodos)throw new Error(dados.error || 'Resposta de estatísticas inválida. Atualize também o servidor.');
+        if(carga!==estatCarga)return;
+        estatisticasAtuais=dados;
+        for(const p of ['dia','semana','mes']){
+            document.getElementById('stat-fat-'+p).innerText=deliveryMoeda(dados.faturamento[p]);
+            document.getElementById('stat-media-'+p).innerText=deliveryMoeda(dados.medias?.[p]);
+            document.getElementById('stat-qtd-'+p).textContent=dados.periodos[p].quantidade+' pedidos concluídos';
         }
+        renderizarPeriodoEstatisticas(estatPeriodo);
+    } catch(e) {
+        if(carga!==estatCarga)return;
+        const el=document.getElementById('stat-erro');el.hidden=false;el.textContent=e.message;
     }
-
-
-    // ==========================================
-    // HISTÓRICO
-    // ==========================================
-    async function carregarHistorico(filtro) {
-        const tbody = document.getElementById('historico-table-body');
-        tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-zinc-500"><i class="fa-solid fa-spinner fa-spin mr-2"></i>A carregar...</td></tr>`;
-        
-        try {
-            const url = filtro === 'todos' ? '/api/historico' : `/api/historico?filtro=${filtro}`;
-            const res = await fetchAPI(url);
-            const data = await res.json();
-            
-            tbody.innerHTML = '';
-            
-            if (data.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-zinc-500">Nenhum registo encontrado.</td></tr>`;
-                return;
-            }
-            
-            data.forEach((comanda) => {
-                const dataF = new Date(comanda.data_fechamento).toLocaleString('pt-BR');
-                const totalF = parseFloat(comanda.valor_total_final || 0).toFixed(2).replace('.', ',');
-                
-                tbody.innerHTML += `
-                    <tr class="border-b border-zinc-800 hover:bg-zinc-800/30 transition">
-                        <td class="p-4 font-black">Mesa ${comanda.mesa_numero}</td>
-                        <td class="p-4 text-orange-400 text-xs font-mono">${comanda.codigo}</td>
-                        <td class="p-4 text-xs text-zinc-400">${dataF}</td>
-                        <td class="p-4 font-black text-emerald-400">R$ ${totalF}</td>
-                    </tr>
-                `;
-            });
-        } catch (e) {
-            tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-rose-500">Erro de comunicação.</td></tr>`;
-        }
-    }
+}
+function renderizarPeriodoEstatisticas(periodo) {
+    if(!['dia','semana','mes'].includes(periodo))return;
+    estatPeriodo=periodo;
+    document.getElementById('stat-periodo').value=periodo;
+    const p=estatisticasAtuais?.periodos[periodo];if(!p)return;
+    const lista=itensDoPeriodo(p.itens),top=lista.filter(i=>i.total_qtd>0).slice(0,5);
+    const low=[...lista].sort((a,b)=>a.total_qtd-b.total_qtd || a.nome_item.localeCompare(b.nome_item,'pt-BR')).slice(0,5);
+    const linha=(item,cor)=>`<div class="flex justify-between items-center gap-3 text-sm bg-zinc-950 p-3 rounded-xl border border-zinc-800"><span class="font-bold text-white">${deliveryTexto(item.nome_item)}</span><span class="${cor} shrink-0 px-2 py-1 rounded text-xs font-black">${item.total_qtd}x</span></div>`;
+    document.getElementById('stat-top-itens').innerHTML=top.map(i=>linha(i,'text-emerald-400')).join('') || '<p class="text-sm text-zinc-400">Nenhum item vendido neste período.</p>';
+    document.getElementById('stat-low-itens').innerHTML=low.map(i=>linha(i,'text-rose-400')).join('');
+    document.getElementById('stat-origem-resumo').textContent=p.quantidade+' pedidos · '+deliveryMoeda(p.valor_total);
+    const inicio=new Date(p.inicio),ultimo=new Date(new Date(p.fim).getTime()-1);
+    document.getElementById('stat-periodo-descricao').textContent=({dia:'Hoje',semana:'Esta semana',mes:'Este mês'}[periodo])+' · '+
+        inicio.toLocaleDateString('pt-BR',{timeZone:'America/Sao_Paulo'})+' a '+ultimo.toLocaleDateString('pt-BR',{timeZone:'America/Sao_Paulo'})+' · horário de Brasília';
+    renderizarGraficoOrigens(p);
+}
+function renderizarGraficoOrigens(periodo) {
+    const mapa=new Map(['MESA','WHATSAPP','IFOOD','RAPPI'].map(origem=>[origem,{origem,quantidade:0,valor_total:0}]));
+    for(const c of periodo.origens || [])mapa.set(c.origem,{...c,quantidade:Number(c.quantidade),valor_total:Number(c.valor_total)});
+    origensGrafico=[...mapa.values()].map((c,idx)=>({...c,cor:corOrigem(c.origem,idx),percentual:periodo.quantidade?c.quantidade*100/periodo.quantidade:0}));
+    let angulo=-Math.PI/2;
+    const fatias=origensGrafico.map((c,idx)=>{
+        if(!c.quantidade)return '';
+        const a=angulo,b=a+c.percentual/100*Math.PI*2;angulo=b;
+        const x=t=>160+112*Math.cos(t),y=t=>140+112*Math.sin(t);
+        const desc=deliveryTexto(nomeOrigem(c.origem)+' — '+c.percentual.toFixed(1).replace('.',',')+'% — '+c.quantidade+' pedidos — '+deliveryMoeda(c.valor_total));
+        const atributos=`fill="${c.cor}" stroke="#141c25" stroke-width="2" tabindex="0" role="button" aria-label="${desc}" onmouseenter="mostrarOrigemGrafico(${idx})" onmouseleave="ocultarOrigemGrafico()" onfocus="mostrarOrigemGrafico(${idx})" onblur="ocultarOrigemGrafico()" onclick="mostrarOrigemGrafico(${idx})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();mostrarOrigemGrafico(${idx})}"`;
+        const forma=c.percentual>=99.999999?`<circle cx="160" cy="140" r="112" ${atributos}><title>${desc}</title></circle>`:
+            `<path d="M160 140 L${x(a)} ${y(a)} A112 112 0 ${b-a>Math.PI?1:0} 1 ${x(b)} ${y(b)} Z" ${atributos}><title>${desc}</title></path>`;
+        const meio=(a+b)/2;
+        const label=c.percentual>=7?`<text x="${160+76*Math.cos(meio)}" y="${145+76*Math.sin(meio)}" text-anchor="middle" fill="#101820" font-size="13" font-weight="800" pointer-events="none">${Math.round(c.percentual)}%</text>`:'';
+        return forma+label;
+    }).join('');
+    document.getElementById('stat-origem-pizza').innerHTML=`<svg viewBox="0 0 320 280" role="group" aria-label="Participação dos pedidos por origem">${fatias || '<circle cx="160" cy="140" r="112" fill="#28323e"/><text x="160" y="145" text-anchor="middle" fill="#aeb9c7" font-size="13">Sem pedidos no período</text>'}</svg>`;
+    document.getElementById('stat-origem-legenda').innerHTML=origensGrafico.map((c,idx)=>`<button type="button" class="origem-legenda-linha" onmouseenter="mostrarOrigemGrafico(${idx})" onmouseleave="ocultarOrigemGrafico()" onfocus="mostrarOrigemGrafico(${idx})" onblur="ocultarOrigemGrafico()" onclick="mostrarOrigemGrafico(${idx})"><span class="origem-cor" style="background:${c.cor}"></span><span>${deliveryTexto(nomeOrigem(c.origem))}</span><strong>${c.percentual.toFixed(1).replace('.',',')}%</strong><small>${c.quantidade} pedidos · ${deliveryMoeda(c.valor_total)}</small></button>`).join('');
+    ocultarOrigemGrafico();
+}
+function mostrarOrigemGrafico(idx) {
+    const c=origensGrafico[idx];if(!c)return;
+    const el=document.getElementById('stat-origem-tooltip');el.hidden=false;
+    el.innerHTML=`<strong>${deliveryTexto(nomeOrigem(c.origem))} · ${c.percentual.toFixed(1).replace('.',',')}%</strong><span>${c.quantidade} ${c.quantidade===1?'pedido':'pedidos'} · ${deliveryMoeda(c.valor_total)}</span>`;
+}
+function ocultarOrigemGrafico(){document.getElementById('stat-origem-tooltip').hidden=true}
+let historicoFiltro='todos';
+async function carregarHistorico(filtro='todos') {
+    if(!['todos','dia','semana','mes'].includes(filtro))return;
+    historicoFiltro=filtro;const carga=++historicoCarga,tbody=document.getElementById('historico-table-body');
+    document.querySelectorAll('[data-historico-filtro]').forEach(btn=>btn.setAttribute('aria-pressed',String(btn.dataset.historicoFiltro===filtro)));
+    tbody.innerHTML='<tr><td colspan="4" class="p-8 text-center text-zinc-400">Carregando pedidos…</td></tr>';
+    try {
+        const res=await fetchAPI('/api/historico?filtro='+filtro),dados=await res.json();
+        if(!res.ok || !Array.isArray(dados))throw new Error(dados.error || 'Não foi possível carregar o histórico.');
+        if(carga!==historicoCarga)return;
+        tbody.innerHTML=dados.map(v=>{
+            const origem=v.tipo==='mesa'||(!v.tipo&&v.mesa_numero!=null)?'Mesa '+v.mesa_numero:nomeOrigem(v.origem);
+            const data=new Date(v.data_fechamento).toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'});
+            return `<tr class="border-b border-zinc-800 hover:bg-zinc-800/30 transition"><td class="p-4 font-black">${deliveryTexto(origem)}</td><td class="p-4 text-orange-400 text-xs font-mono">${deliveryTexto(v.codigo)}</td><td class="p-4 text-xs text-zinc-400">${deliveryTexto(data)}</td><td class="p-4 font-black text-emerald-400">${deliveryMoeda(v.valor_total_final)}</td></tr>`;
+        }).join('')||'<tr><td colspan="4" class="p-8 text-center text-zinc-400">Nenhum pedido concluído neste período.</td></tr>';
+    } catch(e) {if(carga===historicoCarga)tbody.innerHTML=`<tr><td colspan="4" class="p-8 text-center text-rose-400">${deliveryTexto(e.message)}</td></tr>`;}
+}
+function atualizarRelatoriosVisiveis() {
+    if(!document.getElementById('view-historico').classList.contains('hidden'))carregarHistorico(historicoFiltro);
+    if(!document.getElementById('view-estatisticas').classList.contains('hidden'))carregarEstatisticas();
+}
 
 
     // ==========================================
