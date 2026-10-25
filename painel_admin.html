@@ -79,6 +79,129 @@
   .wa-layout {display:grid;grid-template-columns:290px minmax(0,1fr);height:65vh;min-height:420px;gap:12px;}
 @media(max-width:700px){.wa-layout{grid-template-columns:1fr;height:auto}.wa-layout>aside{max-height:220px}.wa-layout>section{height:65vh;min-height:390px}}
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700;750;800&display=swap" rel="stylesheet">
+<style id="liquid-design-system">/* Identidade compartilhada — Bento / Liquid Glass. Estilos só na tela. */
+@media screen {
+  :root{--ui-bg:#090c10;--ui-panel:rgba(25,30,36,.84);--ui-line:rgba(255,255,255,.105);--ui-line-bright:rgba(255,255,255,.2);--ui-ink:#f5f6f7;--ui-muted:#a5adb8;--ui-accent:#ffb45b;--ui-ease:cubic-bezier(.22,1,.36,1);color-scheme:dark}
+  html{background:var(--ui-bg)!important;scroll-behavior:smooth}
+  body{background:radial-gradient(ellipse at 5% 0%,#65412128,transparent 45%),radial-gradient(ellipse at 100% 30%,#264e522b,transparent 46%),#090c10!important;background-attachment:fixed!important;color:var(--ui-ink);font-family:'Inter',ui-sans-serif,system-ui,sans-serif!important;-webkit-font-smoothing:antialiased;line-height:1.5}
+  body button,body input,body textarea,body select{font-family:inherit}
+  body button,body [role="button"]{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+  body button{transition:background .22s,border-color .22s,box-shadow .22s,opacity .22s,transform .22s var(--ui-ease)}
+  body button:not(:disabled):active{transform:scale(.97)}
+  body button:disabled{cursor:not-allowed}
+  body :is(button,a,input,textarea,select,[tabindex]):focus-visible{outline:2px solid var(--ui-accent)!important;outline-offset:4px}
+  body :is(input,textarea,select){background:#0b1018bb!important;border-color:#ffffff20!important;border-radius:14px!important;min-height:44px;color:#f7f8fa;box-shadow:inset 0 1px 2px #0003;transition:border-color .2s,box-shadow .2s}
+  body input[type="checkbox"],body input[type="radio"]{min-height:initial;accent-color:#ffb45b}
+  body :is(input,textarea,select):focus{border-color:#ffb45b80!important;box-shadow:0 0 0 4px #ffb45b12}
+  body ::placeholder{color:#818b99}
+  body .text-zinc-400{color:#a6aeb9}
+  body .text-zinc-500{color:#929ba8}
+  body :is(.text-orange-400,.text-orange-500){color:var(--ui-accent)}
+  body :is(.bg-orange-500,.bg-orange-600){background:linear-gradient(135deg,#ffd196,#ffb45b)!important;color:#26190e!important;border-color:#ffdfaf80!important;box-shadow:0 6px 18px #ffae3a18,inset 0 1px #ffffff70}
+  body .bg-gradient-to-r.from-orange-500{background:linear-gradient(125deg,#ffd69c,#ffad50)!important;color:#26190e;box-shadow:0 8px 26px #ffaf3d23,inset 0 1px #ffffff70}
+  body .glass-panel{background:linear-gradient(145deg,#ffffff08,transparent 50%),var(--ui-panel);border:1px solid var(--ui-line);border-radius:26px;box-shadow:inset 0 1px #ffffff0b,0 16px 46px #0000001f}
+  body .glass-eyebrow{font-size:10px;line-height:1.4;letter-spacing:.15em;text-transform:uppercase;color:#b7bfc9;font-weight:700}
+  body .glass-title{font-size:clamp(25px,3vw,38px);font-weight:750;line-height:1.13;letter-spacing:-.05em}
+  body .glass-caption{font-size:12px;color:var(--ui-muted);line-height:1.65}
+  body [id^="view-"]:not(.hidden),body section[id^="screen-"]:not(.hidden){animation:glass-scene .42s var(--ui-ease)}
+  body [id^="modal-"].fixed:not(.hidden){animation:glass-overlay .18s ease-out;background-color:#05080eb8!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  body [id^="modal-"].fixed>:first-child{background:linear-gradient(135deg,#ffffff08,transparent 50%),#151b23f5!important;border-color:#ffffff26!important;box-shadow:0 30px 100px #0009,inset 0 1px #ffffff18;position:relative}
+  body [id^="modal-"].fixed:not(.hidden)>:first-child{animation:glass-dialog .38s var(--ui-ease)}
+  body [id^="modal-"].fixed>div>div.bg-zinc-950,body [id^="modal-"].fixed header,body [id^="modal-"].fixed footer{background:#0d131ac9;border-color:var(--ui-line)}
+  body #toast,body #toast-notification{background:#18212aee!important;border:1px solid #ffffff26!important;box-shadow:0 18px 60px #0007,inset 0 1px #ffffff10;border-radius:22px;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)}
+  body #cart-badge{background:#ffb45b!important;color:#271a0c;border-color:#10151c;box-shadow:0 3px 14px #ffb45b3b}
+  body #cart-badge:not(.hidden){animation:glass-pop .4s var(--ui-ease)}
+  .ui-order-status{position:fixed;z-index:115;bottom:max(24px,env(safe-area-inset-bottom));left:50%;width:min(380px,calc(100% - 32px));transform:translateX(-50%);display:flex;align-items:center;gap:16px;padding:18px 22px;border-radius:24px;border:1px solid #ffffff30;background:#16212af5;box-shadow:0 20px 70px #0008;backdrop-filter:blur(20px);pointer-events:none;animation:glass-status-in .32s var(--ui-ease)}
+  .ui-order-status[hidden]{display:none!important}
+  .ui-order-status strong{display:block;font-size:14px;font-weight:700;letter-spacing:-.02em}
+  .ui-order-status small{display:block;font-size:11px;color:#afbac7;margin-top:3px}
+  .ui-order-symbol{width:42px;height:42px;flex-shrink:0;border-radius:50%;border:2px solid #ffb45b26;border-top-color:#ffb45b;animation:glass-spin .8s linear infinite}
+  .ui-order-status[data-state="sucesso"] .ui-order-symbol{border:1px solid #6ee7b740;background:#6ee7b718;animation:glass-pop .4s var(--ui-ease)}
+  .ui-order-status[data-state="sucesso"] .ui-order-symbol::after{content:'';display:block;width:16px;height:9px;border-left:2px solid #8cf0c5;border-bottom:2px solid #8cf0c5;transform:rotate(-45deg);margin:12px auto}
+  .ui-order-status[data-state="erro"] .ui-order-symbol{border:1px solid #fb718540;background:#fb718518;animation:none}
+  .ui-order-status[data-state="erro"] .ui-order-symbol::after{content:'!';display:block;text-align:center;line-height:38px;font-size:22px;font-weight:800;color:#fda4af}
+  @supports(backdrop-filter:blur(1px)){body .glass-panel{backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}}
+  @media(hover:hover){body .glass-interactive:hover{border-color:#ffffff35;box-shadow:0 15px 45px #0004,inset 0 1px #ffffff18;transform:translateY(-3px)}}
+  @media(prefers-reduced-transparency:reduce){body .glass-panel,body [id^="modal-"].fixed>:first-child{background:#151b23!important;backdrop-filter:none!important}}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}body *,body *::before,body *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+  @keyframes glass-scene{from{opacity:.25;translate:0 10px}to{opacity:1;translate:0 0}}
+  @keyframes glass-overlay{from{opacity:0}to{opacity:1}}
+  @keyframes glass-dialog{from{opacity:0;transform:translateY(24px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+  @keyframes glass-pop{0%{scale:.8}55%{scale:1.12}100%{scale:1}}
+  @keyframes glass-spin{to{transform:rotate(360deg)}}
+  @keyframes glass-status-in{from{opacity:0;translate:0 16px}to{opacity:1;translate:0 0}}
+}
+
+@media screen {
+  body>nav{margin:16px 22px 0;padding:15px 18px;background:linear-gradient(135deg,#ffffff08,transparent),#141c25d9!important;border:1px solid #ffffff17!important;border-radius:24px;box-shadow:0 12px 40px #0003,inset 0 1px #ffffff12;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);flex-shrink:0;gap:14px}
+  body>nav>div:first-child>div{background:linear-gradient(145deg,#ffd9a5,#ffb45b)!important;color:#39230e!important;border-radius:15px;border-color:#ffe7c570!important;box-shadow:0 4px 20px #ffb45b15}
+  body>nav h2{font-size:12px;letter-spacing:-.01em;text-transform:none;color:#f1f4f7}
+  body>nav>div:nth-child(2){background:#070d1380!important;border:1px solid #ffffff0c!important;border-radius:17px;padding:5px;gap:3px;box-shadow:inset 0 1px 3px #0004}
+  body button[id^="tab-btn-"]{border-radius:12px;padding:11px 13px;min-height:42px;gap:8px;font-size:11px;white-space:nowrap}
+  body button[id^="tab-btn-"]>span.hidden{display:inline}
+  body button[id^="tab-btn-"] i{font-size:12px}
+  body>main{width:100%;max-width:1600px;margin:0 auto;padding:26px 26px 48px;min-height:0}
+  body #login-screen{background:radial-gradient(ellipse at 20% 20%,#a4642426,transparent 55%),radial-gradient(ellipse at 85% 70%,#1c586435,transparent 50%),#090d13!important}
+  body #login-screen>div{background:linear-gradient(140deg,#ffffff0b,transparent),#151d27c9!important;border:1px solid #ffffff20;border-radius:32px;padding:36px;backdrop-filter:blur(26px);box-shadow:0 30px 90px #0006,inset 0 1px #ffffff14}
+  body #login-screen h2{font-size:25px;font-weight:650;letter-spacing:-.05em}
+  body #btn-login{border-radius:15px;min-height:48px}
+  body .dashboard-bento{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:14px;margin-bottom:28px}
+  body .dashboard-bento>div{padding:23px 24px;min-width:0}
+  body .dashboard-bento .dashboard-hero{background:radial-gradient(ellipse at 0% 0%,#e7ad5720,transparent 85%),linear-gradient(145deg,#ffffff07,transparent),#171e26d4;display:flex;flex-direction:column;justify-content:center}
+  body .dashboard-hero h1{margin:8px 0;font-size:30px;letter-spacing:-.055em;font-weight:700;line-height:1.12}
+  body .dashboard-hero p{color:#a6b0bc;font-size:11px;margin:0;max-width:260px}
+  body .dashboard-metric{display:flex;flex-direction:column;justify-content:space-between;gap:13px}
+  body .metric-head{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:11px;color:#aeb8c4}
+  body .metric-head i{color:#c8d2de;font-size:15px}
+  body .metric-number{font-size:35px;letter-spacing:-.06em;font-weight:650;line-height:1}
+  body .metric-number small{font-size:14px;color:#8a96a4;font-weight:500;letter-spacing:0;margin-left:4px}
+  body .metric-caption{font-size:10px;color:#96a2b2}
+  body .metric-green .metric-head i,body .metric-green .metric-number{color:#9bdfbf}
+  body .metric-amber .metric-head i,body .metric-amber .metric-number{color:#ffd39a}
+  body .metric-blue .metric-head i,body .metric-blue .metric-number{color:#a1c9eb}
+  body .section-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 2px 16px}
+  body .section-heading h2{font-size:15px;font-weight:650;letter-spacing:-.025em}
+  body .section-heading p{font-size:11px;color:#93a0ae;display:flex;gap:14px;align-items:center}
+  body .legend-dot{display:inline-block;width:6px;height:6px;margin-right:5px;border-radius:50%;background:#87919e}
+  body .legend-dot.green{background:#8bdbb7}
+  body #tables-grid{gap:14px}
+  body #tables-grid>.mesa-card{min-height:191px;padding:20px;border-radius:25px;background:linear-gradient(140deg,#ffffff07,transparent 70%),#151d26c7;border-color:#ffffff15;box-shadow:inset 0 1px #ffffff0a,0 8px 30px #0001;position:relative;overflow:hidden;transition:transform .3s var(--ui-ease),border-color .3s,box-shadow .3s}
+  body #tables-grid>.mesa-card.mesa-ativa{background:radial-gradient(ellipse at 100% 0%,#69c99513,transparent 80%),#151e25d9;border-color:#73bd963d}
+  body #tables-grid>.mesa-card.mesa-chamada{border-color:#f9c87899;background:radial-gradient(ellipse at 100% 0%,#f9c87822,transparent 80%),#1e2025;animation:none}
+  body .mesa-card .text-4xl{font-size:42px;font-weight:650;letter-spacing:-.06em;line-height:1.1}
+  body .mesa-card .text-emerald-400{color:#9de8c5}
+  body .mesa-card>div:last-child{border-top-color:#ffffff0d!important;margin-top:19px;padding-top:14px}
+  body .mesa-card .bg-emerald-500,body .mesa-card .bg-amber-500{font-size:8px;border-radius:7px;letter-spacing:.03em;padding:4px 7px;background:#9de8c514;color:#9de8c5;border:1px solid #9de8c52b}
+  body .mesa-card .bg-amber-500{background:#ffd39a1a;color:#ffd39a;border-color:#ffd39a40}
+  body #waiter-queue-btn,body #server-status-badge{background:#ffffff05;border-color:#ffffff12;border-radius:12px}
+  body [id^="delivery-col-"]{background:transparent}
+  body #view-delivery>div>div:first-child{background:linear-gradient(135deg,#ffffff06,transparent),#151e27c4;border-color:#ffffff16;border-radius:24px;padding:23px}
+  body #view-delivery>div>div:nth-child(2)>div{border-radius:25px;border-color:#ffffff15;background:#10182099;box-shadow:inset 0 1px #ffffff08}
+  body article[data-delivery-id]{background:linear-gradient(135deg,#ffffff07,transparent),#1a232de0;border-color:#ffffff15;border-radius:21px;box-shadow:0 6px 20px #0002;transition:border-color .25s,transform .25s}
+  body article[data-delivery-id]>div:first-child>span:first-child{font-size:15px;color:#dce4ed}
+  body #view-caixa [class*="bg-zinc-900"],body #view-historico [class*="bg-zinc-900"],body #view-estatisticas [class*="bg-zinc-900"]{background:linear-gradient(140deg,#ffffff06,transparent),#151e27c7;border-color:#ffffff15;border-radius:25px;box-shadow:inset 0 1px #ffffff0a,0 10px 30px #0002}
+  body #view-estatisticas h3,body #view-caixa h3{letter-spacing:-.03em}
+  body #view-historico table{font-size:12px}
+  body #view-historico thead{background:#0b131b9c;color:#aab5c1}
+  body #view-historico tbody tr{border-color:#ffffff0d;transition:background .2s}
+  body #view-historico tbody tr:hover{background:#ffffff04}
+  body .wa-layout>aside,body .wa-layout>section{background:#141e28c9;border-color:#ffffff16;border-radius:24px;box-shadow:inset 0 1px #ffffff0a}
+  body #wa-historico{background:radial-gradient(ellipse at 100% 0%,#5b9e8820,transparent 70%),#0c151ec4}
+  body #wa-lista>button{border-radius:15px}
+  body #wa-historico .bg-green-900\/60{background:#254c40b3;border:1px solid #82bd9e26;border-radius:18px 18px 5px 18px}
+  body #wa-historico .bg-zinc-800{background:#202b36d9;border:1px solid #ffffff10;border-radius:18px 18px 18px 5px}
+  body #wa-enviar{background:#a5e1c1;color:#102a1d;border-radius:15px;font-size:12px}
+  body #modal-comanda>div,body #modal-delivery-resumo>section,body #modal-pdv-caixa>div{border-radius:28px}
+  body [id^="modal-"].fixed .bg-zinc-800{background-color:#ffffff08;border-color:#ffffff12}
+  body #modal-comanda #comanda-items-list{background:transparent}
+  body #waiter-queue-drawer{background:#17222cf5;border-color:#ffffff20;border-radius:19px;backdrop-filter:blur(22px)}
+  @media(hover:hover){body .mesa-card:hover,body article[data-delivery-id]:hover{border-color:#ffcc8555;transform:translateY(-3px);box-shadow:0 16px 42px #0004}}
+  @media(max-width:1200px){body>nav{justify-content:center}body>nav>div:nth-child(2){order:3;width:100%;justify-content:flex-start}body>nav>div:first-child{margin-right:auto}body .dashboard-bento{grid-template-columns:1.5fr 1fr 1fr 1fr}body .dashboard-bento>div{padding:20px}}
+  @media(max-width:760px){body>nav{margin:10px 12px 0;padding:12px;border-radius:21px}body>main{padding:20px 14px 36px}body .dashboard-bento{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:22px}body .dashboard-hero{grid-column:1/-1}body .dashboard-bento>div{padding:17px;border-radius:21px}body .dashboard-hero h1{font-size:27px}body .metric-head{font-size:10px}body .metric-head i{display:none}body .metric-number{font-size:29px}body .metric-caption{font-size:9px}body .section-heading p{gap:8px;font-size:9px}body #tables-grid{gap:10px}body #tables-grid>.mesa-card{padding:17px;min-height:179px;border-radius:22px}body button[id^="tab-btn-"]{padding:10px 12px}body #view-delivery{height:auto}body .wa-layout>section{height:66dvh}}
+  @media(min-width:1024px){body #tables-grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
+}
+</style>
 </head>
 <body class="h-full font-sans text-zinc-100 bg-zinc-950 flex flex-col selection:bg-orange-500 selection:text-white">
 
@@ -88,7 +211,7 @@
   <div id="login-screen" style="display: flex;" class="fixed inset-0 z-50 bg-zinc-950 items-center justify-center p-4">
     <div class="bg-zinc-900 border border-zinc-800 w-full max-w-md rounded-2xl shadow-2xl p-8 space-y-6">
       <div class="text-center space-y-2">
-        <div class="w-12 h-12 bg-orange-500/20 text-orange-400 rounded-2xl flex items-center justify-center font-bold text-lg border border-orange-500/30 mx-auto">R1</div>
+        <div class="w-12 h-12 bg-orange-500/20 text-orange-400 rounded-2xl flex items-center justify-center font-bold text-lg border border-orange-500/30 mx-auto"><i class="fa-solid fa-layer-group" aria-hidden="true"></i></div>
         <h2 class="text-xl font-bold text-white">Painel de Gestão</h2>
       </div>
       <div class="space-y-4">
@@ -113,8 +236,8 @@
   <!-- ========================================== -->
   <nav class="bg-zinc-900 border-b border-zinc-800 px-4 py-3 flex flex-wrap items-center justify-between gap-4">
     <div class="flex items-center space-x-4">
-      <div class="w-10 h-10 bg-orange-500/20 text-orange-400 rounded-xl flex items-center justify-center font-black border border-orange-500/30">R1</div>
-      <h2 class="font-bold text-zinc-100 hidden md:block tracking-wide uppercase text-sm">Painel de Gestão</h2>
+      <div class="w-10 h-10 bg-orange-500/20 text-orange-400 rounded-xl flex items-center justify-center font-black border border-orange-500/30"><i class="fa-solid fa-layer-group" aria-hidden="true"></i></div>
+      <div class="hidden md:block"><h2 class="font-bold text-zinc-100 tracking-wide text-sm">Painel de Gestão</h2><p class="text-[9px] text-zinc-500 tracking-wider">RESTAURANTE · OPERAÇÃO</p></div>
     </div>
 
     <!-- Abas -->
@@ -189,6 +312,13 @@
 </div>
 
 <div id="view-mesas" class="space-y-4">
+      <div class="dashboard-bento">
+  <div class="glass-panel dashboard-hero"><span class="glass-eyebrow">Seu restaurante, em movimento</span><h1>Uma boa operação<br>começa aqui.</h1><p>Mesas, pedidos e atendimento em uma só visão.</p></div>
+  <div class="glass-panel dashboard-metric metric-green"><div class="metric-head"><span>Mesas ativas</span><i class="fa-solid fa-chair" aria-hidden="true"></i></div><div class="metric-number"><span id="ui-mesas-ativas">—</span><small id="ui-mesas-total"></small></div><p class="metric-caption">Comandas abertas no salão</p></div>
+  <div class="glass-panel dashboard-metric metric-amber"><div class="metric-head"><span>Para imprimir</span><i class="fa-solid fa-print" aria-hidden="true"></i></div><div class="metric-number" id="ui-impressao-pendente">—</div><p class="metric-caption">Pedidos de mesa pendentes</p></div>
+  <div class="glass-panel dashboard-metric metric-blue"><div class="metric-head"><span>Novos no delivery</span><i class="fa-solid fa-motorcycle" aria-hidden="true"></i></div><div class="metric-number" id="ui-delivery-novos">—</div><p class="metric-caption">Aguardando seu aceite</p></div>
+</div>
+<div class="section-heading"><h2>Mapa de mesas</h2><p><span><i class="legend-dot green"></i>Em atendimento</span><span><i class="legend-dot"></i>Disponível</span></p></div>
       <div id="tables-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
     </div>
 
@@ -1214,8 +1344,11 @@
             if (isCalling) bgClass = "bg-amber-950/40 border-amber-400 animate-pulse shadow-lg shadow-amber-900/40";
             
             const card = document.createElement('div');
-            card.className = `p-5 rounded-2xl border flex flex-col justify-between cursor-pointer transition-all duration-300 transform hover:-translate-y-1 ${bgClass}`;
+            card.className = `mesa-card ${isBusy ? 'mesa-ativa' : ''} ${isCalling ? 'mesa-chamada' : ''} p-5 rounded-2xl border flex flex-col justify-between cursor-pointer transition-all duration-300 transform hover:-translate-y-1 ${bgClass}`;
             card.onclick = () => openTableModal(table.id);
+            card.tabIndex = 0; card.setAttribute('role','button');
+            card.setAttribute('aria-label',`Mesa ${table.number}, ${isBusy ? 'em atendimento' : 'disponível'}`);
+            card.onkeydown = e => {if(e.key==='Enter'||e.key===' '){e.preventDefault();openTableModal(table.id)}};
             
             card.innerHTML = `
                 <div>
@@ -1885,6 +2018,7 @@
     }
 
     function atualizarSinalizadores() {
+        uiAtualizarResumo();
         const pendentesMesa = tablesState.reduce((s, table) => s + contarPedidosPendentesMesa(table), 0);
         const pendentesDelivery = deliveriesState.filter(p => !p.status || p.status === 'novo').length;
         for (const [aba, total] of [['mesas', pendentesMesa], ['delivery', pendentesDelivery]]) {
@@ -2158,6 +2292,7 @@
         if (!pedidoManual || pedidoManual.enviando || !pedidoManual.itens.length || mesaOperacaoPendente) return;
         const pedido = pedidoManual;
         pedido.enviando = true;
+        uiEstadoPedido('enviando');
         mesaOperacaoPendente = true;
         renderizarRascunhoManual();
         try {
@@ -2169,9 +2304,11 @@
             closeModal('modal-produto-manual');
             closeModal('modal-pedido-manual');
             pedidoManual = null;
+            uiEstadoPedido('sucesso');
             showToast(`Pedido lançado na Mesa ${pedido.numero}!`, 'emerald');
             await carregarMesas();
         } catch (error) {
+            uiEstadoPedido('erro');
             showToast(error.message || 'Falha de comunicação. Confira a comanda antes de reenviar.', 'rose');
         } finally {
             pedido.enviando = false;
@@ -2344,6 +2481,27 @@ async function waEnviar() {
 }
 setInterval(()=>{if(localStorage.getItem('admin_token')&&!document.hidden)carregarWhatsApp();},10000);
 
+
+function uiAtualizarResumo() {
+    const set=(id,valor)=>{const el=document.getElementById(id);if(el)el.textContent=String(valor)};
+    set('ui-mesas-ativas',tablesState.filter(t=>t.status==='busy').length);
+    set('ui-mesas-total','/ '+tablesState.length);
+    set('ui-impressao-pendente',tablesState.reduce((n,t)=>n+contarPedidosPendentesMesa(t),0));
+    set('ui-delivery-novos',deliveriesState.filter(p=>(p.status||'novo')==='novo').length);
+}
+// Somente apresentação: confirmações continuam dependentes da resposta do servidor.
+let uiPedidoTimer;
+function uiEstadoPedido(estado) {
+    const el=document.getElementById('ui-order-status');if(!el)return;
+    clearTimeout(uiPedidoTimer);
+    const textos={enviando:['Enviando seu pedido','Só um instante. Estamos falando com o restaurante.'],sucesso:['Pedido recebido!','Tudo certo. Seu pedido chegou ao restaurante.'],erro:['Pedido não confirmado','Confira a mensagem e tente novamente quando estiver pronto.']};
+    const texto=textos[estado];if(!texto){el.hidden=true;return;}
+    el.hidden=false;el.setAttribute('data-state',estado);
+    document.getElementById('ui-order-title').textContent=texto[0];
+    document.getElementById('ui-order-caption').textContent=texto[1];
+    if(estado!=='enviando')uiPedidoTimer=setTimeout(()=>{el.hidden=true},estado==='sucesso'?3200:4200);
+}
 </script>
+<div id="ui-order-status" class="ui-order-status" hidden role="status" aria-live="polite" aria-atomic="true"><span class="ui-order-symbol" aria-hidden="true"></span><div><strong id="ui-order-title"></strong><small id="ui-order-caption"></small></div></div>
 </body>
 </html>
