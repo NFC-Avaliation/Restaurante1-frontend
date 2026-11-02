@@ -218,6 +218,107 @@
   @media(max-width:760px){.origens-layout{grid-template-columns:1fr;gap:10px}.origem-grafico-wrapper{min-height:340px}.estat-filtro select{min-width:140px}}
 }
 </style>
+<style id="liquid-glass-soft">
+/* Liquid Glass para navegador: tonalidade pêssego, reflexos e transparência. */
+@media screen {
+  :root {
+    --ui-accent:#ffc49c;
+    --ui-panel:rgba(30,35,43,.48);
+    --glass-surface:linear-gradient(135deg,rgba(255,255,255,.13),rgba(255,255,255,.025) 48%,rgba(255,196,156,.055)),rgba(25,31,40,.54);
+    --glass-border:rgba(255,255,255,.20);
+    --glass-shadow:inset 0 1px 0 rgba(255,255,255,.24),inset 0 -1px 0 rgba(255,255,255,.035),0 12px 34px rgba(0,0,0,.19);
+    --glass-blur:blur(24px) saturate(145%);
+  }
+  body {
+    background:radial-gradient(ellipse at 6% 8%,rgba(224,153,109,.16),transparent 39%),radial-gradient(ellipse at 88% 24%,rgba(124,159,181,.15),transparent 44%),radial-gradient(ellipse at 35% 90%,rgba(177,132,110,.10),transparent 42%),#0c1119!important;
+  }
+  body>nav,body .glass-panel,body .estat-filtro,
+  body #login-screen>div,body .wa-layout>aside,body .wa-layout>section,
+  body #view-delivery>div>div:first-child,
+  body #view-delivery>div>div:nth-child(2)>div,
+  body #tables-grid>.mesa-card,body article[data-delivery-id],
+  body :is(#view-caixa,#view-historico,#view-estatisticas) :is(.bg-zinc-900,.bg-zinc-950),
+  body #waiter-queue-drawer,body #toast,body .ui-order-status,body .origem-tooltip {
+    background:var(--glass-surface)!important;
+    border-color:var(--glass-border)!important;
+    box-shadow:var(--glass-shadow)!important;
+    -webkit-backdrop-filter:var(--glass-blur);
+    backdrop-filter:var(--glass-blur);
+  }
+  body>nav>div:nth-child(2){background:rgba(12,18,27,.28)!important;border-color:#ffffff16!important;box-shadow:inset 0 1px 8px #0002}
+  body #login-screen{background:radial-gradient(ellipse at 20% 20%,#d89d7930,transparent 55%),radial-gradient(ellipse at 85% 70%,#789aae26,transparent 50%),#0c1119!important}
+  body #tables-grid>.mesa-card.mesa-ativa{background:linear-gradient(140deg,#ffffff16,transparent 65%),#70bd9710!important;border-color:#a9e8c644!important}
+  body #tables-grid>.mesa-card.mesa-chamada{background:linear-gradient(140deg,#ffffff1c,transparent 65%),#ffc49c16!important;border-color:#ffc49c80!important}
+  body button {
+    --button-tint:rgba(255,255,255,.045);
+    background:linear-gradient(145deg,rgba(255,255,255,.15),rgba(255,255,255,.025) 52%,rgba(255,255,255,.045)),var(--button-tint)!important;
+    border:1px solid rgba(255,255,255,.19)!important;
+    box-shadow:inset 0 1px 0 #ffffff35,inset 0 -1px 0 #ffffff08,0 4px 12px #0002!important;
+    -webkit-backdrop-filter:blur(12px) saturate(140%);
+    backdrop-filter:blur(12px) saturate(140%);
+    transition:background .22s,border-color .22s,box-shadow .22s,transform .22s var(--ui-ease);
+  }
+  body button:is(.bg-orange-500,.bg-orange-600),
+  body #view-historico button[data-historico-filtro][aria-pressed="true"],
+  body .mesa-garcom-chamada button {
+    --button-tint:rgba(255,170,114,.18);
+    color:#ffe1cd!important;
+    border-color:rgba(255,205,171,.48)!important;
+    background:linear-gradient(140deg,#ffffff26,#ffd7bd0a 50%,#ffc49c15),var(--button-tint)!important;
+    box-shadow:inset 0 1px #fff1e770,inset 0 -1px #ffc49c14,0 5px 18px #d3956820!important;
+  }
+  body button:is(.bg-green-600,.bg-emerald-500),body #wa-enviar{--button-tint:rgba(107,206,155,.16);color:#ceffe4!important;border-color:#a0e6bd50!important}
+  body button:is(.bg-rose-500,.bg-rose-500\/10),body button.text-rose-400{--button-tint:rgba(244,112,139,.12);color:#ffb9ca!important;border-color:#f5a0b536!important}
+  body button.bg-amber-500{--button-tint:rgba(255,196,156,.16);color:#ffe0c9!important;border-color:#ffc49c50!important}
+  body button:disabled{opacity:.45;box-shadow:inset 0 1px #ffffff12!important;transform:none!important}
+  body button.admin-brand{background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none;-webkit-backdrop-filter:none}
+  body .admin-brand-icon{background:linear-gradient(140deg,#ffffff2d,#ffc49c0c),#ffb98418!important;color:#ffd4b7!important;border-color:#ffd4b755!important;box-shadow:inset 0 1px #fff6,0 5px 16px #0002}
+  body :is(.text-orange-400,.text-orange-500){color:#ffc49c!important}
+  body :is(input,textarea,select){background:rgba(10,16,24,.38)!important;border-color:#ffffff26!important;box-shadow:inset 0 1px 5px #0002!important}
+  body :is(input,textarea,select):focus{border-color:#ffc49c90!important;box-shadow:0 0 0 3px #ffc49c13!important}
+  body :is(input[type="checkbox"],input[type="radio"]){accent-color:#ffc49c}
+  body select option{background:#19212c;color:#f5f6f7}
+  body .mesa-garcom-chamada{background:#ffc49c0d;border-color:#ffc49c40}
+  body .mesa-garcom-chamada p{color:#ffd4b7}
+  body .mesa-card .bg-amber-500{background:#ffc49c18;color:#ffd4b7;border-color:#ffc49c45}
+  body [id^="modal-"].fixed{background-color:rgba(4,8,15,.48)!important;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  body [id^="modal-"].fixed>:first-child{background:linear-gradient(135deg,#ffffff13,transparent 55%),rgba(22,29,39,.87)!important;border-color:#ffffff30!important;box-shadow:inset 0 1px #ffffff38,0 30px 90px #0007!important;backdrop-filter:blur(30px) saturate(145%);-webkit-backdrop-filter:blur(30px) saturate(145%)}
+  body [id^="modal-"].fixed :is(header,footer),
+  body [id^="modal-"].fixed :is(div.bg-zinc-950,div.bg-zinc-900,aside.bg-zinc-950){background:rgba(13,20,30,.30)!important;border-color:#ffffff16!important}
+  body #wa-historico{background:radial-gradient(ellipse at 100% 0%,#9ccbb117,transparent 70%),#0c151e55!important}
+  body #wa-historico .bg-green-900\/60{background:linear-gradient(135deg,#ffffff12,transparent),#76c79a22!important;border-color:#a0e6bd2c}
+  body #wa-historico .bg-zinc-800{background:linear-gradient(135deg,#ffffff16,transparent),#ffffff08!important}
+  body .ui-order-symbol{border-color:#ffc49c30;border-top-color:#ffc49c}
+  body #toast{max-width:calc(100vw - 32px)}
+  body .custom-scrollbar::-webkit-scrollbar-thumb:hover{background:#ffc49c80}
+  @media(hover:hover){
+    body button:not(:disabled):not(.admin-brand):hover{border-color:#ffffff55!important;box-shadow:inset 0 1px #ffffff60,0 7px 22px #0003!important;filter:brightness(1.08)}
+    body #tables-grid>.mesa-card:hover,body article[data-delivery-id]:hover{border-color:#ffd4b76b!important;box-shadow:inset 0 1px #ffffff45,0 18px 38px #0003!important}
+  }
+  @media(max-width:760px){
+    body button{min-height:40px}
+    body>nav{gap:10px}
+    body [id^="modal-"].fixed{padding:10px}
+    body [id^="modal-"].fixed>:first-child{max-height:92vh;max-height:92dvh}
+    body #modal-escolha-fechamento>div>div.grid{gap:8px;padding:14px}
+    body #modal-escolha-fechamento button[onclick^="selecionarOpcao"]{padding:16px 7px}
+    body #modal-pdv-caixa>div>div:nth-child(2){overflow-y:auto;min-height:0}
+    body #modal-pdv-caixa #pdv-lista-pessoas{max-height:180px}
+    body #toast{right:16px;bottom:max(16px,env(safe-area-inset-bottom));padding:14px 16px}
+  }
+  @media(max-width:600px){body :is(input,textarea,select){font-size:16px!important}}
+  @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+    body{--glass-surface:linear-gradient(135deg,#ffffff0f,transparent),#202936}
+    body button{background-color:#27313e!important}
+  }
+  @media(prefers-reduced-transparency:reduce){
+    body{--glass-surface:#202936}
+    body button,body [id^="modal-"].fixed>:first-child{background-color:#202936!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+    body>nav,body .glass-panel,body #tables-grid>.mesa-card,body article[data-delivery-id]{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+  }
+}
+
+</style>
 </head>
 <body class="h-full font-sans text-zinc-100 bg-zinc-950 flex flex-col selection:bg-orange-500 selection:text-white">
 
@@ -2547,4 +2648,3 @@ function uiEstadoPedido(estado) {
 <div id="ui-order-status" class="ui-order-status" hidden role="status" aria-live="polite" aria-atomic="true"><span class="ui-order-symbol" aria-hidden="true"></span><div><strong id="ui-order-title"></strong><small id="ui-order-caption"></small></div></div>
 </body>
 </html>
-
