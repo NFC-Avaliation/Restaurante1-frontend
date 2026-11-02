@@ -239,6 +239,103 @@
   @media(max-width:360px){body #dishes-grid{gap:10px}body #dishes-grid>.produto-card{padding:6px;border-radius:19px}body .produto-copy{padding:11px 5px 7px}body .produto-preco{font-size:13px}body .produto-add{width:28px;height:28px}body .menu-brand-title{font-size:23px}body .info-contatos{gap:6px}}
 }
 </style>
+<style id="liquid-glass-soft">
+/* Liquid Glass para web — vidro translúcido com laranja suave. */
+@media screen {
+  :root{--ui-accent:#ffc49c;--ui-panel:rgba(30,35,43,.48);--menu-glass:linear-gradient(135deg,#ffffff20,#ffffff05 48%,#ffc49c0c),rgba(25,31,40,.54);--menu-shadow:inset 0 1px #ffffff3d,inset 0 -1px #ffffff09,0 12px 34px #0003;--menu-blur:blur(24px) saturate(145%)}
+  body{background:radial-gradient(ellipse at 6% 8%,#e0996d29,transparent 39%),radial-gradient(ellipse at 88% 24%,#7c9fb526,transparent 44%),radial-gradient(ellipse at 35% 90%,#b1846e1a,transparent 42%),#0c1119!important}
+  body #screen-menu>header,body #dishes-grid>.produto-card,
+  body #toast-notification,body .ui-order-status{
+    background:var(--menu-glass)!important;border-color:#ffffff33!important;box-shadow:var(--menu-shadow)!important;
+    -webkit-backdrop-filter:var(--menu-blur);backdrop-filter:var(--menu-blur);
+  }
+  body #screen-menu>nav{position:relative}
+  body #categories-container{border-radius:18px}
+  body button{
+    --menu-button-tint:rgba(255,255,255,.045);
+    background:linear-gradient(145deg,#ffffff26,#ffffff06 52%,#ffffff0b),var(--menu-button-tint)!important;
+    border:1px solid #ffffff30!important;
+    box-shadow:inset 0 1px #ffffff35,inset 0 -1px #ffffff08,0 4px 12px #0002!important;
+    -webkit-backdrop-filter:blur(12px) saturate(140%);backdrop-filter:blur(12px) saturate(140%);
+    transition:border-color .22s,box-shadow .22s,filter .22s,transform .22s var(--ui-ease);
+  }
+  body button.bg-gradient-to-r.from-orange-500,
+  body button.bg-orange-500,
+  body #categories-container>button.active-category-btn,
+  body button#ui-cart-dock{
+    --menu-button-tint:rgba(255,170,114,.18);
+    background:linear-gradient(140deg,#ffffff26,#ffd7bd0a 50%,#ffc49c15),var(--menu-button-tint)!important;
+    color:#ffe1cd!important;border-color:#ffcdab7a!important;
+    box-shadow:inset 0 1px #fff1e770,inset 0 -1px #ffc49c14,0 5px 18px #d3956820!important;
+  }
+  body button.text-rose-400{--menu-button-tint:#f4708b1f;color:#ffb9ca!important;border-color:#f5a0b536!important}
+  body button:disabled{opacity:.45;transform:none!important;box-shadow:inset 0 1px #ffffff12!important}
+  body :is(.text-orange-400,.text-orange-500,.produto-preco){color:#ffc49c!important}
+  body .produto-add{background:linear-gradient(140deg,#ffffff24,#ffffff04),#ffc49c15;border-color:#ffd4b74d;color:#ffdbbf;box-shadow:inset 0 1px #ffffff38}
+  body [id^="modal-"].fixed:not(.hidden){background-color:rgba(4,8,15,.48)!important;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  body [id^="modal-"].fixed>:first-child{background:linear-gradient(135deg,#ffffff13,transparent 55%),rgba(22,29,39,.87)!important;border-color:#ffffff30!important;box-shadow:inset 0 1px #ffffff38,0 30px 90px #0007!important;-webkit-backdrop-filter:blur(30px) saturate(145%);backdrop-filter:blur(30px) saturate(145%)}
+  body [id^="modal-"].fixed>div>div.bg-zinc-950{background:rgba(13,20,30,.30)!important;border-color:#ffffff16!important}
+  body #modal-cart #cart-items-container>div,body #modal-customize .bg-zinc-800{background:linear-gradient(135deg,#ffffff10,transparent),#ffffff06!important;border-color:#ffffff20!important}
+  body #modal-dish-price{background:linear-gradient(135deg,#ffffff13,transparent),#ffc49c0e;border-color:#ffc49c35;color:#ffd4b7}
+  body #customize-total-price{background:#10182050;color:#ffe1cd}
+  body textarea{background:rgba(10,16,24,.38)!important;border-color:#ffffff26!important;user-select:text;-webkit-user-select:text}
+  body textarea:focus{border-color:#ffc49c90!important;box-shadow:0 0 0 3px #ffc49c13!important}
+  body #cart-badge{background:linear-gradient(135deg,#ffe1cd,#ffc49c)!important;color:#302015!important;border-color:#202936;box-shadow:0 3px 14px #ffc49c26}
+  body #toast-icon-bg{background:#ffc49c15;color:#ffd4b7;border:1px solid #ffc49c26}
+  body .ui-order-symbol{border-color:#ffc49c30;border-top-color:#ffc49c}
+  body #screen-menu{max-width:448px}
+  body #dishes-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  body #screen-menu>header{padding-top:max(10px,env(safe-area-inset-top))}
+  body #ui-cart-dock small{opacity:1;color:#e2c5b1}
+  body #ui-cart-dock:active{transform:translateX(-50%) scale(.98)}
+  @media(hover:hover){
+    body button:not(:disabled):hover{border-color:#ffffff55!important;box-shadow:inset 0 1px #ffffff60,0 7px 22px #0003!important;filter:brightness(1.08)}
+    body #dishes-grid>.produto-card:hover{border-color:#ffd4b76b!important;box-shadow:inset 0 1px #ffffff45,0 18px 38px #0003!important}
+  }
+  @media(max-width:639px){
+    body #screen-menu>header button{min-height:44px;min-width:44px}
+    body #modal-customize button,body #modal-cart button{min-height:44px;min-width:44px}
+    body #modal-dish-detail>div>button{min-height:44px;min-width:44px}
+    body #modal-dish-detail .flex.items-start{gap:10px;flex-wrap:wrap}
+    body #modal-dish-price{white-space:nowrap}
+  }
+  @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){body{--menu-glass:linear-gradient(135deg,#ffffff0f,transparent),#202936}body button{background-color:#27313e!important}}
+  @media(prefers-reduced-transparency:reduce){
+    body{--menu-glass:#202936}
+    body #screen-menu>header,body #dishes-grid>.produto-card,body #toast-notification,body .ui-order-status,body button,body [id^="modal-"].fixed>:first-child{background-color:#202936!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+  }
+}
+/* Componentes próprios do delivery: informações, modalidade e pagamento. */
+@media screen {
+  body .restaurante-topo,body .menu-success,body .menu-success>div.bg-zinc-900{
+    background:var(--menu-glass)!important;border-color:#ffffff33!important;box-shadow:var(--menu-shadow)!important;
+    -webkit-backdrop-filter:var(--menu-blur);backdrop-filter:var(--menu-blur);
+  }
+  body .restaurante-logo{background:linear-gradient(135deg,#fff5,#ffc49c19),#ffc49c18!important;border:1px solid #ffd4b74d;box-shadow:inset 0 1px #ffffff70,0 8px 30px #0003}
+  body .restaurante-logo>div{background:linear-gradient(145deg,#ffffff0c,#ffc49c06),#17202bc7!important}
+  body .restaurante-logo :is(i,span){color:#ffd4b7!important}
+  body .botao-carrinho,body .info-eyebrow,body .info-bloco h3 i,body .info-contatos i{color:#ffc49c}
+  body #info-link-whatsapp i{color:#8ce6b5}
+  body .info-contatos>a{background:linear-gradient(145deg,#ffffff26,#ffffff06 52%,#ffffff0b),#ffffff0b;border-color:#ffffff30;box-shadow:inset 0 1px #ffffff35,0 4px 12px #0002;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+  body .info-contatos>:is(a,button){min-height:76px}
+  body .info-horario{border-color:#ffffff16}
+  body .status-restaurante{box-shadow:inset 0 1px #ffffff20;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+  body .status-restaurante.aberto{background:linear-gradient(135deg,#ffffff0d,transparent),#6bce9b16;border-color:#8ce6b54d;color:#8ce6b5}
+  body .status-restaurante.fechado{background:linear-gradient(135deg,#ffffff0d,transparent),#f4708b16;border-color:#f5a0b54d;color:#ffb9ca}
+  body .checkout-opcoes button,body button#btn-pagar-retirada{
+    background:linear-gradient(140deg,#ffffff26,#ffd7bd0a 50%,#ffc49c15),rgba(255,170,114,.18)!important;
+    color:#ffe1cd!important;border-color:#ffcdab7a!important;box-shadow:inset 0 1px #fff1e770,inset 0 -1px #ffc49c14,0 5px 18px #d3956820!important;
+  }
+  body #modal-payment>div>div.bg-zinc-900,body #modal-payment .bg-zinc-950{background:#0d141e4d!important;border-color:#ffffff20!important}
+  body #checkout-retirada-info{background:#ffc49c10;border-color:#ffc49c35;color:#ffe1cd}
+  body :is(input,select){background:#0a101861!important;border-color:#ffffff26!important;user-select:text;-webkit-user-select:text}
+  body :is(input,select):focus{border-color:#ffc49c90!important;box-shadow:0 0 0 3px #ffc49c13!important}
+  body input[type="checkbox"]{accent-color:#8ce6b5;min-height:initial}
+  body .info-fechar,body #modal-payment button,body #modal-delivery-form button{min-height:44px;min-width:44px}
+  @media(prefers-reduced-transparency:reduce){body .restaurante-topo,body .menu-success,body .menu-success>div.bg-zinc-900,body .info-contatos>a,body .status-restaurante{background-color:#202936!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}}
+}
+
+</style>
 </head>
 <body class="min-h-screen relative pb-10 bg-black text-zinc-100">
 
